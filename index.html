@@ -1,22 +1,12 @@
 <!DOCTYPE html>
-<html lang="de">
-<head>
+<html lang="de"><head>
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-title" content="Auto-Factory">
-  <meta name="theme-color" content="#FF6B35">
-  <title>Auto-Factory</title>
+  <meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Auto-Factory">
+  <meta name="theme-color" content="#FF6B35"><title>Auto-Factory</title>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;800;900&display=swap" rel="stylesheet">
   <style>*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}html,body{margin:0;padding:0;background:#EEF2F7;}body{overscroll-behavior:none;}#root{max-width:430px;margin:0 auto;min-height:100vh;}</style>
-</head>
-<body>
-  <div id="root">
-    <div style="display:flex;align-items:center;justify-content:center;height:100vh;flex-direction:column;gap:16px;font-family:sans-serif;background:#EEF2F7;">
-      <div style="font-size:60px">&#127981;</div>
-      <div style="font-weight:900;font-size:20px;color:#333;font-family:Georgia,serif">Auto-Factory</div>
-      <div style="color:#aaa;font-size:13px" id="status">Wird geladen...</div>
-    </div>
-  </div>
+</head><body>
+  <div id="root"><div style="display:flex;align-items:center;justify-content:center;height:100vh;flex-direction:column;gap:16px;font-family:sans-serif;background:#EEF2F7;"><div style="font-size:60px">&#127981;</div><div style="font-weight:900;font-size:20px;color:#333;font-family:Georgia,serif">Auto-Factory</div><div style="color:#aaa;font-size:13px">Wird geladen...</div></div></div>
   <script id="src" type="text/plain">
 const { useState, useEffect, useRef } = React;
 
@@ -110,7 +100,7 @@ const ACHIEVEMENTS = [
   { id:"pre3",        cat:"city", tier:2, icon:"🌍", name:"Weltenbummler",         desc:"3 Städte bereist",                        check:gs=>gs.cityIdx>=3,       reward:{type:"money",val:200000},  chain:"pre6" },
   { id:"pre6",        cat:"city", tier:2, icon:"🏙️",name:"Metropolenpilgrim",    desc:"6 Städte hinter dir",                     check:gs=>gs.cityIdx>=6,       reward:{type:"money",val:5000000}, chain:"pre10"},
   { id:"pre10",       cat:"city", tier:3, icon:"🏆", name:"Weltreisechampion",   desc:"10 Städte gemeistert  -  Monaco!",          check:gs=>gs.cityIdx>=10,      reward:{type:"money",val:50000000},chain:"pre13"},
-  { id:"pre13",       cat:"city", tier:4, icon:"🔮", name:"Cyberpilgrim",         desc:"13 Städte  -  Neo-Tokio erreicht!",         check:gs=>gs.cityIdx>=13,      reward:{type:"money",val:500000000000},chain:"pre15"},
+  { id:"pre13",       cat:"city", tier:4, icon:"🔮", name:"Cyberpilgrim",         desc:"13 Städte  -  Osaka erreicht!",         check:gs=>gs.cityIdx>=13,      reward:{type:"money",val:500000000000},chain:"pre15"},
   { id:"pre15",       cat:"city", tier:4, icon:"🌐", name:"Weltautomobillegende",desc:"Alle 16 Städte  -  Cyberspace!",            check:gs=>gs.cityIdx>=15,      reward:{type:"money",val:5000000000000}             },
 
   // Prestige-Boni-Kette
@@ -308,22 +298,22 @@ const TUNING_LEVELS = [
 ];
 
 const CITIES = [
-  { name:"Wolfsburg",    flag:"🇩🇪", sky:"#87CEEB", accent:"#FF6B35", maxLines:2 }, //  12k-48k
-  { name:"Detroit",      flag:"🇺🇸", sky:"#B0C4DE", accent:"#5B8CDE", maxLines:2 }, //  60k-155k
-  { name:"München",      flag:"🇩🇪", sky:"#E8F4FD", accent:"#1E88E5", maxLines:3 }, // 185k-480k
-  { name:"Tokio",        flag:"🇯🇵", sky:"#FFB6C1", accent:"#FF69B4", maxLines:3 }, // 580k-1.5M
-  { name:"Seoul",        flag:"🇰🇷", sky:"#C9E8FF", accent:"#0099FF", maxLines:3 }, // 1.8M-4.6M
-  { name:"Shanghai",     flag:"🇨🇳", sky:"#FFE8CC", accent:"#E64A19", maxLines:4 }, // 5.5M-14M
-  { name:"Stuttgart",    flag:"🇩🇪", sky:"#E8D5F0", accent:"#9B59B6", maxLines:4 }, // 17M-43M
-  { name:"Maranello",    flag:"🇮🇹", sky:"#FFB347", accent:"#E63946", maxLines:4 }, // 52M-133M
-  { name:"Dubai 2077",   flag:"🇦🇪", sky:"#FFD700", accent:"#FF8C00", maxLines:5 }, // 160M-410M
-  { name:"Monaco",       flag:"🇲🇨", sky:"#C0E8FF", accent:"#C0A000", maxLines:5 }, // 490M-1.27Mrd
-  { name:"Los Angeles",  flag:"🇺🇸", sky:"#FFECD2", accent:"#FF6584", maxLines:5 }, // 1.5Mrd-3.9Mrd
-  { name:"London",       flag:"🇬🇧", sky:"#D4E8FF", accent:"#1565C0", maxLines:5 }, // 4.7Mrd-12Mrd
-  { name:"Singapur",     flag:"🇸🇬", sky:"#E8FFE8", accent:"#00897B", maxLines:6 }, // 14Mrd-36Mrd
-  { name:"São Paulo",    flag:"🇧🇷", sky:"#FFF3E0", accent:"#E65100", maxLines:6 }, // 43Mrd-110Mrd
-  { name:"Neo-Tokio",    flag:"🗾",  sky:"#EDE7F6", accent:"#7C4DFF", maxLines:6 }, // 130Mrd-340Mrd
-  { name:"Cyberspace",   flag:"🌐",  sky:"#E0F7FA", accent:"#00E5FF", maxLines:7 }, // 400Mrd-1Bio
+  { name:"Wolfsburg", flag:"🇩🇪", sky:"#87CEEB", accent:"#FF6B35", maxLines:2, skyline:`M0,120 L0,85 L30,85 L30,70 L40,70 L40,60 L50,60 L50,55 L60,55 L60,70 L70,70 L70,85 L90,85 L90,75 L100,75 L100,65 L110,65 L110,55 L120,55 L120,45 L130,45 L130,55 L140,55 L140,65 L155,65 L155,75 L160,75 L160,80 L180,80 L180,70 L185,70 L185,60 L190,60 L190,50 L195,50 L195,40 L200,40 L200,30 L205,30 L205,40 L210,40 L210,50 L215,50 L215,60 L220,60 L220,70 L225,70 L225,80 L240,80 L240,70 L255,70 L255,65 L265,65 L265,75 L275,75 L275,85 L295,85 L295,75 L305,75 L305,65 L315,65 L315,75 L335,75 L335,85 L360,85 L360,90 L380,90 L380,85 L400,85 L400,90 L430,90 L430,120 Z` },
+  { name:"Detroit", flag:"🇺🇸", sky:"#B0C4DE", accent:"#5B8CDE", maxLines:2, skyline:`M0,120 L0,90 L20,90 L20,70 L25,70 L25,50 L30,50 L30,35 L35,35 L35,25 L40,25 L40,35 L45,35 L45,50 L50,50 L50,60 L60,60 L60,50 L65,50 L65,40 L75,40 L75,30 L80,30 L80,20 L85,20 L85,15 L90,15 L90,20 L95,20 L95,30 L100,30 L100,40 L110,40 L110,50 L120,50 L120,45 L130,45 L130,40 L140,40 L140,30 L145,30 L145,20 L150,20 L150,15 L155,15 L155,10 L160,10 L160,15 L165,15 L165,20 L170,20 L170,30 L180,30 L180,40 L195,40 L195,50 L210,50 L210,55 L220,55 L220,45 L230,45 L230,35 L240,35 L240,45 L255,45 L255,55 L270,55 L270,65 L290,65 L290,75 L310,75 L310,80 L340,80 L340,85 L370,85 L370,90 L430,90 L430,120 Z` },
+  { name:"München", flag:"🇩🇪", sky:"#E8F4FD", accent:"#1E88E5", maxLines:3, skyline:`M0,120 L0,95 L25,95 L25,80 L35,80 L35,75 L40,75 L40,65 L45,65 L45,55 L50,55 L50,45 L52,45 L52,30 L54,30 L54,20 L56,20 L56,30 L58,30 L58,45 L60,45 L60,65 L70,65 L70,75 L85,75 L85,65 L90,65 L90,55 L95,55 L95,45 L100,45 L100,40 L105,40 L105,35 L110,35 L110,30 L115,30 L115,25 L118,25 L118,15 L120,15 L120,10 L122,10 L122,15 L124,15 L124,25 L127,25 L127,30 L130,30 L130,35 L135,35 L135,45 L140,45 L140,55 L150,55 L150,65 L165,65 L165,70 L180,70 L180,60 L195,60 L195,65 L210,65 L210,70 L225,70 L225,60 L240,60 L240,65 L260,65 L260,75 L280,75 L280,80 L310,80 L310,85 L350,85 L350,90 L430,90 L430,120 Z` },
+  { name:"Tokio", flag:"🇯🇵", sky:"#FFB6C1", accent:"#FF69B4", maxLines:3, skyline:`M0,120 L0,85 L15,85 L15,70 L20,70 L20,55 L25,55 L25,40 L30,40 L30,30 L35,30 L35,20 L40,20 L40,15 L42,15 L42,5 L44,5 L44,0 L46,0 L46,5 L48,5 L48,15 L50,15 L50,20 L55,20 L55,30 L60,30 L60,40 L65,40 L65,55 L75,55 L75,45 L80,45 L80,35 L85,35 L85,25 L90,25 L90,20 L95,20 L95,15 L100,15 L100,20 L105,20 L105,25 L110,25 L110,35 L115,35 L115,45 L125,45 L125,55 L135,55 L135,50 L145,50 L145,40 L150,40 L150,30 L155,30 L155,20 L160,20 L160,15 L165,15 L165,10 L168,10 L168,5 L170,5 L170,10 L172,10 L172,15 L175,15 L175,20 L180,20 L180,30 L185,30 L185,40 L190,40 L190,50 L200,50 L200,55 L215,55 L215,50 L230,50 L230,55 L245,55 L245,65 L265,65 L265,75 L290,75 L290,80 L320,80 L320,85 L360,85 L360,90 L430,90 L430,120 Z` },
+  { name:"Seoul", flag:"🇰🇷", sky:"#C9E8FF", accent:"#0099FF", maxLines:3, skyline:`M0,120 L0,88 L18,88 L18,75 L25,75 L25,60 L30,60 L30,45 L35,45 L35,35 L40,35 L40,25 L45,25 L45,20 L50,20 L50,15 L55,15 L55,10 L58,10 L58,5 L60,5 L60,10 L62,10 L62,15 L65,15 L65,20 L70,20 L70,25 L75,25 L75,35 L80,35 L80,50 L90,50 L90,40 L95,40 L95,30 L100,30 L100,20 L105,20 L105,15 L110,15 L110,10 L115,10 L115,15 L120,15 L120,20 L125,20 L125,30 L130,30 L130,40 L140,40 L140,50 L155,50 L155,45 L165,45 L165,35 L170,35 L170,25 L175,25 L175,20 L180,20 L180,15 L185,15 L185,20 L190,20 L190,25 L195,25 L195,35 L200,35 L200,45 L210,45 L210,55 L225,55 L225,65 L245,65 L245,72 L270,72 L270,78 L300,78 L300,83 L335,83 L335,88 L430,88 L430,120 Z` },
+  { name:"Shanghai", flag:"🇨🇳", sky:"#FFE8CC", accent:"#E64A19", maxLines:4, skyline:`M0,120 L0,85 L20,85 L20,70 L28,70 L28,55 L33,55 L33,40 L38,40 L38,25 L42,25 L42,15 L45,15 L45,8 L47,8 L47,2 L49,2 L49,8 L51,8 L51,15 L54,15 L54,25 L58,25 L58,40 L63,40 L63,55 L70,55 L70,45 L78,45 L78,30 L83,30 L83,20 L88,20 L88,12 L92,12 L92,6 L95,6 L95,2 L97,2 L97,6 L100,6 L100,12 L103,12 L103,20 L107,20 L107,30 L112,30 L112,45 L120,45 L120,55 L130,55 L130,48 L140,48 L140,38 L148,38 L148,25 L153,25 L153,18 L158,18 L158,10 L162,10 L162,5 L165,5 L165,10 L168,10 L168,18 L172,18 L172,25 L177,25 L177,38 L183,38 L183,48 L192,48 L192,55 L205,55 L205,62 L220,62 L220,70 L240,70 L240,76 L265,76 L265,82 L295,82 L295,87 L330,87 L330,90 L430,90 L430,120 Z` },
+  { name:"Stuttgart", flag:"🇩🇪", sky:"#E8D5F0", accent:"#9B59B6", maxLines:4, skyline:`M0,120 L0,92 L22,92 L22,80 L30,80 L30,68 L36,68 L36,55 L42,55 L42,42 L48,42 L48,30 L53,30 L53,22 L57,22 L57,15 L60,15 L60,22 L63,22 L63,30 L67,30 L67,42 L72,42 L72,55 L80,55 L80,62 L90,62 L90,55 L98,55 L98,45 L104,45 L104,35 L110,35 L110,25 L115,25 L115,18 L120,18 L120,25 L125,25 L125,35 L130,35 L130,45 L136,45 L136,55 L145,55 L145,60 L158,60 L158,52 L167,52 L167,40 L174,40 L174,30 L180,30 L180,40 L186,40 L186,52 L195,52 L195,60 L210,60 L210,68 L228,68 L228,75 L250,75 L250,80 L278,80 L278,85 L310,85 L310,88 L350,88 L350,92 L430,92 L430,120 Z` },
+  { name:"Maranello", flag:"🇮🇹", sky:"#FFB347", accent:"#E63946", maxLines:4, skyline:`M0,120 L0,95 L20,95 L20,85 L30,85 L30,75 L38,75 L38,62 L45,62 L45,50 L50,50 L50,40 L54,40 L54,32 L58,32 L58,25 L62,25 L62,20 L65,20 L65,25 L68,25 L68,32 L72,32 L72,40 L76,40 L76,50 L82,50 L82,60 L92,60 L92,70 L105,70 L105,62 L115,62 L115,52 L122,52 L122,42 L128,42 L128,35 L133,35 L133,28 L137,28 L137,22 L140,22 L140,28 L143,28 L143,35 L147,35 L147,42 L152,42 L152,52 L160,52 L160,60 L170,60 L170,68 L185,68 L185,75 L200,75 L200,80 L220,80 L220,85 L245,85 L245,88 L275,88 L275,92 L310,92 L310,95 L430,95 L430,120 Z` },
+  { name:"Dubai 2077", flag:"🇦🇪", sky:"#FFD700", accent:"#FF8C00", maxLines:5, skyline:`M0,120 L0,88 L15,88 L15,75 L22,75 L22,60 L28,60 L28,42 L32,42 L32,28 L36,28 L36,15 L38,15 L38,8 L40,8 L40,2 L42,2 L42,8 L44,8 L44,15 L46,15 L46,28 L50,28 L50,42 L55,42 L55,55 L65,55 L65,45 L72,45 L72,30 L76,30 L76,18 L80,18 L80,10 L83,10 L83,4 L86,4 L86,0 L89,0 L89,4 L92,4 L92,10 L95,10 L95,18 L99,18 L99,30 L103,30 L103,45 L112,45 L112,52 L120,52 L120,42 L128,42 L128,28 L133,28 L133,16 L137,16 L137,8 L141,8 L141,3 L144,3 L144,8 L148,8 L148,16 L152,16 L152,28 L157,28 L157,42 L165,42 L165,52 L178,52 L178,60 L195,60 L195,68 L215,68 L215,75 L240,75 L240,80 L270,80 L270,85 L305,85 L305,88 L430,88 L430,120 Z` },
+  { name:"Monaco", flag:"🇲🇨", sky:"#C0E8FF", accent:"#C0A000", maxLines:5, skyline:`M0,120 L0,90 L18,90 L18,78 L26,78 L26,65 L33,65 L33,52 L38,52 L38,40 L43,40 L43,30 L47,30 L47,22 L51,22 L51,15 L54,15 L54,10 L57,10 L57,15 L60,15 L60,22 L63,22 L63,30 L67,30 L67,40 L72,40 L72,52 L80,52 L80,65 L92,65 L92,58 L100,58 L100,45 L106,45 L106,33 L111,33 L111,24 L115,24 L115,18 L118,18 L118,12 L121,12 L121,18 L124,18 L124,24 L127,24 L127,33 L131,33 L131,45 L136,45 L136,55 L144,55 L144,62 L155,62 L155,70 L170,70 L170,76 L188,76 L188,80 L208,80 L208,84 L232,84 L232,88 L262,88 L262,90 L430,90 L430,120 Z` },
+  { name:"Los Angeles", flag:"🇺🇸", sky:"#FFECD2", accent:"#FF6584", maxLines:5, skyline:`M0,120 L0,88 L16,88 L16,75 L24,75 L24,62 L30,62 L30,50 L35,50 L35,38 L40,38 L40,28 L44,28 L44,20 L48,20 L48,14 L51,14 L51,8 L54,8 L54,14 L57,14 L57,20 L60,20 L60,28 L64,28 L64,38 L70,38 L70,50 L78,50 L78,42 L86,42 L86,30 L92,30 L92,20 L97,20 L97,12 L101,12 L101,6 L105,6 L105,12 L109,12 L109,20 L113,20 L113,30 L118,30 L118,42 L126,42 L126,50 L136,50 L136,45 L145,45 L145,35 L152,35 L152,25 L158,25 L158,18 L162,18 L162,12 L166,12 L166,8 L169,8 L169,12 L172,12 L172,18 L176,18 L176,25 L180,25 L180,35 L186,35 L186,45 L195,45 L195,52 L210,52 L210,60 L228,60 L228,68 L250,68 L250,75 L275,75 L275,80 L305,80 L305,85 L340,85 L340,88 L430,88 L430,120 Z` },
+  { name:"London", flag:"🇬🇧", sky:"#D4E8FF", accent:"#1565C0", maxLines:5, skyline:`M0,120 L0,90 L20,90 L20,78 L28,78 L28,65 L34,65 L34,52 L40,52 L40,42 L45,42 L45,32 L50,32 L50,24 L53,24 L53,18 L56,18 L56,12 L58,12 L58,6 L60,6 L60,2 L62,2 L62,6 L64,6 L64,12 L66,12 L66,18 L68,18 L68,24 L72,24 L72,32 L76,32 L76,42 L82,42 L82,52 L90,52 L90,62 L100,62 L100,55 L108,55 L108,45 L114,45 L114,35 L120,35 L120,28 L124,28 L124,22 L128,22 L128,16 L132,16 L132,12 L135,12 L135,8 L138,8 L138,12 L141,12 L141,16 L144,16 L144,22 L148,22 L148,28 L152,28 L152,35 L158,35 L158,45 L164,45 L164,55 L172,55 L172,62 L185,62 L185,70 L200,70 L200,76 L220,76 L220,80 L245,80 L245,85 L278,85 L278,88 L315,88 L315,90 L430,90 L430,120 Z` },
+  { name:"Singapur", flag:"🇸🇬", sky:"#E8FFE8", accent:"#00897B", maxLines:6, skyline:`M0,120 L0,86 L16,86 L16,72 L24,72 L24,58 L30,58 L30,44 L35,44 L35,32 L40,32 L40,20 L44,20 L44,12 L47,12 L47,5 L50,5 L50,1 L52,1 L52,5 L55,5 L55,12 L58,12 L58,20 L62,20 L62,32 L68,32 L68,44 L76,44 L76,36 L84,36 L84,24 L90,24 L90,14 L95,14 L95,7 L99,7 L99,3 L102,3 L102,7 L106,7 L106,14 L110,14 L110,24 L116,24 L116,36 L124,36 L124,44 L134,44 L134,52 L146,52 L146,44 L155,44 L155,32 L162,32 L162,22 L168,22 L168,14 L173,14 L173,8 L177,8 L177,4 L180,4 L180,8 L183,8 L183,14 L187,14 L187,22 L192,22 L192,32 L198,32 L198,44 L207,44 L207,52 L220,52 L220,60 L238,60 L238,68 L260,68 L260,74 L285,74 L285,80 L315,80 L315,84 L355,84 L355,86 L430,86 L430,120 Z` },
+  { name:"São Paulo", flag:"🇧🇷", sky:"#FFF3E0", accent:"#E65100", maxLines:6, skyline:`M0,120 L0,88 L18,88 L18,76 L26,76 L26,62 L33,62 L33,50 L38,50 L38,38 L43,38 L43,28 L48,28 L48,20 L52,20 L52,14 L55,14 L55,8 L58,8 L58,4 L61,4 L61,8 L64,8 L64,14 L67,14 L67,20 L71,20 L71,28 L76,28 L76,38 L83,38 L83,50 L92,50 L92,42 L100,42 L100,30 L106,30 L106,20 L112,20 L112,12 L116,12 L116,6 L120,6 L120,12 L124,12 L124,20 L128,20 L128,30 L133,30 L133,42 L140,42 L140,50 L150,50 L150,58 L162,58 L162,50 L172,50 L172,38 L179,38 L179,26 L185,26 L185,18 L190,18 L190,12 L194,12 L194,8 L197,8 L197,12 L200,12 L200,18 L204,18 L204,26 L209,26 L209,38 L215,38 L215,48 L224,48 L224,56 L238,56 L238,64 L256,64 L256,72 L278,72 L278,78 L305,78 L305,83 L340,83 L340,87 L430,87 L430,120 Z` },
+  { name:"Osaka", flag:"🗾", sky:"#EDE7F6", accent:"#7C4DFF", maxLines:6, skyline:`M0,120 L0,87 L15,87 L15,74 L22,74 L22,60 L28,60 L28,46 L33,46 L33,34 L38,34 L38,22 L42,22 L42,14 L45,14 L45,7 L48,7 L48,3 L51,3 L51,7 L54,7 L54,14 L57,14 L57,22 L61,22 L61,34 L67,34 L67,46 L75,46 L75,38 L82,38 L82,26 L88,26 L88,16 L93,16 L93,9 L97,9 L97,4 L100,4 L100,9 L103,9 L103,16 L107,16 L107,26 L112,26 L112,38 L120,38 L120,46 L130,46 L130,40 L140,40 L140,28 L146,28 L146,18 L152,18 L152,10 L156,10 L156,5 L159,5 L159,10 L162,10 L162,18 L167,18 L167,28 L172,28 L172,40 L180,40 L180,48 L192,48 L192,56 L208,56 L208,64 L228,64 L228,72 L252,72 L252,78 L280,78 L280,84 L315,84 L315,87 L430,87 L430,120 Z` },
+  { name:"Cyberspace", flag:"🌐", sky:"#E0F7FA", accent:"#00E5FF", maxLines:7, skyline:`M0,120 L0,85 L10,85 L10,70 L15,70 L15,55 L20,55 L20,40 L25,40 L25,25 L28,25 L28,12 L31,12 L31,5 L34,5 L34,0 L36,0 L36,5 L38,5 L38,12 L41,12 L41,25 L44,25 L44,40 L50,40 L50,50 L58,50 L58,38 L63,38 L63,25 L68,25 L68,12 L72,12 L72,5 L75,5 L75,0 L78,0 L78,5 L81,5 L81,12 L84,12 L84,25 L88,25 L88,38 L94,38 L94,48 L104,48 L104,38 L112,38 L112,24 L118,24 L118,12 L123,12 L123,5 L127,5 L127,0 L130,0 L130,5 L133,5 L133,12 L137,12 L137,24 L142,24 L142,38 L150,38 L150,46 L162,46 L162,38 L172,38 L172,25 L178,25 L178,14 L184,14 L184,7 L188,7 L188,2 L191,2 L191,7 L194,7 L194,14 L198,14 L198,25 L204,25 L204,38 L212,38 L212,46 L225,46 L225,55 L245,55 L245,65 L268,65 L268,74 L296,74 L296,80 L330,80 L330,85 L430,85 L430,120 Z` },
 ];
 
 // Upgrade levels per model (5 levels, each +20% base value)
@@ -408,7 +398,7 @@ const CITY_MODELS = [
     { id:"ssc_tuatara", name:"SSC Tuatara",           emoji:"🦎", val:70000000000, ticks:3000, mult:17.0 },
     { id:"devel_16",    name:"Devel Sixteen",         emoji:"😈", val:110000000000,ticks:4200, mult:22.0 },
   ],
-  [ // 15. Neo-Tokio 🗾  -  Sci-Fi Machines (130Mrd-340Mrd)
+  [ // 15. Osaka 🗾  -  Sci-Fi Machines (130Mrd-340Mrd)
     { id:"yamaha_ox",   name:"Yamaha OX99-11",        emoji:"🎌", val:130000000000,ticks:2600, mult:15.0 },
     { id:"toyota_gs",   name:"Toyota GR Hyper",       emoji:"🏮", val:210000000000,ticks:3700, mult:19.0 },
     { id:"neo_phantom", name:"Neo Phantom X",         emoji:"👻", val:340000000000,ticks:5200, mult:24.0 },
@@ -421,6 +411,286 @@ const CITY_MODELS = [
 ];
 
 const ALL_MODELS = CITY_MODELS.flat();
+
+// ── CAR VISUAL SYSTEM ─────────────────────────────────────────
+// Body types: hatchback, sedan, suv, muscle, coupe, supercar,
+//             hypercar, electric, cyber, flying
+const CAR_STYLES = {
+  polo:        { type:"hatchback", color:"#E8F4FD", roof:"#B0C4DE", wheel:"#555", accent:"#2196F3" },
+  golf:        { type:"hatchback", color:"#E8F5E9", roof:"#81C784", wheel:"#444", accent:"#4CAF50" },
+  tiguan:      { type:"suv",       color:"#FFF3E0", roof:"#FFCC80", wheel:"#555", accent:"#FF9800" },
+  mustang:     { type:"muscle",    color:"#FFEBEE", roof:"#EF9A9A", wheel:"#333", accent:"#E53935" },
+  charger:     { type:"muscle",    color:"#1A237E", roof:"#0D47A1", wheel:"#222", accent:"#448AFF" },
+  corvette:    { type:"coupe",     color:"#F3E5F5", roof:"#CE93D8", wheel:"#333", accent:"#9C27B0" },
+  bmw_m4:      { type:"coupe",     color:"#1565C0", roof:"#0D47A1", wheel:"#222", accent:"#42A5F5" },
+  amg_gt:      { type:"coupe",     color:"#212121", roof:"#424242", wheel:"#111", accent:"#FF6F00" },
+  audi_r8:     { type:"supercar",  color:"#F5F5F5", roof:"#BDBDBD", wheel:"#333", accent:"#D32F2F" },
+  supra:       { type:"coupe",     color:"#FF6F00", roof:"#E65100", wheel:"#222", accent:"#FFF9C4" },
+  gtr:         { type:"supercar",  color:"#263238", roof:"#37474F", wheel:"#111", accent:"#E53935" },
+  nsx:         { type:"supercar",  color:"#880E4F", roof:"#6A1B4D", wheel:"#222", accent:"#F48FB1" },
+  ioniq9:      { type:"electric",  color:"#E3F2FD", roof:"#90CAF9", wheel:"#444", accent:"#1E88E5" },
+  genesis:     { type:"sedan",     color:"#1A1A2E", roof:"#16213E", wheel:"#222", accent:"#C0A060" },
+  evx:         { type:"electric",  color:"#311B92", roof:"#4527A0", wheel:"#111", accent:"#B39DDB" },
+  nio_ep9:     { type:"supercar",  color:"#BF360C", roof:"#8D2007", wheel:"#222", accent:"#FF8A65" },
+  yangwang:    { type:"hypercar",  color:"#006064", roof:"#00838F", wheel:"#111", accent:"#80DEEA" },
+  hiphi_x:     { type:"cyber",     color:"#1A237E", roof:"#283593", wheel:"#111", accent:"#82B1FF" },
+  boxster:     { type:"coupe",     color:"#F57F17", roof:"#F9A825", wheel:"#333", accent:"#FFF9C4" },
+  "911":       { type:"coupe",     color:"#37474F", roof:"#263238", wheel:"#111", accent:"#90A4AE" },
+  taycan:      { type:"electric",  color:"#880E4F", roof:"#6A1B4D", wheel:"#222", accent:"#F06292" },
+  portofino:   { type:"supercar",  color:"#B71C1C", roof:"#7F0000", wheel:"#111", accent:"#FF8A80" },
+  sf90:        { type:"hypercar",  color:"#BF360C", roof:"#870000", wheel:"#111", accent:"#FFD180" },
+  laferrari:   { type:"hypercar",  color:"#C62828", roof:"#7F0000", wheel:"#111", accent:"#FFD700" },
+  cyber:       { type:"cyber",     color:"#37474F", roof:"#263238", wheel:"#222", accent:"#4FC3F7" },
+  hypercar:    { type:"hypercar",  color:"#1A237E", roof:"#0D47A1", wheel:"#111", accent:"#40C4FF" },
+  flying:      { type:"flying",    color:"#006064", roof:"#00838F", wheel:"#111", accent:"#B2EBF2" },
+  pagani:      { type:"hypercar",  color:"#212121", roof:"#111111", wheel:"#888", accent:"#CFB53B" },
+  bugatti:     { type:"hypercar",  color:"#1A237E", roof:"#0D47A1", wheel:"#888", accent:"#CFB53B" },
+  koenigsegg:  { type:"hypercar",  color:"#F5F5F5", roof:"#E0E0E0", wheel:"#333", accent:"#FF8F00" },
+  rr_cullinan: { type:"suv",       color:"#1A1A2E", roof:"#16213E", wheel:"#888", accent:"#CFB53B" },
+  lambo_rev:   { type:"supercar",  color:"#F9A825", roof:"#F57F17", wheel:"#111", accent:"#FFEE58" },
+  mclaren_sol: { type:"hypercar",  color:"#FF6F00", roof:"#E65100", wheel:"#111", accent:"#FF8A65" },
+  am_valkyrie: { type:"hypercar",  color:"#006064", roof:"#004D40", wheel:"#111", accent:"#4DB6AC" },
+  bentley_bac: { type:"sedan",     color:"#1B5E20", roof:"#2E7D32", wheel:"#888", accent:"#CFB53B" },
+  rolls_boat:  { type:"sedan",     color:"#212121", roof:"#111111", wheel:"#888", accent:"#CFB53B" },
+  lotus_evija: { type:"supercar",  color:"#1B5E20", roof:"#2E7D32", wheel:"#111", accent:"#69F0AE" },
+  rimac_nev:   { type:"supercar",  color:"#880E4F", roof:"#6A1B4D", wheel:"#111", accent:"#FF80AB" },
+  pini_batt:   { type:"hypercar",  color:"#B71C1C", roof:"#7F0000", wheel:"#111", accent:"#FF8A80" },
+  hennessey:   { type:"hypercar",  color:"#311B92", roof:"#1A0072", wheel:"#111", accent:"#82B1FF" },
+  ssc_tuatara: { type:"hypercar",  color:"#263238", roof:"#1C272C", wheel:"#111", accent:"#4DD0E1" },
+  devel_16:    { type:"hypercar",  color:"#212121", roof:"#111111", wheel:"#111", accent:"#FF1744" },
+  yamaha_ox:   { type:"cyber",     color:"#E65100", roof:"#BF360C", wheel:"#222", accent:"#FFCCBC" },
+  toyota_gs:   { type:"cyber",     color:"#B71C1C", roof:"#7F0000", wheel:"#111", accent:"#FF8A80" },
+  neo_phantom: { type:"cyber",     color:"#1A237E", roof:"#0D47A1", wheel:"#111", accent:"#80D8FF" },
+  quantum_x:   { type:"cyber",     color:"#311B92", roof:"#4527A0", wheel:"#111", accent:"#EA80FC" },
+  neural_car:  { type:"cyber",     color:"#006064", roof:"#004D40", wheel:"#111", accent:"#A7FFEB" },
+  singularity: { type:"cyber",     color:"#4A148C", roof:"#6A1B9A", wheel:"#111", accent:"#E040FB" },
+};
+
+// SVG car component — side profile, 200x80 viewBox
+function CarSVG({ modelId, size=48, animated=false }) {
+  const style = CAR_STYLES[modelId] || { type:"sedan", color:"#90A4AE", roof:"#607D8B", wheel:"#444", accent:"#FF6B35" };
+  const { type, color, roof, wheel, accent } = style;
+  const w = 200, h = 80;
+  const anim = animated ? "float 2s ease-in-out infinite" : "none";
+
+  // Shared wheel component
+  const Wheel = ({cx,cy,r=13}) => (
+    <g>
+      <circle cx={cx} cy={cy} r={r} fill={wheel}/>
+      <circle cx={cx} cy={cy} r={r*0.55} fill="#888"/>
+      <circle cx={cx} cy={cy} r={r*0.2} fill={accent}/>
+      {[0,72,144,216,288].map(a=>(
+        <line key={a} x1={cx} y1={cy} x2={cx+Math.cos(a*Math.PI/180)*r*0.45} y2={cy+Math.sin(a*Math.PI/180)*r*0.45} stroke="#666" strokeWidth="1.5"/>
+      ))}
+    </g>
+  );
+
+  const Window = ({points,opacity=0.7}) => (
+    <polygon points={points} fill="#B3E5FC" opacity={opacity} stroke={accent} strokeWidth="0.5"/>
+  );
+
+  if (type === "hatchback") return (
+    <svg viewBox={`0 0 ${w} ${h}`} width={size*2} height={size} style={{animation:anim,display:"block"}}>
+      {/* Body */}
+      <path d="M20,60 L20,42 Q22,30 35,24 L80,20 L110,20 L130,22 Q148,24 155,32 L168,42 L168,60 Z" fill={color} stroke={accent} strokeWidth="1.5"/>
+      {/* Roof */}
+      <path d="M35,24 L80,20 L110,20 L130,22 Q145,23 148,26 L135,14 Q122,6 105,5 L75,5 Q55,5 42,15 Z" fill={roof}/>
+      {/* Windows */}
+      <Window points="46,22 75,20 75,6 48,14"/>
+      <Window points="80,20 108,20 108,6 80,6"/>
+      {/* Bumpers */}
+      <rect x="12" y="48" width="12" height="8" rx="3" fill={accent} opacity="0.8"/>
+      <rect x="168" y="48" width="12" height="8" rx="3" fill={accent} opacity="0.8"/>
+      {/* Headlight */}
+      <ellipse cx="19" cy="46" rx="4" ry="5" fill="#FFF9C4" opacity="0.9"/>
+      <ellipse cx="173" cy="46" rx="3" ry="4" fill="#FF8A80" opacity="0.8"/>
+      {/* Door line */}
+      <line x1="100" y1="22" x2="100" y2="59" stroke={accent} strokeWidth="0.8" opacity="0.5"/>
+      <Wheel cx={50} cy={62}/>
+      <Wheel cx={138} cy={62}/>
+      {/* Ground shadow */}
+      <ellipse cx={95} cy={76} rx={75} ry={4} fill="rgba(0,0,0,0.08)"/>
+    </svg>
+  );
+
+  if (type === "suv") return (
+    <svg viewBox={`0 0 ${w} ${h}`} width={size*2} height={size} style={{animation:anim,display:"block"}}>
+      <path d="M18,60 L18,36 Q20,22 36,18 L75,14 L125,14 L148,16 Q162,20 168,30 L172,42 L172,60 Z" fill={color} stroke={accent} strokeWidth="1.5"/>
+      <path d="M36,18 L75,14 L125,14 L148,16 Q155,18 158,22 L140,10 Q128,3 108,2 L72,2 Q50,2 38,12 Z" fill={roof}/>
+      <Window points="44,18 75,14 75,3 46,10" opacity="0.65"/>
+      <Window points="80,14 120,14 120,3 80,3" opacity="0.65"/>
+      <Window points="125,14 145,16 148,10 128,4" opacity="0.65"/>
+      <rect x="10" y="46" width="12" height="10" rx="3" fill={accent} opacity="0.8"/>
+      <rect x="170" y="46" width="12" height="10" rx="3" fill={accent} opacity="0.8"/>
+      <ellipse cx="17" cy="44" rx="4" ry="5" fill="#FFF9C4" opacity="0.9"/>
+      <ellipse cx="175" cy="44" rx="3" ry="4" fill="#FF8A80" opacity="0.8"/>
+      <line x1="98" y1="15" x2="98" y2="60" stroke={accent} strokeWidth="0.8" opacity="0.4"/>
+      <Wheel cx={52} cy={63} r={14}/>
+      <Wheel cx={140} cy={63} r={14}/>
+      <ellipse cx={96} cy={78} rx={78} ry={4} fill="rgba(0,0,0,0.1)"/>
+    </svg>
+  );
+
+  if (type === "muscle") return (
+    <svg viewBox={`0 0 ${w} ${h}`} width={size*2} height={size} style={{animation:anim,display:"block"}}>
+      <path d="M15,60 L15,44 Q18,34 30,28 L60,22 L90,18 L118,18 L145,20 Q162,24 170,36 L175,46 L175,60 Z" fill={color} stroke={accent} strokeWidth="2"/>
+      <path d="M60,22 L90,18 L118,18 L140,20 Q150,22 155,26 L140,10 Q126,4 105,3 L82,3 Q65,4 54,16 Z" fill={roof}/>
+      <Window points="64,22 88,18 88,4 66,14" opacity="0.6"/>
+      <Window points="94,18 115,18 115,4 94,4" opacity="0.6"/>
+      {/* Hood scoop */}
+      <ellipse cx={100} cy={28} rx={18} ry={5} fill={accent} opacity="0.4"/>
+      <rect x="6" y="50" width="14" height="8" rx="2" fill={accent}/>
+      <rect x="172" y="48" width="10" height="8" rx="2" fill={accent} opacity="0.7"/>
+      <ellipse cx="14" cy="48" rx="5" ry="6" fill="#FFF9C4" opacity="0.9"/>
+      <ellipse cx="177" cy="48" rx="4" ry="5" fill="#FF8A80" opacity="0.8"/>
+      <Wheel cx={52} cy={63} r={14}/>
+      <Wheel cx={145} cy={63} r={14}/>
+      <ellipse cx={98} cy={78} rx={80} ry={4} fill="rgba(0,0,0,0.1)"/>
+    </svg>
+  );
+
+  if (type === "coupe") return (
+    <svg viewBox={`0 0 ${w} ${h}`} width={size*2} height={size} style={{animation:anim,display:"block"}}>
+      <path d="M18,60 L18,46 Q20,36 32,28 L65,20 L120,18 L148,20 Q162,26 168,38 L172,48 L172,60 Z" fill={color} stroke={accent} strokeWidth="1.5"/>
+      <path d="M65,20 L120,18 L142,20 Q152,22 158,28 L148,10 Q135,3 115,2 L85,2 Q68,3 58,15 Z" fill={roof}/>
+      <Window points="68,20 95,18 95,3 70,12" opacity="0.65"/>
+      <Window points="100,18 118,18 118,3 100,3" opacity="0.65"/>
+      <rect x="10" y="48" width="12" height="8" rx="2" fill={accent} opacity="0.9"/>
+      <rect x="170" y="46" width="10" height="8" rx="2" fill={accent} opacity="0.7"/>
+      <ellipse cx="17" cy="46" rx="5" ry="6" fill="#FFF9C4" opacity="0.9"/>
+      <ellipse cx="175" cy="46" rx="3" ry="5" fill="#FF8A80" opacity="0.8"/>
+      {/* Sport stripe */}
+      <path d="M32,44 L168,44" stroke={accent} strokeWidth="1.5" opacity="0.3"/>
+      <Wheel cx={52} cy={63} r={13}/>
+      <Wheel cx={142} cy={63} r={13}/>
+      <ellipse cx={97} cy={77} rx={77} ry={4} fill="rgba(0,0,0,0.08)"/>
+    </svg>
+  );
+
+  if (type === "supercar") return (
+    <svg viewBox={`0 0 ${w} ${h}`} width={size*2} height={size} style={{animation:anim,display:"block"}}>
+      {/* Very low, wide body */}
+      <path d="M16,58 L16,50 Q18,38 28,30 L58,22 L110,18 L148,20 Q164,24 172,36 L176,48 L176,58 Z" fill={color} stroke={accent} strokeWidth="2"/>
+      <path d="M58,22 L110,18 L145,20 Q155,22 162,30 L155,12 Q142,4 120,2 L90,2 Q72,4 60,16 Z" fill={roof}/>
+      <Window points="62,22 95,18 95,3 64,14" opacity="0.7"/>
+      <Window points="100,18 110,18 110,3 100,3" opacity="0.7"/>
+      {/* Air intakes */}
+      <rect x="165" y="42" width="14" height="6" rx="2" fill={accent} opacity="0.8"/>
+      <rect x="8" y="44" width="14" height="6" rx="2" fill={accent} opacity="0.9"/>
+      <ellipse cx="15" cy="44" rx="5" ry="5" fill="#FFF9C4" opacity="0.95"/>
+      {/* Rear diffuser */}
+      <path d="M172,50 L180,48 L180,56 L172,58 Z" fill={accent} opacity="0.8"/>
+      {/* Spoiler */}
+      <rect x="158" y="16" width="22" height="3" rx="1" fill={accent}/>
+      <rect x="165" y="16" width="2" height="8" fill={accent}/>
+      <rect x="175" y="16" width="2" height="8" fill={accent}/>
+      <Wheel cx={50} cy={61} r={13}/>
+      <Wheel cx={146} cy={61} r={13}/>
+      <ellipse cx={96} cy={74} rx={80} ry={4} fill="rgba(0,0,0,0.12)"/>
+    </svg>
+  );
+
+  if (type === "hypercar") return (
+    <svg viewBox={`0 0 ${w} ${h}`} width={size*2} height={size} style={{animation:anim,display:"block"}}>
+      {/* Extreme low profile */}
+      <path d="M14,56 L14,50 Q16,36 26,28 L55,20 L112,16 L150,18 Q166,22 174,34 L178,48 L178,56 Z" fill={color} stroke={accent} strokeWidth="2"/>
+      <path d="M55,20 L112,16 L148,18 Q158,20 165,28 L158,10 Q144,2 122,1 L88,1 Q68,2 56,14 Z" fill={roof}/>
+      <Window points="58,20 100,16 100,2 60,13" opacity="0.75"/>
+      <Window points="106,16 112,16 112,2 106,2" opacity="0.75"/>
+      {/* Dramatic aero */}
+      <path d="M155,14 L182,12 L182,17 L155,19 Z" fill={accent} opacity="0.9"/> {/* Rear wing */}
+      <path d="M12,46 L5,44 L5,50 L12,52 Z" fill={accent} opacity="0.8"/> {/* Front splitter */}
+      <path d="M174,50 L184,46 L184,54 L174,56 Z" fill={accent} opacity="0.8"/> {/* Diffuser */}
+      <ellipse cx="13" cy="44" rx="4" ry="4" fill="#FFF59D" opacity="0.95"/>
+      <ellipse cx="179" cy="44" rx="3" ry="4" fill={accent} opacity="0.9"/>
+      {/* Body accent lines */}
+      <path d="M26,38 L174,38" stroke={accent} strokeWidth="1" opacity="0.4"/>
+      <Wheel cx={48} cy={59} r={13}/>
+      <Wheel cx={148} cy={59} r={13}/>
+      <ellipse cx={97} cy={72} rx={83} ry={4} fill="rgba(0,0,0,0.15)"/>
+    </svg>
+  );
+
+  if (type === "electric") return (
+    <svg viewBox={`0 0 ${w} ${h}`} width={size*2} height={size} style={{animation:anim,display:"block"}}>
+      {/* Clean smooth body */}
+      <path d="M20,60 L20,44 Q22,30 38,22 L75,16 L125,16 L152,18 Q166,24 170,36 L174,46 L174,60 Z" fill={color} stroke={accent} strokeWidth="1.5"/>
+      <path d="M75,16 L125,16 L148,18 Q158,20 162,26 L150,8 Q136,1 115,0 L84,0 Q64,1 52,14 Z" fill={roof}/>
+      <Window points="56,18 95,16 95,1 58,11" opacity="0.7"/>
+      <Window points="100,16 120,16 120,1 100,1" opacity="0.7"/>
+      {/* Clean minimal bumpers */}
+      <rect x="12" y="48" width="14" height="8" rx="4" fill={accent} opacity="0.7"/>
+      <rect x="166" y="48" width="14" height="8" rx="4" fill={accent} opacity="0.7"/>
+      {/* LED strip headlight */}
+      <rect x="12" y="42" width="12" height="3" rx="1" fill="#FFF9C4"/>
+      <rect x="168" y="42" width="12" height="2" rx="1" fill={accent}/>
+      {/* Charge indicator */}
+      <text x="90" y="40" fontSize="8" fill={accent} opacity="0.6" fontWeight="bold">⚡</text>
+      <Wheel cx={54} cy={63} r={13}/>
+      <Wheel cx={144} cy={63} r={13}/>
+      <ellipse cx={97} cy={77} rx={77} ry={4} fill="rgba(0,0,0,0.07)"/>
+    </svg>
+  );
+
+  if (type === "sedan") return (
+    <svg viewBox={`0 0 ${w} ${h}`} width={size*2} height={size} style={{animation:anim,display:"block"}}>
+      <path d="M18,60 L18,44 Q20,32 34,26 L68,20 L128,20 L152,22 Q166,28 170,40 L172,50 L172,60 Z" fill={color} stroke={accent} strokeWidth="1.5"/>
+      <path d="M68,20 L128,20 L150,22 Q158,24 162,30 L152,12 Q138,4 118,3 L80,3 Q62,4 52,18 Z" fill={roof}/>
+      <Window points="56,21 92,20 92,4 58,16" opacity="0.65"/>
+      <Window points="97,20 122,20 122,4 97,4" opacity="0.65"/>
+      <Window points="128,20 148,22 150,14 130,8" opacity="0.65"/>
+      <rect x="10" y="48" width="12" height="8" rx="3" fill={accent} opacity="0.8"/>
+      <rect x="170" y="48" width="12" height="8" rx="3" fill={accent} opacity="0.7"/>
+      <ellipse cx="16" cy="46" rx="5" ry="6" fill="#FFF9C4" opacity="0.9"/>
+      <ellipse cx="176" cy="46" rx="3" ry="4" fill="#FF8A80" opacity="0.8"/>
+      <Wheel cx={52} cy={63} r={13}/>
+      <Wheel cx={142} cy={63} r={13}/>
+      <ellipse cx={97} cy={77} rx={77} ry={4} fill="rgba(0,0,0,0.08)"/>
+    </svg>
+  );
+
+  if (type === "cyber") return (
+    <svg viewBox={`0 0 ${w} ${h}`} width={size*2} height={size} style={{animation:anim,display:"block"}}>
+      {/* Angular cyber body */}
+      <path d="M15,58 L15,48 L25,30 L55,18 L145,16 L168,22 L178,40 L178,58 Z" fill={color} stroke={accent} strokeWidth="2"/>
+      <path d="M55,18 L145,16 L162,20 L155,6 L140,2 L70,2 L52,10 Z" fill={roof}/>
+      <polygon points="58,19 98,16 98,3 60,11" fill="#B3E5FC" opacity="0.6" stroke={accent} strokeWidth="0.5"/>
+      <polygon points="104,16 144,16 142,3 106,3" fill="#B3E5FC" opacity="0.6" stroke={accent} strokeWidth="0.5"/>
+      {/* Neon accent strips */}
+      <path d="M25,30 L178,32" stroke={accent} strokeWidth="2" opacity="0.5"/>
+      <path d="M25,48 L178,48" stroke={accent} strokeWidth="1.5" opacity="0.3"/>
+      <rect x="8" y="44" width="16" height="6" rx="1" fill={accent} opacity="0.9"/>
+      <rect x="168" y="44" width="16" height="4" rx="1" fill={accent} opacity="0.8"/>
+      {/* Glow effect */}
+      <ellipse cx={96} cy={58} rx={82} ry={6} fill={accent} opacity="0.08"/>
+      <Wheel cx={50} cy={61} r={13}/>
+      <Wheel cx={148} cy={61} r={13}/>
+      <ellipse cx={97} cy={74} rx={82} ry={4} fill="rgba(0,0,0,0.15)"/>
+    </svg>
+  );
+
+  // Flying car
+  return (
+    <svg viewBox={`0 0 ${w} ${h}`} width={size*2} height={size} style={{animation:anim,display:"block"}}>
+      <path d="M20,48 L20,38 Q22,26 38,20 L80,14 L130,14 L155,18 Q168,24 170,34 L172,44 L172,48 Z" fill={color} stroke={accent} strokeWidth="1.5"/>
+      <path d="M80,14 L130,14 L152,18 Q160,20 164,26 L155,8 Q142,1 120,0 L90,0 Q70,1 60,12 Z" fill={roof}/>
+      <Window points="64,15 100,14 100,1 66,10" opacity="0.7"/>
+      <Window points="106,14 126,14 126,1 106,1" opacity="0.7"/>
+      {/* Wings */}
+      <path d="M50,38 L20,28 L14,32 L48,44 Z" fill={accent} opacity="0.7"/>
+      <path d="M148,38 L178,28 L184,32 L150,44 Z" fill={accent} opacity="0.7"/>
+      {/* Thrust nozzles */}
+      <ellipse cx={22} cy={44} rx={5} ry={3} fill="#FFF9C4" opacity="0.9"/>
+      <ellipse cx={176} cy={44} rx={5} ry={3} fill="#FFF9C4" opacity="0.9"/>
+      {/* Hover effect instead of wheels */}
+      <ellipse cx={60} cy={52} rx={20} ry={4} fill={accent} opacity="0.25"/>
+      <ellipse cx={140} cy={52} rx={20} ry={4} fill={accent} opacity="0.25"/>
+      <ellipse cx={97} cy={64} rx={78} ry={5} fill={accent} opacity="0.08"/>
+    </svg>
+  );
+}
+
+
 
 const STATIONS = [
   { id:"chassis",     name:"Chassis",      icon:"⚙️",  col:"#FF6B35", city:0,  bg:"linear-gradient(135deg,#fff5f0,#ffe4d4)", particle:"#FF6B35", machine:"🔩⚙️🔨" },
@@ -453,7 +723,7 @@ const PRESTIGE = [
   { money:150000000000,    cars:8500, label:"→ London"     },
   { money:500000000000,    cars:13000,label:"→ Singapur"   },
   { money:1700000000000,   cars:20000,label:"→ São Paulo"  },
-  { money:5500000000000,   cars:32000,label:"→ Neo-Tokio"  },
+  { money:5500000000000,   cars:32000,label:"→ Osaka"  },
   { money:18000000000000,  cars:50000,label:"→ Cyberspace" },
 ];
 
@@ -969,7 +1239,7 @@ function tickGS(gs) {
 function initGS() {
   return {
     money:8000, cityIdx:0, totalBuilt:0, totalSold:0,
-    totalWorkers:3, salesmanLvl:0, gameDay:1, dayTick:0,
+    totalWorkers:3, salesmanLvl:1, gameDay:1, dayTick:0,
     parked:[], contracts:[genContract(0, false, {polo:true})], techs:{},
     lines:makeLines(),
     reputation:0, streak:0, tunedCount:0,
@@ -1115,6 +1385,14 @@ function AutoFactory() {
   };
 
   // Trigger auto-save on gs changes (debounced)
+  const [activeNotif, setActiveNotif] = useState(null);
+  const notifQueue   = useRef([]);
+  const notifActive  = useRef(false);
+  const notifT       = useRef(null);
+  const prevEventId  = useRef(null);
+  const eventBannerT = useRef(null);
+  const coinId    = useRef(0);
+  const cheatTaps = useRef(0);
   useEffect(() => {
     if (isLoading) return; // don't save while loading
     clearTimeout(saveTimer.current);
@@ -1129,14 +1407,6 @@ function AutoFactory() {
   };
 
   // -- Unified notification queue ------------------------------
-  const [activeNotif, setActiveNotif] = useState(null);
-  const notifQueue   = useRef([]);
-  const notifActive  = useRef(false);
-  const notifT       = useRef(null);
-  const prevEventId  = useRef(null);
-  const eventBannerT = useRef(null);
-  const coinId    = useRef(0);
-  const cheatTaps = useRef(0);
   const cheatTimer= useRef(null);
 
   const handleCheatTap = () => {
@@ -1328,8 +1598,8 @@ function AutoFactory() {
 
   useEffect(() => {
     const lvl = cl(gs.salesmanLvl, 0, SALESMAN.length-1);
-    if (!lvl) return;
     const ms = Math.round(SALESMAN[lvl].ms / (cheatMode ? adminSpeed : 1));
+    if (!ms) return; // Level 0 = kein Verkäufer, nur manuell verkaufen
     const t  = setInterval(() => {
       setGS(prev => {
         if (!prev.parked.length) return prev;
@@ -1350,7 +1620,7 @@ function AutoFactory() {
           if(sc.type==="orders"&&orders>0) sc={...sc,current:(sc.current||0)+orders};
           if(sc.type==="streak"&&newStreak>=(sc.current||0)) sc={...sc,current:newStreak};
         }
-        return {...prev,parked:prev.parked.slice(1),money:prev.money+carVal+bonus,totalSold:prev.totalSold+1,totalEarned:(prev.totalEarned||0)+carVal+bonus,totalOrders:(prev.totalOrders||0)+orders,contracts,reputation:newRep,streak:newStreak,seasonChallenge:sc};
+        return {...prev,parked:prev.parked.slice(1),money:prev.money+carVal+bonus,totalSold:prev.totalSold+1,totalEarned:(prev.totalEarned||0)+carVal+bonus,totalOrders:(prev.totalOrders||0)+orders,contracts,reputation:newRep,streak:newStreak,seasonChallenge:sc,totalSoldSession:(prev.totalSoldSession||0)+1,totalEarnedSession:(prev.totalEarnedSession||0)+carVal+bonus};
       });
     }, ms);
     return () => clearInterval(t);
@@ -1390,7 +1660,7 @@ function AutoFactory() {
   // All 3 models of current city must be unlocked
   const cityModels = CITY_MODELS[ci]||[];
   const allCityModelsUnlocked = cityModels.every(m=>(gs.unlockedModels||{})[m.id]);
-  const canPre  = req && totalEarned>=req.money && gs.totalBuilt>=req.cars && allCityModelsUnlocked;
+  const canPre  = req && totalEarned>=req.money && gs.totalBuilt>=req.cars;
   const assignedW = gs.lines.filter(l=>l.id<maxL).reduce((s,l)=>s+(l.unlocked?l.workers:0),0);
   const freeW   = gs.totalWorkers - assignedW;
   const mechBase= Math.round(2200*Math.pow(1.18, gs.totalWorkers));
@@ -1508,7 +1778,7 @@ function AutoFactory() {
     const cost=LINE_COSTS[lid]||0;
     const techReq=LINE_TECH_REQ[lid];
     if(gs.money<cost||(techReq&&!gs.techs[techReq]))return;
-    setGS(p=>({...p,money:p.money-cost,lines:p.lines.map(l=>l.id===lid?{...l,unlocked:true,workers:1}:l)}));
+    setGS(p=>({...p,money:p.money-cost,lines:p.lines.map(l=>l.id===lid?{...l,unlocked:true,workers:0}:l)}));
     notify(`🏭 Linie ${lid+1} eröffnet!`);
   };
   const unlockModel=(mi)=>{
@@ -1538,7 +1808,7 @@ function AutoFactory() {
     const newCityFirstId = (CITY_MODELS[nl]&&CITY_MODELS[nl][0]&&CITY_MODELS[nl][0].id) || 'polo';
     setGS({
       money:Math.floor(gs.money*0.1), cityIdx:nl, totalBuilt:0, totalSold:0,
-      totalWorkers:3, salesmanLvl:0, gameDay:1, dayTick:0,
+      totalWorkers:3, salesmanLvl:1, gameDay:1, dayTick:0,
       parked:[], contracts:[genContract(nl, false, {[newCityFirstId]:true})], techs:gs.techs,
       lines:Array.from({length:MAX_LINES},(_,i)=>({id:i,unlocked:i===0,modelId:newCityFirstId,workers:i===0?1:0,stIdx:0,prog:0,ready:false})),
       reputation:0, streak:0,
@@ -1674,8 +1944,16 @@ function AutoFactory() {
   );
 
   return (
-    <div style={{ background:"#EEF2F7", minHeight:"100vh", fontFamily:"'Nunito',sans-serif", maxWidth:430, margin:"0 auto", display:"flex", flexDirection:"column", }}>
+    <div style={{ background:`linear-gradient(180deg, ${city.sky}dd 0%, ${city.sky}66 40%, #EEF2F7 100%)`, minHeight:"100vh", fontFamily:"'Nunito',sans-serif", maxWidth:430, margin:"0 auto", display:"flex", flexDirection:"column", position:"relative", transition:"background 0.8s ease" }}>
       <style>{css}</style>
+
+      {/* City Skyline SVG background */}
+      {city.skyline&&(
+        <svg viewBox="0 0 430 120" xmlns="http://www.w3.org/2000/svg"
+          style={{ position:"fixed",bottom:72,left:"50%",transform:"translateX(-50%)",width:"100%",maxWidth:430,height:120,pointerEvents:"none",zIndex:0,opacity:0.07,transition:"opacity 0.8s" }}>
+          <path d={city.skyline} fill={city.accent}/>
+        </svg>
+      )}
 
 
       {/* Coins */}
@@ -1684,7 +1962,7 @@ function AutoFactory() {
       ))}
 
       {/* -- HUD -- */}
-      <div style={{ position:"sticky",top:0,zIndex:50,background:"#fff",borderBottom:`2px solid ${city.accent}33`,paddingBottom:8,boxShadow:"0 3px 16px rgba(0,0,0,0.07)" }}>
+      <div style={{ position:"sticky",top:0,zIndex:50,background:`linear-gradient(180deg,${city.sky}ee,#ffffffee)`,backdropFilter:"blur(8px)",WebkitBackdropFilter:"blur(8px)",borderBottom:`2px solid ${city.accent}33`,paddingBottom:8,boxShadow:"0 3px 16px rgba(0,0,0,0.07)" }}>
         <div style={{ display:"flex",justifyContent:"space-between",alignItems:"center",padding:"12px 14px 6px" }}>
           <div style={{ display:"flex",alignItems:"center",gap:8,cursor:"pointer",background:"#fff",borderRadius:99,padding:"7px 14px 7px 10px",boxShadow:"0 3px 0 #e0e0e0",border:"2px solid #e8e8e8" }} onClick={()=>setShowMap(true)}>
             <span style={{ fontSize:24,display:"inline-block" }}>{city.flag}</span>
@@ -1805,7 +2083,7 @@ function AutoFactory() {
             </div>
             <button onClick={()=>canPre?setShowPre(true):null}
               style={{ fontSize:10,fontWeight:800,padding:"4px 12px",borderRadius:20,border:"none",background:canPre?city.accent:"rgba(255,255,255,0.5)",color:canPre?"#fff":"#aaa",cursor:canPre?"pointer":"default",fontFamily:"'Nunito',sans-serif",boxShadow:canPre?`0 4px 0 ${city.accent}88`:"none",animation:canPre?"bounce 1.2s ease infinite":"none",whiteSpace:"nowrap" }}>
-              {canPre?"✨ PRESTIGE!":!allCityModelsUnlocked?`🔓 Alle Modelle freischalten`:req.label}
+              {canPre?"✨ PRESTIGE!":req.label}
             </button>
           </div>
         )}
@@ -1869,7 +2147,7 @@ function AutoFactory() {
       })()}
 
       {/* -- CONTENT -- */}
-      <div style={{ flex:1,overflowY:"auto",padding:"10px 12px 100px" }}>
+      <div style={{ flex:1,overflowY:"auto",padding:"10px 12px 100px",position:"relative",zIndex:1 }}>
 
         {/* == FABRIK == */}
         {tab==="fabrik"&&(
@@ -2141,6 +2419,118 @@ function AutoFactory() {
             <div style={{ textAlign:"center",fontSize:10,color:"rgba(0,0,0,0.2)",fontWeight:700,padding:"6px 0" }}>
               🏭 {gs.totalBuilt} GEBAUT . 👆 {gs.totalTaps||0} TAPS . {CITIES[ci].maxLines} LINIEN
             </div>
+
+
+            {/* ── Aufträge Preview ── */}
+            {(gs.contracts||[]).filter(c=>!c.claimed).length>0&&(
+              <div style={{ marginTop:8 }}>
+                <div style={{ fontSize:10,fontWeight:900,color:"#888",letterSpacing:0.5,marginBottom:6 }}>📋 OFFENE AUFTRÄGE</div>
+                <div style={{ display:"flex",gap:6,overflowX:"auto",scrollbarWidth:"none" }}>
+                  {(gs.contracts||[]).filter(c=>!c.claimed).slice(0,4).map(c=>{
+                    const m=ALL_MODELS.find(x=>x.id===c.modelId)||{emoji:"🚗",name:c.modelId};
+                    const val=Math.round((c.val||0)*streakMult*repBonus);
+                    const ttl=c.ttl||200;
+                    const pct=Math.round(((c.ticksLeft||ttl)/ttl)*100);
+                    const urgent=pct<30;
+                    const hasCar=gs.parked.some(p=>p.modelId===c.modelId);
+                    return (
+                      <div key={c.id} style={{ flexShrink:0,background:c.isVip?"linear-gradient(135deg,#FFF8E7,#FFF3CD)":hasCar?"linear-gradient(135deg,#E8F5E9,#F1F8E9)":"#fff",border:`2px solid ${c.isVip?"#FFD70066":hasCar?"#4CAF5066":"#e0e0e0"}`,borderRadius:14,padding:"8px 10px",minWidth:100,position:"relative" }}>
+                        {c.isVip&&<div style={{ position:"absolute",top:-5,right:-5,background:"#FFD700",color:"#333",fontSize:7,fontWeight:900,borderRadius:99,padding:"2px 5px" }}>VIP</div>}
+                        <div style={{ fontSize:9,fontWeight:900,color:"#555" }}>{m.name}</div>
+                        <div style={{ fontSize:11,fontWeight:900,color:c.isVip?"#B8860B":city.accent,marginTop:2 }}>{fmtE(val)}</div>
+                        <div style={{ height:3,background:"#f0f0f0",borderRadius:99,marginTop:4,overflow:"hidden" }}>
+                          <div style={{ height:"100%",background:urgent?"#E63946":hasCar?"#4CAF50":"#FF9800",width:`${pct}%`,borderRadius:99,transition:"width .5s" }}/>
+                        </div>
+                        {hasCar&&<div style={{ fontSize:7,color:"#4CAF50",fontWeight:800,marginTop:2 }}>✅ Lieferbereit</div>}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {/* ── SHOWROOM / PARKPLATZ ── */}
+            <div style={{ background:"linear-gradient(135deg,#1a1a2e,#16213e)",borderRadius:20,padding:"14px",marginTop:6,border:"2px solid #ffffff11" }}>
+              {/* Verkäufer + Featured Car */}
+              <div style={{ display:"flex",alignItems:"center",gap:12,marginBottom:12 }}>
+                {/* Salesman */}
+                <div style={{ textAlign:"center",minWidth:56 }}>
+                  <div style={{ fontSize:36,animation:"customerBob 1.2s ease-in-out infinite" }}>{SALESMAN[slvl].emoji}</div>
+                  <div style={{ fontSize:8,color:"#aaa",marginTop:2 }}>{SALESMAN[slvl].name}</div>
+                </div>
+                {/* Featured car or empty */}
+                {gs.parked.length>0?(
+                  <div style={{ flex:1,background:"rgba(255,255,255,0.06)",borderRadius:14,padding:"10px 12px",display:"flex",alignItems:"center",gap:10,cursor:"pointer" }} onClick={()=>setTuningCar(gs.parked[0].id)}>
+                    <CarSVG modelId={gs.parked[0].modelId} size={44} animated={true}/>
+                    <div style={{ flex:1 }}>
+                      <div style={{ fontSize:12,fontWeight:900,color:"#fff" }}>{gs.parked[0].name}</div>
+                      <div style={{ fontSize:13,fontWeight:900,color:"#FFD700",marginTop:2 }}>{fmtE(gs.parked[0].val)}</div>
+                      {(gs.parked[0].appliedTuning||[]).length>0&&(
+                        <div style={{ fontSize:9,color:"#FF9800",marginTop:2 }}>
+                          {(gs.parked[0].appliedTuning||[]).map(tid=>TUNING_LEVELS.find(t=>t.id===tid)||{}).filter(t=>t.icon).map(t=>t.icon).join(' ')} Getunt
+                        </div>
+                      )}
+                    </div>
+                    <button onClick={(e)=>{e.stopPropagation();sell();}} style={{ padding:"8px 14px",background:`linear-gradient(135deg,${city.accent},${city.accent}cc)`,border:"none",borderRadius:12,color:"#fff",fontWeight:900,fontSize:11,cursor:"pointer",fontFamily:"'Nunito',sans-serif",boxShadow:`0 3px 0 ${city.accent}66`,whiteSpace:"nowrap" }}>
+                      💰 Verkaufen
+                    </button>
+                  </div>
+                ):(
+                  <div style={{ flex:1,background:"rgba(255,255,255,0.04)",borderRadius:14,padding:"14px 12px",textAlign:"center",border:"2px dashed rgba(255,255,255,0.1)" }}>
+                    <div style={{ fontSize:24,opacity:0.3 }}>🚗</div>
+                    <div style={{ fontSize:10,color:"#555",marginTop:4 }}>Showroom leer — Autos produzieren!</div>
+                  </div>
+                )}
+              </div>
+
+              {/* Parked cars queue */}
+              {gs.parked.length>1&&(
+                <div style={{ display:"flex",gap:5,overflowX:"auto",paddingBottom:4,scrollbarWidth:"none" }}>
+                  {gs.parked.slice(1,12).map((car,i)=>(
+                    <div key={car.id} onClick={()=>setTuningCar(car.id)}
+                      style={{ flexShrink:0,width:50,height:62,background:"rgba(255,255,255,0.05)",borderRadius:12,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",cursor:"pointer",border:"1px solid rgba(255,255,255,0.08)",position:"relative" }}>
+                      {(car.appliedTuning||[]).length>0&&<div style={{ position:"absolute",top:2,right:3,fontSize:7,color:"#FF9800" }}>{(TUNING_LEVELS.find(t=>t.id===(car.appliedTuning||[]).slice(-1)[0])||{icon:''}).icon}</div>}
+                      <CarSVG modelId={car.modelId} size={22}/>
+                      <div style={{ fontSize:7,color:"#aaa",marginTop:2 }}>{fmtE(car.val)}</div>
+                    </div>
+                  ))}
+                  {gs.parked.length>12&&(
+                    <div style={{ flexShrink:0,width:50,height:62,background:"rgba(255,255,255,0.03)",borderRadius:12,display:"flex",alignItems:"center",justifyContent:"center" }}>
+                      <div style={{ fontSize:9,color:"#555",textAlign:"center" }}>+{gs.parked.length-12}</div>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Showroom stats + Verkäufer-Roster */}
+              <div style={{ marginTop:10,paddingTop:8,borderTop:"1px solid rgba(255,255,255,0.07)" }}>
+                <div style={{ display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:8 }}>
+                  <div style={{ fontSize:10,color:"#555" }}>🚗 {gs.parked.length}/{showroomMax} Plätze . 💰 {gs.totalSold} verkauft</div>
+                  <div style={{ fontSize:9,color:"#666",fontWeight:800 }}>VERKÄUFER</div>
+                </div>
+                <div style={{ display:"flex",gap:6,overflowX:"auto",paddingBottom:4,scrollbarWidth:"none" }}>
+                  {SALESMAN.slice(1).map((s,i)=>{
+                    const idx = i+1;
+                    const isCurrent = slvl===idx;
+                    const isOwned = slvl>=idx;
+                    const canBuy = slvl===idx-1 && gs.money>=s.cost;
+                    return (
+                      <div key={idx} onClick={()=>canBuy?upgSale():null}
+                        style={{ flexShrink:0,width:64,background:isCurrent?"rgba(255,215,0,0.15)":isOwned?"rgba(76,175,80,0.1)":canBuy?"rgba(255,107,53,0.12)":"rgba(255,255,255,0.03)",border:`1.5px solid ${isCurrent?"#FFD700":isOwned?"#4CAF5055":canBuy?city.accent+"88":"rgba(255,255,255,0.08)"}`,borderRadius:12,padding:"8px 4px",textAlign:"center",cursor:canBuy?"pointer":"default",transition:"all .2s" }}>
+                        <div style={{ fontSize:22 }}>{s.emoji}</div>
+                        <div style={{ fontSize:7,fontWeight:800,color:isCurrent?"#FFD700":isOwned?"#4CAF50":canBuy?"#fff":"#444",marginTop:3,lineHeight:1.2 }}>{s.name}</div>
+                        {isOwned?(
+                          <div style={{ fontSize:7,color:isCurrent?"#FFD700":"#4CAF50",marginTop:2 }}>{isCurrent?"AKTIV":"✓"}</div>
+                        ):(
+                          <div style={{ fontSize:7,color:canBuy?city.accent:"#555",marginTop:2 }}>{fmtE(s.cost)}</div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+
           </div>
         )}
 
@@ -2321,7 +2711,7 @@ function AutoFactory() {
                             {upgLvl>0&&<div style={{ position:"absolute",top:6,right:6,background:"#4CAF50",color:"#fff",fontSize:7,fontWeight:900,borderRadius:99,padding:"1px 5px" }}>+{upgLvl*20}%</div>}
                             {/* Car on pedestal */}
                             <div style={{ position:"relative",marginBottom:6 }}>
-                              <div style={{ fontSize:44,filter:locked?"grayscale(0.8) opacity(0.4)":"none",animation:locked?"none":"float 3s ease-in-out infinite",animationDelay:`${m.mi*0.5}s` }}>{m.emoji}</div>
+                              <div style={{ opacity:locked?0.35:1 }}><CarSVG modelId={m.id} size={44} animated={!locked}/></div>
                               {/* Pedestal shadow */}
                               <div style={{ width:50,height:6,background:locked?"#e0e0e0":c2.accent+"33",borderRadius:"50%",margin:"-4px auto 0",filter:"blur(2px)" }}/>
                             </div>
@@ -2730,7 +3120,7 @@ function AutoFactory() {
       </div>
 
       {/* -- TAB BAR -- */}
-      <div style={{ position:"fixed",bottom:0,left:"50%",transform:"translateX(-50%)",width:"100%",maxWidth:430,background:"#fff",borderTop:"3px solid #f0f0f0",display:"flex",zIndex:50,boxShadow:"0 -4px 20px rgba(0,0,0,0.08)" }}>
+      <div style={{ position:"fixed",bottom:0,left:"50%",transform:"translateX(-50%)",width:"100%",maxWidth:430,background:`linear-gradient(0deg,${city.sky}dd,#ffffffee)`,backdropFilter:"blur(10px)",WebkitBackdropFilter:"blur(10px)",borderTop:`2px solid ${city.accent}22`,display:"flex",zIndex:50,boxShadow:"0 -4px 20px rgba(0,0,0,0.06)" }}>
         {[["fabrik","🏭","Fabrik"],["showroom","🚗","Showroom"],["missions","📋","Missionen"],["forschen","🔬","Forschen"],["achievements","🏆","Erfolge"]].map(([k,ic,lb])=>(
           <button key={k} onClick={()=>switchTab(k)} style={{ flex:1,padding:"8px 2px 12px",background:"none",border:"none",cursor:"pointer",borderTop:`3px solid ${tab===k?city.accent:"transparent"}`,transition:"border-color .2s",position:"relative" }}>
             <div style={{ fontSize:20,animation:tab===k?"bounce 1s ease infinite":"none" }}>{ic}</div>
@@ -2833,7 +3223,7 @@ function AutoFactory() {
               {/* Sheet header */}
               <div style={{ display:"flex",alignItems:"center",justifyContent:"space-between",padding:"18px 20px 10px" }}>
                 <div style={{ display:"flex",alignItems:"center",gap:12 }}>
-                  <span style={{ fontSize:34 }}>{car.emoji}</span>
+                  <CarSVG modelId={car.modelId} size={34}/>
                   <div>
                     <div style={{ fontSize:16,fontWeight:900,color:"#fff" }}>{car.name}</div>
                     <div style={{ fontSize:11,color:"#aaa" }}>Tuning-Werkstatt . Aktuell: {fmtE(car.val)}</div>
@@ -3229,15 +3619,5 @@ function AutoFactory() {
   <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
-  <script>
-  (function(){
-    function showErr(msg){document.getElementById('root').innerHTML='<pre style="color:red;font-size:10px;padding:12px;white-space:pre-wrap;background:#fff;min-height:100vh">'+String(msg)+'</pre>';}
-    try{
-      var src=document.getElementById('src').textContent;
-      var r=Babel.transform(src,{presets:['react'],sourceType:'script',filename:'game.jsx'});
-      var s=document.createElement('script');s.textContent=r.code;document.body.appendChild(s);
-    }catch(e){showErr(e&&e.message?e.message+'\n'+(e.stack||''):String(e));}
-  })();
-  </script>
-</body>
-</html>
+  <script>(function(){function showErr(msg){document.getElementById('root').innerHTML='<pre style="color:red;font-size:10px;padding:12px;white-space:pre-wrap;background:#fff;min-height:100vh">'+String(msg)+'</pre>';}try{var src=document.getElementById('src').textContent;var r=Babel.transform(src,{presets:['react'],sourceType:'script',filename:'game.jsx'});var s=document.createElement('script');s.textContent=r.code;document.body.appendChild(s);}catch(e){showErr(e&&e.message?e.message+'\n'+(e.stack||''):String(e));}})();</script>
+</body></html>
