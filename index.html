@@ -1,47 +1,32 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="Auto-Factory">
   <meta name="theme-color" content="#FF6B35">
-  <title>🏭 Auto-Factory</title>
+  <title>Auto-Factory</title>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;800;900&display=swap" rel="stylesheet">
-  <style>
-    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-    html,body{margin:0;padding:0;background:#EEF2F7;}
-    body{overscroll-behavior:none;}
-    #root{max-width:430px;margin:0 auto;min-height:100vh;}
-  </style>
+  <style>*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}html,body{margin:0;padding:0;background:#EEF2F7;}body{overscroll-behavior:none;}#root{max-width:430px;margin:0 auto;min-height:100vh;}</style>
 </head>
 <body>
   <div id="root">
-    <div style="display:flex;align-items:center;justify-content:center;height:100vh;flex-direction:column;gap:16px;font-family:sans-serif;">
-      <div style="font-size:60px">🏭</div>
-      <div style="font-weight:900;font-size:20px;color:#333">Auto-Factory</div>
-      <div style="color:#aaa;font-size:13px">Wird geladen...</div>
+    <div style="display:flex;align-items:center;justify-content:center;height:100vh;flex-direction:column;gap:16px;font-family:sans-serif;background:#EEF2F7;">
+      <div style="font-size:60px">&#127981;</div>
+      <div style="font-weight:900;font-size:20px;color:#333;font-family:Georgia,serif">Auto-Factory</div>
+      <div style="color:#aaa;font-size:13px" id="status">Wird geladen...</div>
     </div>
   </div>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
-
-  <script type="text/babel">
-    /* eslint-disable */
-    const { useState, useEffect, useRef } = React;
-
-    try {
+  <script id="src" type="text/plain">
+const { useState, useEffect, useRef } = React;
 
 
-
-// ═══ CONSTANTS ═══════════════════════════════════════════════
+// === CONSTANTS ===============================================
 const TICK_MS   = 200;
 const TICKS_DAY = 100;
 const MAX_LINES = 7;
 
-// ── EVENTS ──────────────────────────────────────────────────
+// -- EVENTS --------------------------------------------------
 const DAILY_EVENTS = [
   { id:"bonus",    type:"good", icon:"🎉", name:"Bonus-Tag!",           desc:"Alle Einnahmen heute +50%",          effect:"income+50"   },
   { id:"hype",     type:"good", icon:"📺", name:"Medien-Hype!",          desc:"Autowert heute +40%",                effect:"value+40"    },
@@ -50,23 +35,23 @@ const DAILY_EVENTS = [
   { id:"weather",  type:"good", icon:"☀️", name:"Perfektes Wetter!",     desc:"Produktionsgeschwindigkeit +20%",    effect:"speed+20"    },
   { id:"crash",    type:"bad",  icon:"🔧", name:"Maschinenpanne!",        desc:"Linie 1 pausiert für 20s",           effect:"line1stop"   },
   { id:"delay",    type:"bad",  icon:"🚢", name:"Lieferverzug!",          desc:"Bauzeit heute +30% langsamer",       effect:"speed-30"    },
-  { id:"strike",   type:"bad",  icon:"✊", name:"Streik!",                desc:"Lohnkosten heute ×2",                effect:"wage+100"    },
-  { id:"rival",    type:"bad",  icon:"🏁", name:"Konkurrenz-Druck!",      desc:"Auftragspreise heute −25%",          effect:"contract-25" },
+  { id:"strike",   type:"bad",  icon:"✊", name:"Streik!",                desc:"Lohnkosten heute x2",                effect:"wage+100"    },
+  { id:"rival",    type:"bad",  icon:"🏁", name:"Konkurrenz-Druck!",      desc:"Auftragspreise heute -25%",          effect:"contract-25" },
   { id:"recall",   type:"bad",  icon:"⚠️", name:"Rückrufaktion!",         desc:"Showroom halbiert sich kurz",        effect:"recall"      },
-  { id:"boom",     type:"good", icon:"🎆", name:"Wirtschafts­boom!",        desc:"Alle Werte heute ×1.8",              effect:"boom"        },
+  { id:"boom",     type:"good", icon:"🎆", name:"Wirtschaftsboom!",        desc:"Alle Werte heute x1.8",              effect:"boom"        },
   { id:"influencer_day",type:"good",icon:"📲",name:"Viral gegangen!",       desc:"Auftragsbonus heute +80%",           effect:"viral"       },
-  { id:"shortage",  type:"bad",  icon:"⛽", name:"Rohstoff­knappheit!",     desc:"Bauzeit heute +50% langsamer",       effect:"shortage"    },
+  { id:"shortage",  type:"bad",  icon:"⛽", name:"Rohstoffknappheit!",     desc:"Bauzeit heute +50% langsamer",       effect:"shortage"    },
 ];
 
-// ── ACHIEVEMENTS ─────────────────────────────────────────────
-// ── ACHIEVEMENT TIERS ────────────────────────────────────────
+// -- ACHIEVEMENTS ---------------------------------------------
+// -- ACHIEVEMENT TIERS ----------------------------------------
 // tier: 1=Bronze, 2=Silber, 3=Gold, 4=Platin, 0=Geheim
 // reward: { type: 'money'|'rep'|'streak'|'notify', val }
 // chain: next achievement id unlocked after this one
 const ACHIEVEMENTS = [
-  // ══ PRODUKTION ════════════════════════════════════════════
+  // == PRODUKTION ============================================
   { id:"first_car",   cat:"prod", tier:1, icon:"🔩", name:"Erster Bolide",       desc:"Erstes Auto vom Band gebaut",             check:gs=>gs.totalBuilt>=1,    reward:{type:"money",val:2000},  chain:"car25"   },
-  { id:"car25",       cat:"prod", tier:1, icon:"🚗", name:"Klein­produktion",    desc:"25 Fahrzeuge gebaut",                     check:gs=>gs.totalBuilt>=25,   reward:{type:"money",val:15000}, chain:"car100"  },
+  { id:"car25",       cat:"prod", tier:1, icon:"🚗", name:"Kleinproduktion",    desc:"25 Fahrzeuge gebaut",                     check:gs=>gs.totalBuilt>=25,   reward:{type:"money",val:15000}, chain:"car100"  },
   { id:"car100",      cat:"prod", tier:2, icon:"🏭", name:"Serienproduktion",    desc:"100 Fahrzeuge gebaut",                    check:gs=>gs.totalBuilt>=100,  reward:{type:"money",val:80000}, chain:"car500"  },
   { id:"car500",      cat:"prod", tier:2, icon:"🏗️",name:"Maschinenpark",       desc:"500 Fahrzeuge gebaut",                    check:gs=>gs.totalBuilt>=500,  reward:{type:"money",val:500000},chain:"car2500" },
   { id:"car2500",     cat:"prod", tier:3, icon:"🚀", name:"Massenproduktion",    desc:"2.500 Fahrzeuge gebaut",                  check:gs=>gs.totalBuilt>=2500, reward:{type:"money",val:5000000},chain:"car10k" },
@@ -74,117 +59,117 @@ const ACHIEVEMENTS = [
 
   // Linien-Kette
   { id:"line2",       cat:"prod", tier:1, icon:"⚙️",name:"Doppelschicht",       desc:"2 Produktionslinien aktiv",               check:gs=>gs.lines.filter(l=>l.unlocked).length>=2, reward:{type:"money",val:5000},   chain:"line3" },
-  { id:"line3",       cat:"prod", tier:2, icon:"🏗️",name:"Drei­linienbetrieb",  desc:"3 Produktionslinien aktiv",               check:gs=>gs.lines.filter(l=>l.unlocked).length>=3, reward:{type:"money",val:40000},  chain:"line4" },
+  { id:"line3",       cat:"prod", tier:2, icon:"🏗️",name:"Dreilinienbetrieb",  desc:"3 Produktionslinien aktiv",               check:gs=>gs.lines.filter(l=>l.unlocked).length>=3, reward:{type:"money",val:40000},  chain:"line4" },
   { id:"line4",       cat:"prod", tier:3, icon:"🏭", name:"Großfabrik",          desc:"4 Produktionslinien aktiv",               check:gs=>gs.lines.filter(l=>l.unlocked).length>=4, reward:{type:"money",val:300000}, chain:"line5" },
-  { id:"line5",       cat:"prod", tier:4, icon:"🤖", name:"Mega-Fabrik",         desc:"5 Produktionslinien — volle Kapazität",   check:gs=>gs.lines.filter(l=>l.unlocked).length>=5, reward:{type:"money",val:2000000}               },
+  { id:"line5",       cat:"prod", tier:4, icon:"🤖", name:"Mega-Fabrik",         desc:"5 Produktionslinien  -  volle Kapazität",   check:gs=>gs.lines.filter(l=>l.unlocked).length>=5, reward:{type:"money",val:2000000}               },
 
   // Modell-Upgrades
-  { id:"upg1",        cat:"prod", tier:1, icon:"⬆️",name:"Aufwerts­techniker",  desc:"1 Modell auf Stufe 1 gebracht",           check:gs=>Object.values(gs.modelUpgrades||{}).some(v=>v>=1), reward:{type:"money",val:8000},  chain:"upg3" },
-  { id:"upg3",        cat:"prod", tier:2, icon:"🔧", name:"Tuning­ingenieur",    desc:"3 Modelle auf mindestens Stufe 2",        check:gs=>Object.values(gs.modelUpgrades||{}).filter(v=>v>=2).length>=3, reward:{type:"money",val:60000}, chain:"upgmax" },
+  { id:"upg1",        cat:"prod", tier:1, icon:"⬆️",name:"Aufwertstechniker",  desc:"1 Modell auf Stufe 1 gebracht",           check:gs=>Object.values(gs.modelUpgrades||{}).some(v=>v>=1), reward:{type:"money",val:8000},  chain:"upg3" },
+  { id:"upg3",        cat:"prod", tier:2, icon:"🔧", name:"Tuningingenieur",    desc:"3 Modelle auf mindestens Stufe 2",        check:gs=>Object.values(gs.modelUpgrades||{}).filter(v=>v>=2).length>=3, reward:{type:"money",val:60000}, chain:"upgmax" },
   { id:"upgmax",      cat:"prod", tier:3, icon:"💠", name:"Perfektionist",       desc:"Ein Modell voll auf Stufe 5 ausgebaut",   check:gs=>Object.values(gs.modelUpgrades||{}).some(v=>v>=5), reward:{type:"money",val:500000}               },
 
-  // ══ VERKAUF ═══════════════════════════════════════════════
+  // == VERKAUF ===============================================
   { id:"first_sold",  cat:"sale", tier:1, icon:"💰", name:"Erster Abschluss",    desc:"Erstes Auto erfolgreich verkauft",        check:gs=>gs.totalSold>=1,     reward:{type:"money",val:1000},  chain:"sold50"  },
-  { id:"sold50",      cat:"sale", tier:1, icon:"💵", name:"Gebrauchtwagen­händler",desc:"50 Autos verkauft",                     check:gs=>gs.totalSold>=50,    reward:{type:"money",val:30000}, chain:"sold250" },
-  { id:"sold250",     cat:"sale", tier:2, icon:"💎", name:"Autohaus­besitzer",   desc:"250 Autos verkauft",                     check:gs=>gs.totalSold>=250,   reward:{type:"money",val:200000},chain:"sold1k"  },
+  { id:"sold50",      cat:"sale", tier:1, icon:"💵", name:"Gebrauchtwagenhändler",desc:"50 Autos verkauft",                     check:gs=>gs.totalSold>=50,    reward:{type:"money",val:30000}, chain:"sold250" },
+  { id:"sold250",     cat:"sale", tier:2, icon:"💎", name:"Autohausbesitzer",   desc:"250 Autos verkauft",                     check:gs=>gs.totalSold>=250,   reward:{type:"money",val:200000},chain:"sold1k"  },
   { id:"sold1k",      cat:"sale", tier:3, icon:"🏅", name:"Verkaufslegende",     desc:"1.000 Autos verkauft",                   check:gs=>gs.totalSold>=1000,  reward:{type:"money",val:2000000},chain:"sold5k" },
   { id:"sold5k",      cat:"sale", tier:4, icon:"👑", name:"Auto-Magnat",         desc:"5.000 Autos an den Mann gebracht",        check:gs=>gs.totalSold>=5000,  reward:{type:"money",val:20000000}              },
 
   // Auftrags-Kette
   { id:"order1",      cat:"sale", tier:1, icon:"📋", name:"Erster Auftrag",      desc:"Ersten Auftrag erfüllt",                  check:gs=>(gs.totalOrders||0)>=1,   reward:{type:"money",val:3000},  chain:"order10" },
   { id:"order10",     cat:"sale", tier:1, icon:"📦", name:"Auftragstreiber",      desc:"10 Aufträge erfüllt",                     check:gs=>(gs.totalOrders||0)>=10,  reward:{type:"money",val:25000}, chain:"order50" },
-  { id:"order50",     cat:"sale", tier:2, icon:"🚚", name:"Liefer­spezialist",    desc:"50 Aufträge pünktlich erfüllt",           check:gs=>(gs.totalOrders||0)>=50,  reward:{type:"money",val:150000},chain:"order200"},
-  { id:"order200",    cat:"sale", tier:3, icon:"🌐", name:"Logistik­meister",     desc:"200 Aufträge abgewickelt",                check:gs=>(gs.totalOrders||0)>=200, reward:{type:"money",val:1000000}              },
+  { id:"order50",     cat:"sale", tier:2, icon:"🚚", name:"Lieferspezialist",    desc:"50 Aufträge pünktlich erfüllt",           check:gs=>(gs.totalOrders||0)>=50,  reward:{type:"money",val:150000},chain:"order200"},
+  { id:"order200",    cat:"sale", tier:3, icon:"🌐", name:"Logistikmeister",     desc:"200 Aufträge abgewickelt",                check:gs=>(gs.totalOrders||0)>=200, reward:{type:"money",val:1000000}              },
 
   // Streak-Kette
   { id:"streak3",     cat:"sale", tier:1, icon:"🔥", name:"Auf Kurs",            desc:"3 Aufträge in Folge",                     check:gs=>gs.streak>=3,        reward:{type:"money",val:5000},  chain:"streak7" },
-  { id:"streak7",     cat:"sale", tier:2, icon:"🔥", name:"Flammen­streak",      desc:"7 Aufträge in Folge",                     check:gs=>gs.streak>=7,        reward:{type:"money",val:40000}, chain:"streak15"},
-  { id:"streak15",    cat:"sale", tier:3, icon:"🌋", name:"Auftrags­vulkan",     desc:"15 Aufträge am Stück — heiß!",            check:gs=>gs.streak>=15,       reward:{type:"money",val:300000},chain:"streak30"},
-  { id:"streak30",    cat:"sale", tier:4, icon:"⚡", name:"Unaufhaltsam",        desc:"30 Aufträge Streak — legendär",           check:gs=>gs.streak>=30,       reward:{type:"money",val:3000000}               },
+  { id:"streak7",     cat:"sale", tier:2, icon:"🔥", name:"Flammenstreak",      desc:"7 Aufträge in Folge",                     check:gs=>gs.streak>=7,        reward:{type:"money",val:40000}, chain:"streak15"},
+  { id:"streak15",    cat:"sale", tier:3, icon:"🌋", name:"Auftragsvulkan",     desc:"15 Aufträge am Stück  -  heiß!",            check:gs=>gs.streak>=15,       reward:{type:"money",val:300000},chain:"streak30"},
+  { id:"streak30",    cat:"sale", tier:4, icon:"⚡", name:"Unaufhaltsam",        desc:"30 Aufträge Streak  -  legendär",           check:gs=>gs.streak>=30,       reward:{type:"money",val:3000000}               },
 
   // Tuning-Kette
-  { id:"tuned1",      cat:"sale", tier:1, icon:"🔧", name:"Tuning­einstieg",     desc:"1 Auto getunt",                           check:gs=>(gs.tunedCount||0)>=1,   reward:{type:"money",val:4000},  chain:"tuned5" },
-  { id:"tuned5",      cat:"sale", tier:2, icon:"⚡", name:"Tuning­werkstatt",    desc:"5 Autos getunt",                          check:gs=>(gs.tunedCount||0)>=5,   reward:{type:"money",val:35000}, chain:"tuned20"},
-  { id:"tuned20",     cat:"sale", tier:3, icon:"🏎️",name:"Tuning­guru",         desc:"20 Autos veredelt",                       check:gs=>(gs.tunedCount||0)>=20,  reward:{type:"money",val:250000}               },
+  { id:"tuned1",      cat:"sale", tier:1, icon:"🔧", name:"Tuningeinstieg",     desc:"1 Auto getunt",                           check:gs=>(gs.tunedCount||0)>=1,   reward:{type:"money",val:4000},  chain:"tuned5" },
+  { id:"tuned5",      cat:"sale", tier:2, icon:"⚡", name:"Tuningwerkstatt",    desc:"5 Autos getunt",                          check:gs=>(gs.tunedCount||0)>=5,   reward:{type:"money",val:35000}, chain:"tuned20"},
+  { id:"tuned20",     cat:"sale", tier:3, icon:"🏎️",name:"Tuningguru",         desc:"20 Autos veredelt",                       check:gs=>(gs.tunedCount||0)>=20,  reward:{type:"money",val:250000}               },
 
-  // ══ REICHTUM ══════════════════════════════════════════════
+  // == REICHTUM ==============================================
   { id:"rich_50k",    cat:"rich", tier:1, icon:"💵", name:"Erstes Kapital",      desc:"50.000€ in der Kasse",                    check:gs=>gs.money>=50000,       reward:{type:"money",val:5000},  chain:"rich_500k" },
-  { id:"rich_500k",   cat:"rich", tier:1, icon:"💸", name:"Halb-Millionär",      desc:"500.000€ — langsam wird's ernst",         check:gs=>gs.money>=500000,      reward:{type:"money",val:50000}, chain:"rich_5m"   },
-  { id:"rich_5m",     cat:"rich", tier:2, icon:"🤑", name:"Millionen­spieler",   desc:"5 Millionen Euro",                        check:gs=>gs.money>=5000000,     reward:{type:"money",val:500000},chain:"rich_50m"  },
-  { id:"rich_50m",    cat:"rich", tier:3, icon:"🏦", name:"Bank­direktor",       desc:"50 Millionen in der Kasse",               check:gs=>gs.money>=50000000,    reward:{type:"money",val:5000000},chain:"rich_1b"  },
-  { id:"rich_1b",     cat:"rich", tier:4, icon:"🛥️",name:"Milliardär",          desc:"1 Milliarde Euro — exklusiver Klub!",     check:gs=>gs.money>=1000000000,  reward:{type:"money",val:50000000}              },
+  { id:"rich_500k",   cat:"rich", tier:1, icon:"💸", name:"Halb-Millionär",      desc:"500.000€  -  langsam wird's ernst",         check:gs=>gs.money>=500000,      reward:{type:"money",val:50000}, chain:"rich_5m"   },
+  { id:"rich_5m",     cat:"rich", tier:2, icon:"🤑", name:"Millionenspieler",   desc:"5 Millionen Euro",                        check:gs=>gs.money>=5000000,     reward:{type:"money",val:500000},chain:"rich_50m"  },
+  { id:"rich_50m",    cat:"rich", tier:3, icon:"🏦", name:"Bankdirektor",       desc:"50 Millionen in der Kasse",               check:gs=>gs.money>=50000000,    reward:{type:"money",val:5000000},chain:"rich_1b"  },
+  { id:"rich_1b",     cat:"rich", tier:4, icon:"🛥️",name:"Milliardär",          desc:"1 Milliarde Euro  -  exklusiver Klub!",     check:gs=>gs.money>=1000000000,  reward:{type:"money",val:50000000}              },
 
-  // ══ REPUTATION ════════════════════════════════════════════
+  // == REPUTATION ============================================
   { id:"rep20",       cat:"rep",  tier:1, icon:"🔘", name:"Bekannte Marke",      desc:"Reputation 20 erreicht",                  check:gs=>(gs.reputation||0)>=20,  reward:{type:"rep",val:5},   chain:"rep50"  },
-  { id:"rep50",       cat:"rep",  tier:2, icon:"⭐", name:"Stadtbekannt",        desc:"Reputation 50 — man kennt dich!",         check:gs=>(gs.reputation||0)>=50,  reward:{type:"rep",val:10},  chain:"rep80"  },
-  { id:"rep80",       cat:"rep",  tier:3, icon:"🌟", name:"Regionaler Star",     desc:"Reputation 80 — fast eine Legende",       check:gs=>(gs.reputation||0)>=80,  reward:{type:"rep",val:10},  chain:"rep100" },
-  { id:"rep100",      cat:"rep",  tier:4, icon:"👑", name:"Legende der Stadt",   desc:"Reputation 100 — maximales Ansehen!",     check:gs=>(gs.reputation||0)>=100, reward:{type:"money",val:10000000}             },
+  { id:"rep50",       cat:"rep",  tier:2, icon:"⭐", name:"Stadtbekannt",        desc:"Reputation 50  -  man kennt dich!",         check:gs=>(gs.reputation||0)>=50,  reward:{type:"rep",val:10},  chain:"rep80"  },
+  { id:"rep80",       cat:"rep",  tier:3, icon:"🌟", name:"Regionaler Star",     desc:"Reputation 80  -  fast eine Legende",       check:gs=>(gs.reputation||0)>=80,  reward:{type:"rep",val:10},  chain:"rep100" },
+  { id:"rep100",      cat:"rep",  tier:4, icon:"👑", name:"Legende der Stadt",   desc:"Reputation 100  -  maximales Ansehen!",     check:gs=>(gs.reputation||0)>=100, reward:{type:"money",val:10000000}             },
 
-  // ══ PRESTIGE / STÄDTE ══════════════════════════════════════
+  // == PRESTIGE / STÄDTE ======================================
   { id:"pre1",        cat:"city", tier:1, icon:"✈️", name:"Auf nach Detroit",      desc:"Erste Stadt verlassen",                   check:gs=>gs.cityIdx>=1,       reward:{type:"money",val:10000},   chain:"pre3" },
   { id:"pre3",        cat:"city", tier:2, icon:"🌍", name:"Weltenbummler",         desc:"3 Städte bereist",                        check:gs=>gs.cityIdx>=3,       reward:{type:"money",val:200000},  chain:"pre6" },
-  { id:"pre6",        cat:"city", tier:2, icon:"🏙️",name:"Metropolen­pilgrim",    desc:"6 Städte hinter dir",                     check:gs=>gs.cityIdx>=6,       reward:{type:"money",val:5000000}, chain:"pre10"},
-  { id:"pre10",       cat:"city", tier:3, icon:"🏆", name:"Welt­reise­champion",   desc:"10 Städte gemeistert — Monaco!",          check:gs=>gs.cityIdx>=10,      reward:{type:"money",val:50000000},chain:"pre13"},
-  { id:"pre13",       cat:"city", tier:4, icon:"🔮", name:"Cyber­pilgrim",         desc:"13 Städte — Neo-Tokio erreicht!",         check:gs=>gs.cityIdx>=13,      reward:{type:"money",val:500000000000},chain:"pre15"},
-  { id:"pre15",       cat:"city", tier:4, icon:"🌐", name:"Welt­automobil­legende",desc:"Alle 16 Städte — Cyberspace!",            check:gs=>gs.cityIdx>=15,      reward:{type:"money",val:5000000000000}             },
+  { id:"pre6",        cat:"city", tier:2, icon:"🏙️",name:"Metropolenpilgrim",    desc:"6 Städte hinter dir",                     check:gs=>gs.cityIdx>=6,       reward:{type:"money",val:5000000}, chain:"pre10"},
+  { id:"pre10",       cat:"city", tier:3, icon:"🏆", name:"Weltreisechampion",   desc:"10 Städte gemeistert  -  Monaco!",          check:gs=>gs.cityIdx>=10,      reward:{type:"money",val:50000000},chain:"pre13"},
+  { id:"pre13",       cat:"city", tier:4, icon:"🔮", name:"Cyberpilgrim",         desc:"13 Städte  -  Neo-Tokio erreicht!",         check:gs=>gs.cityIdx>=13,      reward:{type:"money",val:500000000000},chain:"pre15"},
+  { id:"pre15",       cat:"city", tier:4, icon:"🌐", name:"Weltautomobillegende",desc:"Alle 16 Städte  -  Cyberspace!",            check:gs=>gs.cityIdx>=15,      reward:{type:"money",val:5000000000000}             },
 
   // Prestige-Boni-Kette
   { id:"pb1",         cat:"city", tier:2, icon:"🏅", name:"Erster Bonus",          desc:"Ersten Prestige-Bonus gewählt",           check:gs=>(gs.prestigeCount||0)>=1,  reward:{type:"money",val:50000},   chain:"pb3" },
-  { id:"pb3",         cat:"city", tier:2, icon:"🎖️",name:"Dreifach­veteran",      desc:"3× Prestige mit Bonus",                   check:gs=>(gs.prestigeCount||0)>=3,  reward:{type:"money",val:1000000}, chain:"pb8" },
-  { id:"pb8",         cat:"city", tier:3, icon:"🌟", name:"Prestige­könig",        desc:"8× Prestige — du kennst alle Boni",       check:gs=>(gs.prestigeCount||0)>=8,  reward:{type:"money",val:20000000},chain:"pb15"},
-  { id:"pb15",        cat:"city", tier:4, icon:"💫", name:"Unsterblicher",         desc:"15× Prestige — komplette Meisterschaft",  check:gs=>(gs.prestigeCount||0)>=15, reward:{type:"money",val:500000000}              },
+  { id:"pb3",         cat:"city", tier:2, icon:"🎖️",name:"Dreifachveteran",      desc:"3x Prestige mit Bonus",                   check:gs=>(gs.prestigeCount||0)>=3,  reward:{type:"money",val:1000000}, chain:"pb8" },
+  { id:"pb8",         cat:"city", tier:3, icon:"🌟", name:"Prestigekönig",        desc:"8x Prestige  -  du kennst alle Boni",       check:gs=>(gs.prestigeCount||0)>=8,  reward:{type:"money",val:20000000},chain:"pb15"},
+  { id:"pb15",        cat:"city", tier:4, icon:"💫", name:"Unsterblicher",         desc:"15x Prestige  -  komplette Meisterschaft",  check:gs=>(gs.prestigeCount||0)>=15, reward:{type:"money",val:500000000}              },
 
-  // ══ FORSCHUNG ══════════════════════════════════════════════
+  // == FORSCHUNG ==============================================
   { id:"tech5",       cat:"tech", tier:1, icon:"🔬", name:"Forscher",            desc:"5 Technologien erforscht",                check:gs=>Object.keys(gs.techs||{}).length>=5,  reward:{type:"money",val:10000}, chain:"tech15" },
-  { id:"tech15",      cat:"tech", tier:2, icon:"🧬", name:"Innovations­treiber", desc:"15 Technologien erforscht",               check:gs=>Object.keys(gs.techs||{}).length>=15, reward:{type:"money",val:100000},chain:"tech30" },
-  { id:"tech30",      cat:"tech", tier:3, icon:"🚀", name:"Forscher­elite",      desc:"30 Technologien erforscht",               check:gs=>Object.keys(gs.techs||{}).length>=30, reward:{type:"money",val:1000000},chain:"tech50"},
-  { id:"tech50",      cat:"tech", tier:4, icon:"🧠", name:"Technologie­ikone",   desc:"50 Technologien — beinahe alles!",        check:gs=>Object.keys(gs.techs||{}).length>=50, reward:{type:"money",val:20000000}             },
+  { id:"tech15",      cat:"tech", tier:2, icon:"🧬", name:"Innovationstreiber", desc:"15 Technologien erforscht",               check:gs=>Object.keys(gs.techs||{}).length>=15, reward:{type:"money",val:100000},chain:"tech30" },
+  { id:"tech30",      cat:"tech", tier:3, icon:"🚀", name:"Forscherelite",      desc:"30 Technologien erforscht",               check:gs=>Object.keys(gs.techs||{}).length>=30, reward:{type:"money",val:1000000},chain:"tech50"},
+  { id:"tech50",      cat:"tech", tier:4, icon:"🧠", name:"Technologieikone",   desc:"50 Technologien  -  beinahe alles!",        check:gs=>Object.keys(gs.techs||{}).length>=50, reward:{type:"money",val:20000000}             },
 
   // Kategorie-Ketten
-  { id:"prod_chain",  cat:"tech", tier:3, icon:"⚙️",name:"Produktions­meister", desc:"Alle Produktions-Techs der Stadt 1–3",    check:gs=>["lean","assembly","printing3d","solar","nachtschicht","robot1","robot2"].every(t=>gs.techs[t]), reward:{type:"money",val:500000}  },
-  { id:"sale_chain",  cat:"tech", tier:3, icon:"💼", name:"Vertriebs­profi",     desc:"Alle Vertriebs-Techs bis City 3",         check:gs=>["mktg","export","influencer","dealer","werbevertrag"].every(t=>gs.techs[t]),                    reward:{type:"money",val:500000}  },
+  { id:"prod_chain",  cat:"tech", tier:3, icon:"⚙️",name:"Produktionsmeister", desc:"Alle Produktions-Techs der Stadt 1-3",    check:gs=>["lean","assembly","printing3d","solar","nachtschicht","robot1","robot2"].every(t=>gs.techs[t]), reward:{type:"money",val:500000}  },
+  { id:"sale_chain",  cat:"tech", tier:3, icon:"💼", name:"Vertriebsprofi",     desc:"Alle Vertriebs-Techs bis City 3",         check:gs=>["mktg","export","influencer","dealer","werbevertrag"].every(t=>gs.techs[t]),                    reward:{type:"money",val:500000}  },
 
-  // ══ GEHEIME ACHIEVEMENTS (tier 0) ══════════════════════════
-  { id:"secret_night",cat:"secret",tier:0, icon:"🌙", name:"Nacht­schicht­könig", desc:"Gleichzeitig Nachtschicht + Roboter I aktiv",  check:gs=>gs.techs.nachtschicht&&gs.techs.robot1, reward:{type:"money",val:100000} },
+  // == GEHEIME ACHIEVEMENTS (tier 0) ==========================
+  { id:"secret_night",cat:"secret",tier:0, icon:"🌙", name:"Nachtschichtkönig", desc:"Gleichzeitig Nachtschicht + Roboter I aktiv",  check:gs=>gs.techs.nachtschicht&&gs.techs.robot1, reward:{type:"money",val:100000} },
   { id:"secret_vip",  cat:"secret",tier:0, icon:"⭐", name:"VIP-Flüsterer",       desc:"Ersten VIP-Auftrag erfüllt",                   check:gs=>(gs.totalOrders||0)>=1&&(gs.contracts||[]).some(c=>c.isVip&&c.claimed), reward:{type:"money",val:250000} },
-  { id:"secret_tune", cat:"secret",tier:0, icon:"🔥", name:"Turbo­legende",        desc:"Auto auf Hyper-Tuning + Modell Stufe 5",       check:gs=>(gs.tunedCount||0)>0&&Object.values(gs.modelUpgrades||{}).some(v=>v>=5), reward:{type:"money",val:500000} },
+  { id:"secret_tune", cat:"secret",tier:0, icon:"🔥", name:"Turbolegende",        desc:"Auto auf Hyper-Tuning + Modell Stufe 5",       check:gs=>(gs.tunedCount||0)>0&&Object.values(gs.modelUpgrades||{}).some(v=>v>=5), reward:{type:"money",val:500000} },
   { id:"secret_zero", cat:"secret",tier:0, icon:"💸", name:"Bankrott-Ritter",      desc:"Mit weniger als 100€ überlebt",                check:gs=>gs.money<100&&gs.totalBuilt>0, reward:{type:"money",val:50000}  },
   { id:"secret_rich_pre", cat:"secret",tier:0, icon:"🧨", name:"Mega-Prestige",   desc:"Prestige mit über 10Mio€ in der Kasse",        check:gs=>(gs.prestigeCount||0)>0&&gs.money>=10000000, reward:{type:"money",val:1000000} },
 
-  // ══ KLICK-ERFOLGE ═══════════════════════════════════════
-  { id:"tap50",       cat:"tap", tier:1, icon:"👆", name:"Erste Finger­arbeit",  desc:"50 Mal auf Stationen getippt",             check:gs=>(gs.totalTaps||0)>=50,      reward:{type:"money",val:500},    chain:"tap250"   },
+  // == KLICK-ERFOLGE =======================================
+  { id:"tap50",       cat:"tap", tier:1, icon:"👆", name:"Erste Fingerarbeit",  desc:"50 Mal auf Stationen getippt",             check:gs=>(gs.totalTaps||0)>=50,      reward:{type:"money",val:500},    chain:"tap250"   },
   { id:"tap250",      cat:"tap", tier:1, icon:"✌️", name:"Fleißiger Tipper",     desc:"250 Station-Taps",                         check:gs=>(gs.totalTaps||0)>=250,     reward:{type:"money",val:3000},   chain:"tap1k"    },
-  { id:"tap1k",       cat:"tap", tier:2, icon:"🖐️",name:"Tipp-Meister",         desc:"1.000 Taps — die Finger brennen!",         check:gs=>(gs.totalTaps||0)>=1000,    reward:{type:"money",val:15000},  chain:"tap5k"    },
-  { id:"tap5k",       cat:"tap", tier:2, icon:"🤙", name:"Stations­freund",      desc:"5.000 Taps auf Produktionsstationen",      check:gs=>(gs.totalTaps||0)>=5000,    reward:{type:"money",val:75000},  chain:"tap20k"   },
-  { id:"tap20k",      cat:"tap", tier:3, icon:"🏋️",name:"Ausdauer­tipper",      desc:"20.000 Taps — du liebst die Kontrolle",   check:gs=>(gs.totalTaps||0)>=20000,   reward:{type:"money",val:400000}, chain:"tap100k"  },
-  { id:"tap100k",     cat:"tap", tier:3, icon:"⚡", name:"Klick­legende",        desc:"100.000 Stations-Taps",                   check:gs=>(gs.totalTaps||0)>=100000,  reward:{type:"money",val:2000000},chain:"tap500k"  },
-  { id:"tap500k",     cat:"tap", tier:4, icon:"🌋", name:"Tipp-Gott",           desc:"500.000 Taps — wahnsinnige Ausdauer!",    check:gs=>(gs.totalTaps||0)>=500000,  reward:{type:"money",val:20000000},chain:"tap1m"   },
-  { id:"tap1m",       cat:"tap", tier:4, icon:"💫", name:"Ein­millionen­klicker", desc:"1.000.000 Taps — absoluter Rekord!",     check:gs=>(gs.totalTaps||0)>=1000000, reward:{type:"money",val:200000000}                 },
+  { id:"tap1k",       cat:"tap", tier:2, icon:"🖐️",name:"Tipp-Meister",         desc:"1.000 Taps  -  die Finger brennen!",         check:gs=>(gs.totalTaps||0)>=1000,    reward:{type:"money",val:15000},  chain:"tap5k"    },
+  { id:"tap5k",       cat:"tap", tier:2, icon:"🤙", name:"Stationsfreund",      desc:"5.000 Taps auf Produktionsstationen",      check:gs=>(gs.totalTaps||0)>=5000,    reward:{type:"money",val:75000},  chain:"tap20k"   },
+  { id:"tap20k",      cat:"tap", tier:3, icon:"🏋️",name:"Ausdauertipper",      desc:"20.000 Taps  -  du liebst die Kontrolle",   check:gs=>(gs.totalTaps||0)>=20000,   reward:{type:"money",val:400000}, chain:"tap100k"  },
+  { id:"tap100k",     cat:"tap", tier:3, icon:"⚡", name:"Klicklegende",        desc:"100.000 Stations-Taps",                   check:gs=>(gs.totalTaps||0)>=100000,  reward:{type:"money",val:2000000},chain:"tap500k"  },
+  { id:"tap500k",     cat:"tap", tier:4, icon:"🌋", name:"Tipp-Gott",           desc:"500.000 Taps  -  wahnsinnige Ausdauer!",    check:gs=>(gs.totalTaps||0)>=500000,  reward:{type:"money",val:20000000},chain:"tap1m"   },
+  { id:"tap1m",       cat:"tap", tier:4, icon:"💫", name:"Einmillionenklicker", desc:"1.000.000 Taps  -  absoluter Rekord!",     check:gs=>(gs.totalTaps||0)>=1000000, reward:{type:"money",val:200000000}                 },
 
   // Geheime Tap-Erfolge
-  { id:"secret_tap_burst", cat:"secret",tier:0, icon:"💥", name:"Turbo­hände",   desc:"10 Taps in unter 2 Sekunden",             check:gs=>(gs.totalTaps||0)>=10,      reward:{type:"money",val:5000}   },
+  { id:"secret_tap_burst", cat:"secret",tier:0, icon:"💥", name:"Turbohände",   desc:"10 Taps in unter 2 Sekunden",             check:gs=>(gs.totalTaps||0)>=10,      reward:{type:"money",val:5000}   },
 ];
 
-// ── LINIENSPEZIALISIERUNG ─────────────────────────────────────
+// -- LINIENSPEZIALISIERUNG -------------------------------------
 const LINE_SPECS = {
-  speed:   { label:"Geschwindigkeit", icon:"⚡", desc:"Bauzeit −30%",        col:"#2196F3", cost:50000  },
+  speed:   { label:"Geschwindigkeit", icon:"⚡", desc:"Bauzeit -30%",        col:"#2196F3", cost:50000  },
   quality: { label:"Qualität",        icon:"💎", desc:"Autowert +30%",       col:"#9C27B0", cost:80000  },
   volume:  { label:"Volumen",         icon:"📦", desc:"Showroom +4 Plätze",  col:"#4CAF50", cost:60000  },
 };
 
-// ── WOCHENMARKT ───────────────────────────────────────────────
-// ── LOGIN-KALENDER (7-Tage rotierend) ────────────────────────
+// -- WOCHENMARKT -----------------------------------------------
+// -- LOGIN-KALENDER (7-Tage rotierend) ------------------------
 const LOGIN_REWARDS = [
   { day:1, icon:"💰", label:"Startgeld",     type:"money",   val:5000       },
   { day:2, icon:"👷", label:"Gratis-Arbeiter",type:"worker",  val:1          },
-  { day:3, icon:"⚡", label:"Speed-Boost",   type:"speedBoost",val:300      }, // 5 Min ×3 Speed
+  { day:3, icon:"⚡", label:"Speed-Boost",   type:"speedBoost",val:300      }, // 5 Min x3 Speed
   { day:4, icon:"💎", label:"Großes Kapital", type:"money",   val:50000      },
   { day:5, icon:"🔬", label:"Tech-Rabatt",   type:"techDisc", val:0.5       }, // 50% auf nächste Tech
   { day:6, icon:"🚗", label:"Showroom-Füllung",type:"cars",  val:5          }, // 5 Gratis-Autos
   { day:7, icon:"👑", label:"MEGA-BONUS",    type:"money",   val:500000,  special:true },
 ];
 
-// ── DAILY MISSIONS ────────────────────────────────────────────
+// -- DAILY MISSIONS --------------------------------------------
 const DAILY_MISSION_POOL = [
   { id:"dm_build10",  icon:"🔩", text:"Baue 10 Fahrzeuge",        type:"build",  target:10   },
   { id:"dm_build25",  icon:"🏭", text:"Baue 25 Fahrzeuge",        type:"build",  target:25   },
@@ -195,8 +180,8 @@ const DAILY_MISSION_POOL = [
   { id:"dm_orders10", icon:"📦", text:"Erfülle 10 Aufträge",      type:"orders", target:10   },
   { id:"dm_earn50k",  icon:"💵", text:"Verdiene 50.000€",         type:"earn",   target:50000  },
   { id:"dm_earn500k", icon:"💸", text:"Verdiene 500.000€",        type:"earn",   target:500000 },
-  { id:"dm_tap100",   icon:"👆", text:"Klicke 100× auf Stationen",type:"taps",   target:100  },
-  { id:"dm_streak3",  icon:"🔥", text:"Erreiche Streak ×3",       type:"streak", target:3    },
+  { id:"dm_tap100",   icon:"👆", text:"Klicke 100x auf Stationen",type:"taps",   target:100  },
+  { id:"dm_streak3",  icon:"🔥", text:"Erreiche Streak x3",       type:"streak", target:3    },
   { id:"dm_tune1",    icon:"🔧", text:"Tune 1 Auto",              type:"tuned",  target:1    },
   { id:"dm_rep10",    icon:"⭐", text:"+10 Reputation",           type:"rep",    target:10   },
 ];
@@ -219,17 +204,19 @@ function genDailyMissions(gameDay, cityIdx) {
 }
 
 
-  { id:"m_lean2",    icon:"🚀", name:"Rabatt: Lean II",         desc:"Alle Bauzeiten −10% heute",     type:"tmpSpeed",  val:0.9,  cost:15000  },
+const MARKET_POOL = [
+  { id:"m_lean",     icon:"⚡", name:"Rabatt: Lean",            desc:"Alle Bauzeiten -30% heute",    type:"tmpSpeed",  val:0.7,  cost:8000   },
+  { id:"m_lean2",    icon:"🚀", name:"Rabatt: Lean II",         desc:"Alle Bauzeiten -10% heute",     type:"tmpSpeed",  val:0.9,  cost:15000  },
   { id:"m_worker",   icon:"👷", name:"Gastarbeiter",            desc:"3 Gratis-Facharbeiter",          type:"workers",   val:3,    cost:0,     price:25000 },
-  { id:"m_value",    icon:"💰", name:"Luxus-Käufer-Event",      desc:"Autowert heute ×1.5",            type:"tmpVal",    val:1.5,  cost:20000  },
+  { id:"m_value",    icon:"💰", name:"Luxus-Käufer-Event",      desc:"Autowert heute x1.5",            type:"tmpVal",    val:1.5,  cost:20000  },
   { id:"m_contracts",icon:"📋", name:"Auftrags-Welle",          desc:"5 neue Aufträge sofort",         type:"contracts", val:5,    cost:30000  },
   { id:"m_rep",      icon:"⭐", name:"PR-Kampagne",             desc:"+20 Reputation",                 type:"rep",       val:20,   cost:18000  },
-  { id:"m_streak",   icon:"🔥", name:"Motivations-Tag",         desc:"Streak × 1.5 für heute",         type:"streak",    val:1.5,  cost:12000  },
-  { id:"m_tech",     icon:"🔬", name:"Forschungs-Beschleuniger",desc:"Nächste Tech −50% Kosten",       type:"techDisc",  val:0.5,  cost:40000  },
+  { id:"m_streak",   icon:"🔥", name:"Motivations-Tag",         desc:"Streak x 1.5 für heute",         type:"streak",    val:1.5,  cost:12000  },
+  { id:"m_tech",     icon:"🔬", name:"Forschungs-Beschleuniger",desc:"Nächste Tech -50% Kosten",       type:"techDisc",  val:0.5,  cost:40000  },
   { id:"m_hire",     icon:"🏫", name:"Berufsschule",            desc:"Einstellung gratis heute",       type:"hireDisc",  val:0,    cost:0, price:15000 },
 ];
 
-// ── SAISON-CHALLENGES ─────────────────────────────────────────
+// -- SAISON-CHALLENGES -----------------------------------------
 const SEASON_TEMPLATES = [
   { icon:"🚗", goal:"Baue 50 Autos",             type:"build",  target:50,     reward:200000    },
   { icon:"🚙", goal:"Baue 200 Autos",             type:"build",  target:200,    reward:1000000   },
@@ -237,27 +224,27 @@ const SEASON_TEMPLATES = [
   { icon:"💎", goal:"Verdiene 5M€ gesamt",        type:"earn",   target:5000000,reward:2000000   },
   { icon:"📋", goal:"Erfülle 20 Aufträge",        type:"orders", target:20,     reward:300000    },
   { icon:"📦", goal:"Erfülle 100 Aufträge",       type:"orders", target:100,    reward:2000000   },
-  { icon:"🔥", goal:"Erreiche Streak ×10",        type:"streak", target:10,     reward:500000    },
-  { icon:"🌋", goal:"Erreiche Streak ×25",        type:"streak", target:25,     reward:5000000   },
+  { icon:"🔥", goal:"Erreiche Streak x10",        type:"streak", target:10,     reward:500000    },
+  { icon:"🌋", goal:"Erreiche Streak x25",        type:"streak", target:25,     reward:5000000   },
   { icon:"⭐", goal:"Tune 3 Autos",               type:"tuned",  target:3,      reward:250000    },
   { icon:"👆", goal:"Klicke 1.000 Mal auf Stationen",type:"taps",target:1000,  reward:100000    },
   { icon:"🧪", goal:"Erforsche 10 Technologien",  type:"techs",  target:10,     reward:500000    },
   { icon:"🔓", goal:"Schalte 2 Modelle frei",     type:"unlocks",target:2,      reward:300000    },
 ];
 
-// ── PRESTIGE-BONI ─────────────────────────────────────────────
+// -- PRESTIGE-BONI ---------------------------------------------
 const PRESTIGE_BONUS_OPTIONS = [
-  { id:"pbSpeed", icon:"⚡", name:"Turbo-Erbschaft", desc:"Bauzeit dauerhaft −8%",   effect:"speed" },
+  { id:"pbSpeed", icon:"⚡", name:"Turbo-Erbschaft", desc:"Bauzeit dauerhaft -8%",   effect:"speed" },
   { id:"pbValue", icon:"💎", name:"Marken-Erbschaft", desc:"Autowert dauerhaft +10%", effect:"value" },
-  { id:"pbWage",  icon:"💸", name:"Effizienz-Erbschaft",desc:"Lohnkosten dauerhaft −10%",effect:"wage" },
+  { id:"pbWage",  icon:"💸", name:"Effizienz-Erbschaft",desc:"Lohnkosten dauerhaft -10%",effect:"wage" },
 ];
 
-// ── TUNING SYSTEM — Alpina/Brabus/Mansory-inspiriert ───────
+// -- TUNING SYSTEM  -  Alpina/Brabus/Mansory-inspiriert -------
 // Echte Tuning-Stufen mit realen Bauteilen
 const TUNING_PARTS = {
   sport: [
     { name:"Sport-Auspuff",      icon:"💨", desc:"Edelstahl-Duplex, tieferer Sound" },
-    { name:"Sportfedern",        icon:"🔩", desc:"−35mm Tieferlegung, schärferes Handling" },
+    { name:"Sportfedern",        icon:"🔩", desc:"-35mm Tieferlegung, schärferes Handling" },
     { name:"Sport-Luftfilter",   icon:"🌬️",desc:"K&N Rennluftfilter, +8 PS" },
     { name:"Carbon-Spoiler",     icon:"🪶", desc:"Leichter Heckflügel, verbesserte Aerodynamik" },
   ],
@@ -270,9 +257,9 @@ const TUNING_PARTS = {
   ],
   hyper: [
     { name:"Kompressor-Kit",     icon:"🔥", desc:"Roots-Kompressor, +150-300 PS" },
-    { name:"Carbon-Monocoque",   icon:"🛸", desc:"Vollcarbon-Karosserie −200kg" },
+    { name:"Carbon-Monocoque",   icon:"🛸", desc:"Vollcarbon-Karosserie -200kg" },
     { name:"Racing-Getriebe",    icon:"⚙️", desc:"Serielles 7-Gang-Sequentialgetriebe" },
-    { name:"Titan-Abgasanlage",  icon:"✨", desc:"Vollständige Titan-Abgasanlage −18kg" },
+    { name:"Titan-Abgasanlage",  icon:"✨", desc:"Vollständige Titan-Abgasanlage -18kg" },
     { name:"Aerodynamik-Paket",  icon:"🌀", desc:"Front-Splitter, Diffusor, GT-Flügel" },
     { name:"Keramik-Bremsen",    icon:"💎", desc:"Karbon-Keramik, 1400°C standfast" },
   ],
@@ -290,7 +277,7 @@ const TUNING_LEVELS = [
     col:"#4CAF50",
     brand:"Alpina",
     parts: TUNING_PARTS.sport,
-    desc:"Sportliche Basis-Optimierung — Sound, Optik, Handling",
+    desc:"Sportliche Basis-Optimierung  -  Sound, Optik, Handling",
   },
   {
     id:"super",
@@ -303,7 +290,7 @@ const TUNING_LEVELS = [
     col:"#FF9800",
     brand:"Brabus",
     parts: TUNING_PARTS.super,
-    desc:"Echte Leistungssteigerung — Turbo, Bremsen, ECU",
+    desc:"Echte Leistungssteigerung  -  Turbo, Bremsen, ECU",
   },
   {
     id:"hyper",
@@ -316,117 +303,117 @@ const TUNING_LEVELS = [
     col:"#E63946",
     brand:"Mansory",
     parts: TUNING_PARTS.hyper,
-    desc:"Vollumbau auf Racing-Niveau — Carbon, Kompressor, Titan",
+    desc:"Vollumbau auf Racing-Niveau  -  Carbon, Kompressor, Titan",
   },
 ];
 
 const CITIES = [
-  { name:"Wolfsburg",    flag:"🇩🇪", sky:"#87CEEB", accent:"#FF6B35", maxLines:2 }, //  12k–48k
-  { name:"Detroit",      flag:"🇺🇸", sky:"#B0C4DE", accent:"#5B8CDE", maxLines:2 }, //  60k–155k
-  { name:"München",      flag:"🇩🇪", sky:"#E8F4FD", accent:"#1E88E5", maxLines:3 }, // 185k–480k
-  { name:"Tokio",        flag:"🇯🇵", sky:"#FFB6C1", accent:"#FF69B4", maxLines:3 }, // 580k–1.5M
-  { name:"Seoul",        flag:"🇰🇷", sky:"#C9E8FF", accent:"#0099FF", maxLines:3 }, // 1.8M–4.6M
-  { name:"Shanghai",     flag:"🇨🇳", sky:"#FFE8CC", accent:"#E64A19", maxLines:4 }, // 5.5M–14M
-  { name:"Stuttgart",    flag:"🇩🇪", sky:"#E8D5F0", accent:"#9B59B6", maxLines:4 }, // 17M–43M
-  { name:"Maranello",    flag:"🇮🇹", sky:"#FFB347", accent:"#E63946", maxLines:4 }, // 52M–133M
-  { name:"Dubai 2077",   flag:"🇦🇪", sky:"#FFD700", accent:"#FF8C00", maxLines:5 }, // 160M–410M
-  { name:"Monaco",       flag:"🇲🇨", sky:"#C0E8FF", accent:"#C0A000", maxLines:5 }, // 490M–1.27Mrd
-  { name:"Los Angeles",  flag:"🇺🇸", sky:"#FFECD2", accent:"#FF6584", maxLines:5 }, // 1.5Mrd–3.9Mrd
-  { name:"London",       flag:"🇬🇧", sky:"#D4E8FF", accent:"#1565C0", maxLines:5 }, // 4.7Mrd–12Mrd
-  { name:"Singapur",     flag:"🇸🇬", sky:"#E8FFE8", accent:"#00897B", maxLines:6 }, // 14Mrd–36Mrd
-  { name:"São Paulo",    flag:"🇧🇷", sky:"#FFF3E0", accent:"#E65100", maxLines:6 }, // 43Mrd–110Mrd
-  { name:"Neo-Tokio",    flag:"🗾",  sky:"#EDE7F6", accent:"#7C4DFF", maxLines:6 }, // 130Mrd–340Mrd
-  { name:"Cyberspace",   flag:"🌐",  sky:"#E0F7FA", accent:"#00E5FF", maxLines:7 }, // 400Mrd–1Bio
+  { name:"Wolfsburg",    flag:"🇩🇪", sky:"#87CEEB", accent:"#FF6B35", maxLines:2 }, //  12k-48k
+  { name:"Detroit",      flag:"🇺🇸", sky:"#B0C4DE", accent:"#5B8CDE", maxLines:2 }, //  60k-155k
+  { name:"München",      flag:"🇩🇪", sky:"#E8F4FD", accent:"#1E88E5", maxLines:3 }, // 185k-480k
+  { name:"Tokio",        flag:"🇯🇵", sky:"#FFB6C1", accent:"#FF69B4", maxLines:3 }, // 580k-1.5M
+  { name:"Seoul",        flag:"🇰🇷", sky:"#C9E8FF", accent:"#0099FF", maxLines:3 }, // 1.8M-4.6M
+  { name:"Shanghai",     flag:"🇨🇳", sky:"#FFE8CC", accent:"#E64A19", maxLines:4 }, // 5.5M-14M
+  { name:"Stuttgart",    flag:"🇩🇪", sky:"#E8D5F0", accent:"#9B59B6", maxLines:4 }, // 17M-43M
+  { name:"Maranello",    flag:"🇮🇹", sky:"#FFB347", accent:"#E63946", maxLines:4 }, // 52M-133M
+  { name:"Dubai 2077",   flag:"🇦🇪", sky:"#FFD700", accent:"#FF8C00", maxLines:5 }, // 160M-410M
+  { name:"Monaco",       flag:"🇲🇨", sky:"#C0E8FF", accent:"#C0A000", maxLines:5 }, // 490M-1.27Mrd
+  { name:"Los Angeles",  flag:"🇺🇸", sky:"#FFECD2", accent:"#FF6584", maxLines:5 }, // 1.5Mrd-3.9Mrd
+  { name:"London",       flag:"🇬🇧", sky:"#D4E8FF", accent:"#1565C0", maxLines:5 }, // 4.7Mrd-12Mrd
+  { name:"Singapur",     flag:"🇸🇬", sky:"#E8FFE8", accent:"#00897B", maxLines:6 }, // 14Mrd-36Mrd
+  { name:"São Paulo",    flag:"🇧🇷", sky:"#FFF3E0", accent:"#E65100", maxLines:6 }, // 43Mrd-110Mrd
+  { name:"Neo-Tokio",    flag:"🗾",  sky:"#EDE7F6", accent:"#7C4DFF", maxLines:6 }, // 130Mrd-340Mrd
+  { name:"Cyberspace",   flag:"🌐",  sky:"#E0F7FA", accent:"#00E5FF", maxLines:7 }, // 400Mrd-1Bio
 ];
 
 // Upgrade levels per model (5 levels, each +20% base value)
 const MODEL_UPGRADE_LEVELS = 5;
-const MODEL_UPGRADE_COST_MULT = [1.0, 2.5, 6.0, 15.0, 40.0]; // × val
+const MODEL_UPGRADE_COST_MULT = [1.0, 2.5, 6.0, 15.0, 40.0]; // x val
 
 // Unlock requirements per model slot (index in city)
 const MODEL_UNLOCK_REQ = [
-  { cost:0   }, // Slot 0 — immer gratis
-  { cost:1.5 }, // Slot 1 — val×1.5
-  { cost:3.0 }, // Slot 2 — val×3
+  { cost:0   }, // Slot 0  -  immer gratis
+  { cost:1.5 }, // Slot 1  -  valx1.5
+  { cost:3.0 }, // Slot 2  -  valx3
 ];
 
 const CITY_MODELS = [
-  [ // 1. Wolfsburg 🇩🇪 — Einstieg (12k–48k)
+  [ // 1. Wolfsburg 🇩🇪  -  Einstieg (12k-48k)
     { id:"polo",        name:"Polo",              emoji:"🚗",  val:12000,         ticks:55,   mult:1.0 },
     { id:"golf",        name:"Golf",              emoji:"🚙",  val:28000,         ticks:80,   mult:1.2 },
     { id:"tiguan",      name:"Tiguan",            emoji:"🚐",  val:48000,         ticks:110,  mult:1.5 },
   ],
-  [ // 2. Detroit 🇺🇸 — Muscle (60k–155k)
+  [ // 2. Detroit 🇺🇸  -  Muscle (60k-155k)
     { id:"mustang",     name:"Mustang",           emoji:"🐎",  val:60000,         ticks:110,  mult:1.5 },
     { id:"charger",     name:"Charger",           emoji:"💪",  val:95000,         ticks:145,  mult:1.8 },
     { id:"corvette",    name:"Corvette",          emoji:"🦅",  val:155000,        ticks:195,  mult:2.3 },
   ],
-  [ // 3. München 🇩🇪 — Premium Sport (185k–480k)
+  [ // 3. München 🇩🇪  -  Premium Sport (185k-480k)
     { id:"bmw_m4",      name:"BMW M4",            emoji:"🏎️", val:185000,        ticks:145,  mult:2.0 },
     { id:"amg_gt",      name:"Mercedes AMG GT",   emoji:"🦁",  val:300000,        ticks:200,  mult:2.6 },
     { id:"audi_r8",     name:"Audi R8 V10",       emoji:"💠",  val:480000,        ticks:270,  mult:3.2 },
   ],
-  [ // 4. Tokio 🇯🇵 — JDM Sport (580k–1.5M)
+  [ // 4. Tokio 🇯🇵  -  JDM Sport (580k-1.5M)
     { id:"supra",       name:"Supra",             emoji:"🏁",  val:580000,        ticks:190,  mult:2.4 },
     { id:"gtr",         name:"GT-R",              emoji:"🎌",  val:920000,        ticks:270,  mult:3.0 },
     { id:"nsx",         name:"NSX",               emoji:"⚡",  val:1480000,       ticks:380,  mult:3.8 },
   ],
-  [ // 5. Seoul 🇰🇷 — Electric Luxury (1.8M–4.6M)
+  [ // 5. Seoul 🇰🇷  -  Electric Luxury (1.8M-4.6M)
     { id:"ioniq9",      name:"Ioniq 9",           emoji:"🔵",  val:1800000,       ticks:250,  mult:3.0 },
     { id:"genesis",     name:"Genesis G90",       emoji:"💎",  val:2900000,       ticks:370,  mult:3.8 },
     { id:"evx",         name:"EV-X Concept",      emoji:"🌀",  val:4600000,       ticks:530,  mult:5.0 },
   ],
-  [ // 6. Shanghai 🇨🇳 — Tech Hypercars (5.5M–14M)
+  [ // 6. Shanghai 🇨🇳  -  Tech Hypercars (5.5M-14M)
     { id:"nio_ep9",     name:"NIO EP9",           emoji:"⚡",  val:5500000,       ticks:330,  mult:4.0 },
     { id:"yangwang",    name:"Yangwang U9",       emoji:"🐉",  val:8800000,       ticks:480,  mult:5.2 },
     { id:"hiphi_x",     name:"HiPhi X",           emoji:"🌟",  val:14000000,      ticks:690,  mult:6.5 },
   ],
-  [ // 7. Stuttgart 🇩🇪 — Porsche Elite (17M–43M)
+  [ // 7. Stuttgart 🇩🇪  -  Porsche Elite (17M-43M)
     { id:"boxster",     name:"Boxster GT4",       emoji:"🐴",  val:17000000,      ticks:430,  mult:5.0 },
     { id:"911",         name:"Porsche 911 GT3",   emoji:"🏆",  val:27000000,      ticks:620,  mult:6.2 },
     { id:"taycan",      name:"Taycan Turbo GT",   emoji:"⚡",  val:43000000,      ticks:880,  mult:7.5 },
   ],
-  [ // 8. Maranello 🇮🇹 — Ferrari (52M–133M)
+  [ // 8. Maranello 🇮🇹  -  Ferrari (52M-133M)
     { id:"portofino",   name:"Portofino M",       emoji:"🏎️", val:52000000,      ticks:550,  mult:6.0 },
     { id:"sf90",        name:"SF90 Stradale",      emoji:"🚀",  val:83000000,      ticks:790,  mult:7.5 },
     { id:"laferrari",   name:"LaFerrari Aperta",  emoji:"🔥",  val:133000000,     ticks:1100, mult:9.0 },
   ],
-  [ // 9. Dubai 2077 🇦🇪 — Hypercar Future (160M–410M)
+  [ // 9. Dubai 2077 🇦🇪  -  Hypercar Future (160M-410M)
     { id:"cyber",       name:"Cybertruck X",      emoji:"🤖",  val:160000000,     ticks:700,  mult:7.5 },
     { id:"hypercar",    name:"Hypercar One",      emoji:"🚀",  val:255000000,     ticks:990,  mult:9.0 },
     { id:"flying",      name:"Flying Car",        emoji:"✈️",  val:410000000,     ticks:1400, mult:11.0 },
   ],
-  [ // 10. Monaco 🇲🇨 — Legenden (490M–1.27Mrd)
+  [ // 10. Monaco 🇲🇨  -  Legenden (490M-1.27Mrd)
     { id:"pagani",      name:"Pagani Utopia",     emoji:"🌀",  val:490000000,     ticks:880,  mult:9.5  },
     { id:"bugatti",     name:"Bugatti Tourbillon",emoji:"👑",  val:790000000,     ticks:1240, mult:12.0 },
     { id:"koenigsegg",  name:"Koenigsegg Jesko",  emoji:"🔱",  val:1270000000,    ticks:1750, mult:15.0 },
   ],
-  [ // 11. Los Angeles 🇺🇸 — Hollywood Elite (1.5Mrd–3.9Mrd)
+  [ // 11. Los Angeles 🇺🇸  -  Hollywood Elite (1.5Mrd-3.9Mrd)
     { id:"rr_cullinan", name:"Rolls-Royce Cullinan",  emoji:"🎬", val:1500000000,  ticks:1100, mult:10.0 },
     { id:"lambo_rev",   name:"Lamborghini Revuelto",  emoji:"🔴", val:2500000000,  ticks:1550, mult:13.0 },
     { id:"mclaren_sol", name:"McLaren Solus GT",      emoji:"🌟", val:3900000000,  ticks:2200, mult:17.0 },
   ],
-  [ // 12. London 🇬🇧 — British Excellence (4.7Mrd–12Mrd)
+  [ // 12. London 🇬🇧  -  British Excellence (4.7Mrd-12Mrd)
     { id:"am_valkyrie", name:"Aston Martin Valkyrie", emoji:"🦅", val:4700000000,  ticks:1400, mult:11.0 },
     { id:"bentley_bac", name:"Bentley Bacalar",       emoji:"🇬🇧",val:7500000000,  ticks:1950, mult:14.0 },
     { id:"rolls_boat",  name:"Rolls-Royce Boat Tail", emoji:"⚓", val:12000000000, ticks:2750, mult:18.0 },
   ],
-  [ // 13. Singapur 🇸🇬 — Electric Legends (14Mrd–36Mrd)
+  [ // 13. Singapur 🇸🇬  -  Electric Legends (14Mrd-36Mrd)
     { id:"lotus_evija", name:"Lotus Evija",           emoji:"🍃", val:14000000000, ticks:1750, mult:12.0 },
     { id:"rimac_nev",   name:"Rimac Nevera Attack",   emoji:"⚡", val:23000000000, ticks:2400, mult:16.0 },
     { id:"pini_batt",   name:"Pininfarina Battista",  emoji:"🌸", val:36000000000, ticks:3400, mult:20.0 },
   ],
-  [ // 14. São Paulo 🇧🇷 — Extreme Machines (43Mrd–110Mrd)
+  [ // 14. São Paulo 🇧🇷  -  Extreme Machines (43Mrd-110Mrd)
     { id:"hennessey",   name:"Hennessey Venom F5",    emoji:"🐍", val:43000000000, ticks:2100, mult:13.0 },
     { id:"ssc_tuatara", name:"SSC Tuatara",           emoji:"🦎", val:70000000000, ticks:3000, mult:17.0 },
     { id:"devel_16",    name:"Devel Sixteen",         emoji:"😈", val:110000000000,ticks:4200, mult:22.0 },
   ],
-  [ // 15. Neo-Tokio 🗾 — Sci-Fi Machines (130Mrd–340Mrd)
+  [ // 15. Neo-Tokio 🗾  -  Sci-Fi Machines (130Mrd-340Mrd)
     { id:"yamaha_ox",   name:"Yamaha OX99-11",        emoji:"🎌", val:130000000000,ticks:2600, mult:15.0 },
     { id:"toyota_gs",   name:"Toyota GR Hyper",       emoji:"🏮", val:210000000000,ticks:3700, mult:19.0 },
     { id:"neo_phantom", name:"Neo Phantom X",         emoji:"👻", val:340000000000,ticks:5200, mult:24.0 },
   ],
-  [ // 16. Cyberspace 🌐 — Quantum Vehicles (400Mrd–1Bio)
+  [ // 16. Cyberspace 🌐  -  Quantum Vehicles (400Mrd-1Bio)
     { id:"quantum_x",   name:"Quantum Drive X1",      emoji:"🔮", val:400000000000,ticks:3200, mult:17.0 },
     { id:"neural_car",  name:"Neural Car Z",          emoji:"🧠", val:650000000000,ticks:4600, mult:22.0 },
     { id:"singularity", name:"Singularity One",       emoji:"🌀", val:1000000000000,ticks:6500,mult:30.0 },
@@ -473,26 +460,26 @@ const PRESTIGE = [
 const LINE_COSTS    = [0, 15000, 80000, 300000, 1000000, 5000000, 20000000];
 const LINE_TECH_REQ = [null, null, "automate", "megafabrik", "vollautomatik", "gigafabrik", "quantenwerk"];
 
-// ══════════════════════════════════════════════════════════════
-// ── INGENIEUR-SYSTEM ──────────────────────────────────────────
-// ══════════════════════════════════════════════════════════════
+// ==============================================================
+// -- INGENIEUR-SYSTEM ------------------------------------------
+// ==============================================================
 
-// Engineer specialties — affect their bonuses
+// Engineer specialties  -  affect their bonuses
 const ENG_SPECS = {
-  speed:   { label:"Produktions­spezialist", icon:"⚡", col:"#2196F3", lineBonus:{speed:0.15}, desc:"Linie +15% Speed" },
-  quality: { label:"Qualitäts­ingenieur",    icon:"💎", col:"#9C27B0", lineBonus:{val:0.20},   desc:"Linie +20% Wert" },
-  research:{ label:"Forschungs­leiter",      icon:"🔬", col:"#4CAF50", lineBonus:{},            desc:"Forscht Prototypen aus" },
+  speed:   { label:"Produktionsspezialist", icon:"⚡", col:"#2196F3", lineBonus:{speed:0.15}, desc:"Linie +15% Speed" },
+  quality: { label:"Qualitätsingenieur",    icon:"💎", col:"#9C27B0", lineBonus:{val:0.20},   desc:"Linie +20% Wert" },
+  research:{ label:"Forschungsleiter",      icon:"🔬", col:"#4CAF50", lineBonus:{},            desc:"Forscht Prototypen aus" },
   hybrid:  { label:"Universalgenie",         icon:"🧠", col:"#FF9800", lineBonus:{speed:0.08,val:0.10}, desc:"+8% Speed & +10% Wert" },
 };
 
-// Named engineer pool — hired from these candidates
+// Named engineer pool  -  hired from these candidates
 const ENGINEER_POOL = [
-  { id:"mueller",   name:"Dr. Müller",     spec:"research", baseSalary:3000,  emoji:"👨‍🔬", city:0 },
+  { id:"mueller",   name:"Dr. Müller",     spec:"research", baseSalary:3000,  emoji:"👨🔬", city:0 },
   { id:"schmidt",   name:"Ing. Schmidt",   spec:"speed",    baseSalary:2500,  emoji:"👷",   city:0 },
-  { id:"weber",     name:"Dr. Weber",      spec:"quality",  baseSalary:2800,  emoji:"👩‍🔬", city:1 },
-  { id:"fischer",   name:"Prof. Fischer",  spec:"research", baseSalary:5000,  emoji:"🧑‍💻", city:1 },
+  { id:"weber",     name:"Dr. Weber",      spec:"quality",  baseSalary:2800,  emoji:"👩🔬", city:1 },
+  { id:"fischer",   name:"Prof. Fischer",  spec:"research", baseSalary:5000,  emoji:"🧑💻", city:1 },
   { id:"tanaka",    name:"Ing. Tanaka",    spec:"hybrid",   baseSalary:6000,  emoji:"🎌",   city:2 },
-  { id:"chen",      name:"Dr. Chen",       spec:"research", baseSalary:8000,  emoji:"👩‍💻", city:3 },
+  { id:"chen",      name:"Dr. Chen",       spec:"research", baseSalary:8000,  emoji:"👩💻", city:3 },
   { id:"novak",     name:"Ing. Novak",     spec:"speed",    baseSalary:9000,  emoji:"⚡",   city:3 },
   { id:"rossi",     name:"Prof. Rossi",    spec:"quality",  baseSalary:12000, emoji:"🎨",   city:4 },
   { id:"kim",       name:"Dr. Kim",        spec:"research", baseSalary:15000, emoji:"🔮",   city:4 },
@@ -504,118 +491,118 @@ const ENGINEER_POOL = [
   { id:"ai_eng",    name:"KI-Ingenieur X", spec:"hybrid",   baseSalary:300000,emoji:"🤖",   city:12 },
 ];
 
-// Prototype blueprints — one per city, only researchable by engineers
+// Prototype blueprints  -  one per city, only researchable by engineers
 // Each takes `researchCost` points (1 point/tick per assigned engineer level)
 const BLUEPRINTS = [
-  { id:"proto_polo_r",  cityIdx:0,  name:"Polo R",          emoji:"🏎️", val:85000,   researchCost:500,   desc:"Sportversion des Polo — Ingenieur-Exklusiv" },
-  { id:"proto_dodge_v", cityIdx:1,  name:"Dodge Viper",     emoji:"🐍", val:320000,  researchCost:1200,  desc:"Legendäre Viper — nur durch Forschung" },
+  { id:"proto_polo_r",  cityIdx:0,  name:"Polo R",          emoji:"🏎️", val:85000,   researchCost:500,   desc:"Sportversion des Polo  -  Ingenieur-Exklusiv" },
+  { id:"proto_dodge_v", cityIdx:1,  name:"Dodge Viper",     emoji:"🐍", val:320000,  researchCost:1200,  desc:"Legendäre Viper  -  nur durch Forschung" },
   { id:"proto_bmw_m",   cityIdx:2,  name:"BMW M8 Proto",    emoji:"💠", val:950000,  researchCost:2500,  desc:"Exklusiver M8 Prototyp" },
-  { id:"proto_gtr_r",   cityIdx:3,  name:"GT-R Nismo R35",  emoji:"🏁", val:2800000, researchCost:5000,  desc:"Nismo Ultimate — Straßenversion verboten" },
-  { id:"proto_g90_n",   cityIdx:4,  name:"Genesis X Gran",  emoji:"🌟", val:8500000, researchCost:9000,  desc:"Concept Car — nie öffentlich gezeigt" },
+  { id:"proto_gtr_r",   cityIdx:3,  name:"GT-R Nismo R35",  emoji:"🏁", val:2800000, researchCost:5000,  desc:"Nismo Ultimate  -  Straßenversion verboten" },
+  { id:"proto_g90_n",   cityIdx:4,  name:"Genesis X Gran",  emoji:"🌟", val:8500000, researchCost:9000,  desc:"Concept Car  -  nie öffentlich gezeigt" },
   { id:"proto_hiphi_e", cityIdx:5,  name:"HiPhi Z Hyper",   emoji:"🐉", val:28000000,researchCost:16000, desc:"Ultra-Hypercar aus Shanghais Geheimlab" },
   { id:"proto_911_x",   cityIdx:6,  name:"Porsche 911 GT1", emoji:"🏆", val:85000000,researchCost:28000, desc:"Straßenversion des Le-Mans-Siegers" },
-  { id:"proto_xx",      cityIdx:7,  name:"Ferrari FXX K",   emoji:"🔥", val:260000000,researchCost:50000, desc:"Nur 40 Stück — alle für Museen" },
-  { id:"proto_neo_d",   cityIdx:8,  name:"Dubai NeoCar",    emoji:"🛸", val:800000000,researchCost:90000, desc:"Antigravitation-Prototyp — nicht für Straße" },
+  { id:"proto_xx",      cityIdx:7,  name:"Ferrari FXX K",   emoji:"🔥", val:260000000,researchCost:50000, desc:"Nur 40 Stück  -  alle für Museen" },
+  { id:"proto_neo_d",   cityIdx:8,  name:"Dubai NeoCar",    emoji:"🛸", val:800000000,researchCost:90000, desc:"Antigravitation-Prototyp  -  nicht für Straße" },
   { id:"proto_omega",   cityIdx:9,  name:"Omega One",       emoji:"👑", val:2500000000,researchCost:150000,desc:"Der wertvollste Wagen der Menschheit" },
 ];
 
 const TECH_TREE = [
-  // ══════════════════════════════════════════════════════
-  // ── PRODUKTION ────────────────────────────────────────
-  // ══════════════════════════════════════════════════════
+  // ======================================================
+  // -- PRODUKTION ----------------------------------------
+  // ======================================================
 
-  // ── Hauptkette: Robotisierung ──
-  { id:"lean",           cat:"prod", name:"Lean-Produktion",      desc:"Bauzeit −20%",                  cost:40000,       icon:"📉", req:null,             city:0 },
-  { id:"robot1",         cat:"prod", name:"Roboter I",             desc:"Linie 2 × 2 Speed",             cost:120000,      icon:"🤖", req:"lean",           city:1 },
-  { id:"robot2",         cat:"prod", name:"Roboter II",            desc:"Alle Linien × 3",               cost:500000,      icon:"🚀", req:"robot1",         city:2 },
-  { id:"robotultimate",  cat:"prod", name:"Roboter III",           desc:"Alle Linien × 5",               cost:5000000,     icon:"🦾", req:"robot2",         city:4 },
-  { id:"smartfactory",   cat:"prod", name:"Smart Factory",         desc:"Bauzeit × 6 + Wert +20%",       cost:25000000,    icon:"🧠", req:"robotultimate",  city:6 },
-  { id:"quantenwerk",    cat:"prod", name:"Quantenwerk",           desc:"Bauzeit × 8 — Höchst­leistung", cost:500000000,   icon:"⚛️", req:"smartfactory",   city:8 },
+  // -- Hauptkette: Robotisierung --
+  { id:"lean",           cat:"prod", name:"Lean-Produktion",      desc:"Bauzeit -20%",                  cost:40000,       icon:"📉", req:null,             city:0 },
+  { id:"robot1",         cat:"prod", name:"Roboter I",             desc:"Linie 2 x 2 Speed",             cost:120000,      icon:"🤖", req:"lean",           city:1 },
+  { id:"robot2",         cat:"prod", name:"Roboter II",            desc:"Alle Linien x 3",               cost:500000,      icon:"🚀", req:"robot1",         city:2 },
+  { id:"robotultimate",  cat:"prod", name:"Roboter III",           desc:"Alle Linien x 5",               cost:5000000,     icon:"🦾", req:"robot2",         city:4 },
+  { id:"smartfactory",   cat:"prod", name:"Smart Factory",         desc:"Bauzeit x 6 + Wert +20%",       cost:25000000,    icon:"🧠", req:"robotultimate",  city:6 },
+  { id:"quantenwerk",    cat:"prod", name:"Quantenwerk",           desc:"Bauzeit x 8  -  Höchstleistung", cost:500000000,   icon:"⚛️", req:"smartfactory",   city:8 },
 
-  // ── Zweigkette: Fließband & Präzision ──
-  { id:"assembly",       cat:"prod", name:"Fließband",             desc:"Bauzeit −10% extra",            cost:80000,       icon:"⚙️", req:null,             city:1 },
-  { id:"printing3d",     cat:"prod", name:"3D-Drucklabor",         desc:"Bauzeit −15% extra",            cost:600000,      icon:"🖨️",req:"assembly",        city:2 },
-  { id:"carbon_fiber",   cat:"prod", name:"Carbon-Rohbau",         desc:"Bauzeit −18% + Wert +10%",      cost:3000000,     icon:"🧱", req:"printing3d",     city:3 },
+  // -- Zweigkette: Fließband & Präzision --
+  { id:"assembly",       cat:"prod", name:"Fließband",             desc:"Bauzeit -10% extra",            cost:80000,       icon:"⚙️", req:null,             city:1 },
+  { id:"printing3d",     cat:"prod", name:"3D-Drucklabor",         desc:"Bauzeit -15% extra",            cost:600000,      icon:"🖨️",req:"assembly",        city:2 },
+  { id:"carbon_fiber",   cat:"prod", name:"Carbon-Rohbau",         desc:"Bauzeit -18% + Wert +10%",      cost:3000000,     icon:"🧱", req:"printing3d",     city:3 },
   { id:"precision",      cat:"prod", name:"Präzisionsfertigung",   desc:"Autowert +15%",                 cost:2000000,     icon:"🔬", req:"assembly",        city:3 },
   { id:"nano_coating",   cat:"prod", name:"Nano-Beschichtung",     desc:"Autowert +20%",                 cost:8000000,     icon:"🔵", req:"precision",      city:4 },
   { id:"ki_vision",      cat:"prod", name:"KI-Qualitätsprüfung",   desc:"Autowert +25% + Speed +8%",     cost:20000000,    icon:"👁️",req:"precision",      city:5 },
   { id:"formel1_tech",   cat:"prod", name:"F1-Technologie",        desc:"Autowert +40%",                 cost:80000000,    icon:"🏎️",req:"ki_vision",      city:6 },
   { id:"ki_design",      cat:"prod", name:"KI-Fahrzeugdesign",     desc:"Autowert +50%",                 cost:350000000,   icon:"🎨", req:"formel1_tech",   city:7 },
 
-  // ── Zweigkette: Energie & Nachhaltigkeit ──
-  { id:"solar",          cat:"prod", name:"Solardach",             desc:"Lohnkosten −20%",               cost:90000,       icon:"☀️", req:"lean",           city:1 },
-  { id:"windkraft",      cat:"prod", name:"Windkraftanlage",       desc:"Lohnkosten −20% extra",         cost:800000,      icon:"🌬️",req:"solar",          city:3 },
-  { id:"fusionsreaktor", cat:"prod", name:"Fusions­reaktor",       desc:"Lohnkosten −40% extra",         cost:20000000,    icon:"⚛️", req:"windkraft",      city:6 },
+  // -- Zweigkette: Energie & Nachhaltigkeit --
+  { id:"solar",          cat:"prod", name:"Solardach",             desc:"Lohnkosten -20%",               cost:90000,       icon:"☀️", req:"lean",           city:1 },
+  { id:"windkraft",      cat:"prod", name:"Windkraftanlage",       desc:"Lohnkosten -20% extra",         cost:800000,      icon:"🌬️",req:"solar",          city:3 },
+  { id:"fusionsreaktor", cat:"prod", name:"Fusionsreaktor",       desc:"Lohnkosten -40% extra",         cost:20000000,    icon:"⚛️", req:"windkraft",      city:6 },
 
-  // ── Zweigkette: Schicht & Versorgung ──
+  // -- Zweigkette: Schicht & Versorgung --
   { id:"nachtschicht",   cat:"prod", name:"Nachtschicht",          desc:"Produktion +25% Speed",         cost:50000,       icon:"🌙", req:"lean",           city:0 },
-  { id:"turbolader",     cat:"prod", name:"Turbo­aufladung",        desc:"Bauzeit −15% extra",            cost:300000,      icon:"💨", req:"nachtschicht",   city:1 },
-  { id:"globalsupply",   cat:"prod", name:"Globale Lieferkette",   desc:"Bauzeit −12% + Wert +10%",      cost:3000000,     icon:"🌐", req:"robot2",         city:4 },
+  { id:"turbolader",     cat:"prod", name:"Turboaufladung",        desc:"Bauzeit -15% extra",            cost:300000,      icon:"💨", req:"nachtschicht",   city:1 },
+  { id:"globalsupply",   cat:"prod", name:"Globale Lieferkette",   desc:"Bauzeit -12% + Wert +10%",      cost:3000000,     icon:"🌐", req:"robot2",         city:4 },
 
-  // ══════════════════════════════════════════════════════
-  // ── VERTRIEB ──────────────────────────────────────────
-  // ══════════════════════════════════════════════════════
+  // ======================================================
+  // -- VERTRIEB ------------------------------------------
+  // ======================================================
 
-  // ── Hauptkette: Markenaufbau ──
+  // -- Hauptkette: Markenaufbau --
   { id:"mktg",           cat:"sale", name:"Marketing",             desc:"Autowert +25%",                 cost:55000,       icon:"📊", req:null,             city:0 },
-  { id:"export",         cat:"sale", name:"Export-Netz",           desc:"Auftragsboni × 2",              cost:200000,      icon:"🌍", req:"mktg",           city:1 },
+  { id:"export",         cat:"sale", name:"Export-Netz",           desc:"Auftragsboni x 2",              cost:200000,      icon:"🌍", req:"mktg",           city:1 },
   { id:"premium",        cat:"sale", name:"Premium-Brand",         desc:"Autowert +50%",                 cost:2000000,     icon:"💎", req:"export",         city:3 },
   { id:"luxury",         cat:"sale", name:"Luxury Edition",        desc:"Autowert +80%",                 cost:15000000,    icon:"✨", req:"premium",        city:5 },
-  { id:"global_brand",   cat:"sale", name:"Globale Marke",         desc:"VIP-Aufträge 2× häufiger",      cost:60000000,    icon:"🌟", req:"luxury",         city:6 },
-  { id:"ikone",          cat:"sale", name:"Kultmarke",             desc:"Auftragsboni × 2 extra",        cost:200000000,   icon:"🏆", req:"luxury",         city:7 },
+  { id:"global_brand",   cat:"sale", name:"Globale Marke",         desc:"VIP-Aufträge 2x häufiger",      cost:60000000,    icon:"🌟", req:"luxury",         city:6 },
+  { id:"ikone",          cat:"sale", name:"Kultmarke",             desc:"Auftragsboni x 2 extra",        cost:200000000,   icon:"🏆", req:"luxury",         city:7 },
   { id:"vip_program",    cat:"sale", name:"VIP-Concierge",         desc:"VIP-Preis +75%",                cost:800000000,   icon:"💍", req:"global_brand",   city:8 },
 
-  // ── Zweigkette: Auftrags­volumen ──
+  // -- Zweigkette: Auftragsvolumen --
   { id:"dealer",         cat:"sale", name:"Händlernetz",           desc:"Max. Aufträge +2",              cost:150000,      icon:"🏪", req:"mktg",           city:2 },
-  { id:"werbevertrag",   cat:"sale", name:"Werbe­vertrag",          desc:"Max. Aufträge +3",              cost:600000,      icon:"📺", req:"dealer",         city:2 },
+  { id:"werbevertrag",   cat:"sale", name:"Werbevertrag",          desc:"Max. Aufträge +3",              cost:600000,      icon:"📺", req:"dealer",         city:2 },
   { id:"online",         cat:"sale", name:"Online-Plattform",      desc:"Max. Aufträge +2 extra",        cost:1000000,     icon:"📱", req:"dealer",         city:4 },
   { id:"abo_modell",     cat:"sale", name:"Abo-Modell",            desc:"+8k€ täglich fix",              cost:4000000,     icon:"🔄", req:"online",         city:5 },
   { id:"nft_platform",   cat:"sale", name:"NFT-Plattform",         desc:"+25k€ täglich fix",             cost:50000000,    icon:"🖼️", req:"abo_modell",     city:6 },
 
-  // ── Zweigkette: Kampagnen & Showroom ──
+  // -- Zweigkette: Kampagnen & Showroom --
   { id:"influencer",     cat:"sale", name:"Influencer-Kampagne",   desc:"Auftragsbonus +50%",            cost:300000,      icon:"📸", req:"mktg",           city:2 },
   { id:"media_deal",     cat:"sale", name:"TV-Mediendeal",         desc:"Autowert +30%",                 cost:2000000,     icon:"📡", req:"influencer",     city:3 },
   { id:"showroom_ext",   cat:"sale", name:"Showroom-Erweiterung",  desc:"Showroom +8 Plätze",            cost:500000,      icon:"🏬", req:"influencer",     city:3 },
   { id:"showroom_vip",   cat:"sale", name:"VIP-Showroom",          desc:"Showroom +12 Plätze",           cost:8000000,     icon:"🎪", req:"showroom_ext",   city:5 },
   { id:"collectors_ed",  cat:"sale", name:"Collector's Edition",   desc:"Autowert +60%",                 cost:40000000,    icon:"🎁", req:"showroom_vip",   city:6 },
 
-  // ── Zweigkette: Leasing & Finanzierung ──
+  // -- Zweigkette: Leasing & Finanzierung --
   { id:"leasing",        cat:"sale", name:"Leasing-Programm",      desc:"Autowert +35%",                 cost:6000000,     icon:"📋", req:"premium",        city:4 },
   { id:"abo_luxus",      cat:"sale", name:"Luxus-Leasing",         desc:"Autowert +55% extra",           cost:80000000,    icon:"🏅", req:"leasing",        city:7 },
 
-  // ══════════════════════════════════════════════════════
-  // ── MANAGEMENT ────────────────────────────────────────
-  // ══════════════════════════════════════════════════════
+  // ======================================================
+  // -- MANAGEMENT ----------------------------------------
+  // ======================================================
 
-  // ── Hauptkette: Personal ──
-  { id:"hr",             cat:"mgmt", name:"HR-Abteilung",          desc:"Einstellkosten −30%",           cost:30000,       icon:"👔", req:null,             city:0 },
-  { id:"betriebsrat",    cat:"mgmt", name:"Betriebsrat",           desc:"Lohnkosten −10%",               cost:50000,       icon:"🤝", req:"hr",             city:0 },
-  { id:"kantine",        cat:"mgmt", name:"Kantine",               desc:"Lohnkosten −15%",               cost:60000,       icon:"🍽️",req:"hr",             city:1 },
-  { id:"weiterbildung",  cat:"mgmt", name:"Weiterbildungs­zentrum", desc:"Arbeiter +10% effizienter",    cost:400000,      icon:"🎓", req:"kantine",        city:2 },
-  { id:"lean_kanban",    cat:"mgmt", name:"Lean Kanban",           desc:"Bauzeit −10%",                  cost:700000,      icon:"📌", req:"kantine",        city:2 },
+  // -- Hauptkette: Personal --
+  { id:"hr",             cat:"mgmt", name:"HR-Abteilung",          desc:"Einstellkosten -30%",           cost:30000,       icon:"👔", req:null,             city:0 },
+  { id:"betriebsrat",    cat:"mgmt", name:"Betriebsrat",           desc:"Lohnkosten -10%",               cost:50000,       icon:"🤝", req:"hr",             city:0 },
+  { id:"kantine",        cat:"mgmt", name:"Kantine",               desc:"Lohnkosten -15%",               cost:60000,       icon:"🍽️",req:"hr",             city:1 },
+  { id:"weiterbildung",  cat:"mgmt", name:"Weiterbildungszentrum", desc:"Arbeiter +10% effizienter",    cost:400000,      icon:"🎓", req:"kantine",        city:2 },
+  { id:"lean_kanban",    cat:"mgmt", name:"Lean Kanban",           desc:"Bauzeit -10%",                  cost:700000,      icon:"📌", req:"kantine",        city:2 },
   { id:"workspace",      cat:"mgmt", name:"Premium Workspace",     desc:"Arbeiter +15% effizienter",     cost:2000000,     icon:"🏢", req:"weiterbildung",  city:3 },
-  { id:"energie",        cat:"mgmt", name:"Energie­optimierung",    desc:"Lohnkosten −25% extra",         cost:1500000,     icon:"⚡", req:"weiterbildung",  city:3 },
-  { id:"ceo_bonus",      cat:"mgmt", name:"CEO-Bonus­programm",     desc:"Alle Werte +15%",               cost:50000000,    icon:"🎩", req:"energie",        city:6 },
+  { id:"energie",        cat:"mgmt", name:"Energieoptimierung",    desc:"Lohnkosten -25% extra",         cost:1500000,     icon:"⚡", req:"weiterbildung",  city:3 },
+  { id:"ceo_bonus",      cat:"mgmt", name:"CEO-Bonusprogramm",     desc:"Alle Werte +15%",               cost:50000000,    icon:"🎩", req:"energie",        city:6 },
   { id:"aktienoptionen", cat:"mgmt", name:"Aktienoptionen",        desc:"Alle Werte +15% extra",         cost:500000000,   icon:"📈", req:"ceo_bonus",      city:8 },
 
-  // ── Zweigkette: Qualität ──
+  // -- Zweigkette: Qualität --
   { id:"quality",        cat:"mgmt", name:"Qualitätskontrolle",    desc:"Autowert +40%",                 cost:150000,      icon:"🔍", req:"hr",             city:1 },
-  { id:"iso_zert",       cat:"mgmt", name:"ISO-Zertifizierung",    desc:"Autowert +30% + Export ×1.5",   cost:800000,      icon:"📜", req:"quality",        city:2 },
-  { id:"ip_portfolio",   cat:"mgmt", name:"IP-Portfolio",          desc:"Auftrags­boni +75%",             cost:5000000,     icon:"⚖️", req:"iso_zert",       city:4 },
+  { id:"iso_zert",       cat:"mgmt", name:"ISO-Zertifizierung",    desc:"Autowert +30% + Export x1.5",   cost:800000,      icon:"📜", req:"quality",        city:2 },
+  { id:"ip_portfolio",   cat:"mgmt", name:"IP-Portfolio",          desc:"Auftragsboni +75%",             cost:5000000,     icon:"⚖️", req:"iso_zert",       city:4 },
   { id:"sixsigma",       cat:"mgmt", name:"Six Sigma",             desc:"Autowert +60%",                 cost:5000000,     icon:"⭐", req:"quality",        city:4 },
   { id:"total_quality",  cat:"mgmt", name:"Total Quality Mgmt",   desc:"Autowert +80%",                 cost:30000000,    icon:"🥇", req:"sixsigma",       city:5 },
-  { id:"r_and_d",        cat:"mgmt", name:"F&E-Abteilung",        desc:"Forschungskosten −20%",          cost:1000000,     icon:"🧪", req:"iso_zert",       city:3 },
+  { id:"r_and_d",        cat:"mgmt", name:"F&E-Abteilung",        desc:"Forschungskosten -20%",          cost:1000000,     icon:"🧪", req:"iso_zert",       city:3 },
 
-  // ── Zweigkette: Linien-Ausbau ──
+  // -- Zweigkette: Linien-Ausbau --
   { id:"automate",       cat:"mgmt", name:"Automatisierung",       desc:"Linie 3 freischalten",          cost:300000,      icon:"🏭", req:"hr",             city:1 },
   { id:"megafabrik",     cat:"mgmt", name:"Mega-Fabrik",           desc:"Linie 4 freischalten",          cost:2000000,     icon:"🏗️",req:"automate",       city:3 },
   { id:"vollautomatik",  cat:"mgmt", name:"Vollautomatik",         desc:"Linie 5 freischalten",          cost:10000000,    icon:"🤖", req:"megafabrik",     city:5 },
-  { id:"gigafabrik",     cat:"mgmt", name:"Giga­fabrik",            desc:"Alle Linien +50% Speed",        cost:200000000,   icon:"🚀", req:"vollautomatik",  city:7 },
+  { id:"gigafabrik",     cat:"mgmt", name:"Gigafabrik",            desc:"Alle Linien +50% Speed",        cost:200000000,   icon:"🚀", req:"vollautomatik",  city:7 },
 
-  // ── Sondertechs ──
+  // -- Sondertechs --
   { id:"werksschutz",    cat:"mgmt", name:"Werksschutz",           desc:"Showroom +6 Plätze",            cost:120000,      icon:"🛡️",req:"hr",             city:1 },
-  { id:"ki_manager",     cat:"mgmt", name:"KI-Manager",            desc:"Frei-Arbeiter 2× effizienter",  cost:15000000,    icon:"🧑‍💻",req:"sixsigma",    city:5 },
-  { id:"supply_chain_ai",cat:"mgmt", name:"Supply Chain AI",       desc:"Bauzeit −25%",                  cost:100000000,   icon:"🔗", req:"ki_manager",     city:6 },
+  { id:"ki_manager",     cat:"mgmt", name:"KI-Manager",            desc:"Frei-Arbeiter 2x effizienter",  cost:15000000,    icon:"🧑💻",req:"sixsigma",    city:5 },
+  { id:"supply_chain_ai",cat:"mgmt", name:"Supply Chain AI",       desc:"Bauzeit -25%",                  cost:100000000,   icon:"🔗", req:"ki_manager",     city:6 },
 ];
 
 // Build flat tree with depth for each category
@@ -643,7 +630,7 @@ const SALESMAN = [
   { name:"Quanten-Händler", ms:60,    cost:100000000, emoji:"⚡" },
 ];
 
-// ═══ HELPERS ══════════════════════════════════════════════════
+// === HELPERS ==================================================
 const fmt  = n => n>=1e12?`${(n/1e12).toFixed(1)}Bio`:n>=1e9?`${(n/1e9).toFixed(1)}Mrd`:n>=1e6?`${(n/1e6).toFixed(1)}Mio`:n>=1e3?`${(n/1e3).toFixed(0)}k`:`${Math.round(n)}`;
 const fmtE = n => `${fmt(n)}€`;
 const uid  = () => Math.random().toString(36).slice(2,9);
@@ -837,7 +824,7 @@ function tickGS(gs) {
 
   // Event modifiers
   const ev       = gs.activeEvent;
-  const evSpeed  = ev && ev.effect==="speed+20" ? 0.80 : (ev && ev.effect==="speed-30"||ev?.effect==="shortage") ? 1.50 : 1.0;
+  const evSpeed  = ev && ev.effect==="speed+20" ? 0.80 : (ev && ev.effect==="speed-30"||(ev||{}).effect==="shortage") ? 1.50 : 1.0;
   const evVal    = ev && ev.effect==="value+40" ? 1.40 : ev && ev.effect==="boom" ? 1.80 : 1.0;
   const evWage   = ev && ev.effect==="wage+100"  ? 2.0  : 1.0;
 
@@ -847,7 +834,7 @@ function tickGS(gs) {
   const wageMult     = getWageMult(gs.techs) * evWage * (1 - (pb.wage||0)/100);
   const dailyBonus   = getDailyBonus(gs.techs);
 
-  // Event countdown — BUG FIX: clear _newEventFlag immediately
+  // Event countdown  -  BUG FIX: clear _newEventFlag immediately
   let eventTicksLeft = (gs.eventTicksLeft||0) > 0 ? gs.eventTicksLeft-1 : 0;
   let activeEvent    = eventTicksLeft > 0 ? gs.activeEvent : null;
 
@@ -927,7 +914,7 @@ function tickGS(gs) {
     return t;
   });
 
-  // ── Tuning research tick ──
+  // -- Tuning research tick --
   let tuningResearch = {...(gs.tuningResearch||{sport:0,super:0,hyper:0})};
   let tuningUnlocked = {...(gs.tuningUnlocked||{})};
   let _newTuningUnlock = null;
@@ -1019,7 +1006,7 @@ function initGS() {
   };
 }
 
-// ═══ COMPONENT ════════════════════════════════════════════════
+// === COMPONENT ================================================
 function AutoFactory() {
   const [gs, setGS]           = useState(initGS);
   const [tab, setTab]         = useState("fabrik");
@@ -1044,7 +1031,7 @@ function AutoFactory() {
   const [showLogin, setShowLogin] = useState(false);
   const [forschTab, setForschTab] = useState('tech'); // tech|ing sub-tab in forschen
 
-  // ── Save system ─────────────────────────────────────────────
+  // -- Save system ---------------------------------------------
   const [isLoading, setIsLoading]   = useState(true);  // true while checking storage
   const [saveStatus, setSaveStatus] = useState('idle'); // 'idle'|'saving'|'saved'|'error'
   const saveTimer = useRef(null);
@@ -1121,7 +1108,7 @@ function AutoFactory() {
       localStorage.removeItem(SAVE_KEY);
       setGS(initGS());
       setSaveStatus('idle');
-      notify('🗑️ Spielstand gelöscht — Neustart!');
+      notify('🗑️ Spielstand gelöscht  -  Neustart!');
     } catch(e) {
       notify('❌ Löschen fehlgeschlagen');
     }
@@ -1141,7 +1128,7 @@ function AutoFactory() {
     if (!isLoading) saveNow(gs);
   };
 
-  // ── Unified notification queue ──────────────────────────────
+  // -- Unified notification queue ------------------------------
   const [activeNotif, setActiveNotif] = useState(null);
   const notifQueue   = useRef([]);
   const notifActive  = useRef(false);
@@ -1162,7 +1149,7 @@ function AutoFactory() {
     }
   };
 
-  // Login bonus — check on load
+  // Login bonus  -  check on load
   useEffect(()=>{
     if(isLoading) return;
     // Show login modal if new day
@@ -1202,7 +1189,7 @@ function AutoFactory() {
     notifQueuePush({type:'toast', msg:`${reward.icon} Login-Bonus: ${reward.label}!`});
   };
 
-  // Mission progress tracker — update on key events
+  // Mission progress tracker  -  update on key events
   const updateMissions = (type, amount) => {
     setGS(p=>{
       const ms=(p.dailyMissions||[]).map(m=>{
@@ -1238,13 +1225,13 @@ function AutoFactory() {
       const a = unlocked[0];
       setGS(p => {
         let upd = { ...p, achievements: { ...p.achievements, [a.id]: true } };
-        if (a.reward?.type === 'money') upd.money = (p.money||0) + a.reward.val;
-        if (a.reward?.type === 'rep')   upd.reputation = Math.min(100,(p.reputation||0)+a.reward.val);
+        if ((a.reward||{}).type === 'money') upd.money = (p.money||0) + a.reward.val;
+        if ((a.reward||{}).type === 'rep')   upd.reputation = Math.min(100,(p.reputation||0)+a.reward.val);
         return upd;
       });
-      // Queue achievement notif — reward toast follows after
+      // Queue achievement notif  -  reward toast follows after
       pushAch(a);
-      if (a.reward?.type === 'money') notifQueuePush({type:'toast', msg:`🏅 Belohnung: +${fmtE(a.reward.val)}`});
+      if ((a.reward||{}).type === 'money') notifQueuePush({type:'toast', msg:`🏅 Belohnung: +${fmtE(a.reward.val)}`});
     }
   }, [gs.totalBuilt, gs.totalSold, gs.cityIdx, gs.money, gs.reputation, gs.streak, gs.tunedCount, gs.lines, gs.achievements, gs.totalOrders, gs.modelUpgrades, gs.techs, gs.prestigeCount, gs.totalTaps]);
 
@@ -1277,7 +1264,7 @@ function AutoFactory() {
   }, [gs._completedBlueprint]);
 
   // Engineer salary deducted daily (in tickGS via wageMult already covers workers;
-  // engineers are extra — deduct from daily cycle)
+  // engineers are extra  -  deduct from daily cycle)
   // Blueprint cars available in model picker: add to availModels
 
   useEffect(() => {
@@ -1286,7 +1273,7 @@ function AutoFactory() {
       prevEventId.current = pid;
       const ev = DAILY_EVENTS.find(e=>e.id===pid);
       if (ev) {
-        notify(`${ev.icon} ${ev.name} — ${ev.desc}`);
+        notify(`${ev.icon} ${ev.name}  -  ${ev.desc}`);
         if (ev.effect==="cash500k") setGS(p=>({...p,money:p.money+500000}));
         if (ev.effect==="vip")      setGS(p=>({...p,contracts:[...p.contracts,genContract(cl(p.cityIdx,0,CITY_MODELS.length-1),true,p.unlockedModels,getVipPriceMult(p.techs))]}));
       }
@@ -1369,7 +1356,7 @@ function AutoFactory() {
     return () => clearInterval(t);
   }, [gs.salesmanLvl, cheatMode]);
 
-  // ── Unified notification queue ──────────────────────────────
+  // -- Unified notification queue ------------------------------
   const notifQueuePush = (item) => {
     notifQueue.current.push(item);
     if (!notifActive.current) showNextNotif();
@@ -1430,7 +1417,7 @@ function AutoFactory() {
       .map(c=>{ if(c.filled>=c.qty&&!c.claimed){bonus+=Math.round(c.reward*cm);orders++;return{...c,claimed:true};}return c; })
       .filter(c=>!c.claimed);
     const carVal = Math.round(car.val * incMult * (1+(pb.value||0)/100) * (1+repBonus));
-    if (bonus>0) notify(`🎉 Auftrag! +${fmtE(bonus)}${streakMult>1?" 🔥×"+streakMult:""}`);
+    if (bonus>0) notify(`🎉 Auftrag! +${fmtE(bonus)}${streakMult>1?" 🔥x"+streakMult:""}`);
     const newStreak = filled ? (gs.streak||0)+1 : gs.streak||0;
     const newRep    = cl(rep+repGain, 0, 100);
     let sc = gs.seasonChallenge;
@@ -1496,13 +1483,13 @@ function AutoFactory() {
     if ((gs.tuningUnlocked||{})[tuningId]) { notify('✅ Bereits erforscht!'); return; }
     setGS(p=>({...p, engineers:(p.engineers||[]).map(e=>e.id===engInstId?{...e,assignment:'tuning',tuningId,lineId:null,blueprintId:null}:e)}));
     const tl=TUNING_LEVELS.find(t=>t.id===tuningId);
-    notify(`🔬 Forschung gestartet: ${tl?.label}`);
+    notify(`🔬 Forschung gestartet: ${(tl||{}).label}`);
   };
   const assignEngineerResearch = (engInstId, blueprintId) => {
     if ((gs.blueprints||{})[blueprintId]) { notify('🔬 Blaupause bereits abgeschlossen!'); return; }
     setGS(p=>({...p, engineers:p.engineers.map(e=>e.id===engInstId?{...e,assignment:'research',blueprintId,lineId:null,researchProgress:e.blueprintId===blueprintId?e.researchProgress:0}:e)}));
     const bp = BLUEPRINTS.find(b=>b.id===blueprintId);
-    notify(`🔬 Forschung gestartet: ${bp?.name}`);
+    notify(`🔬 Forschung gestartet: ${(bp||{}).name}`);
   };
   const fireEngineer = (engInstId) => setGS(p=>({...p, engineers:p.engineers.filter(e=>e.id!==engInstId)}));
 
@@ -1510,9 +1497,9 @@ function AutoFactory() {
   const getEngBonusForLine = (lineId) => {
     let speedBonus=0, valBonus=0;
     (gs.engineers||[]).filter(e=>e.assignment==='line'&&e.lineId===lineId).forEach(e=>{
-      const sp=ENG_SPECS[ENGINEER_POOL.find(p=>p.id===e.engId)?.spec||'hybrid'];
-      speedBonus += (sp?.lineBonus?.speed||0) * e.level;
-      valBonus   += (sp?.lineBonus?.val  ||0) * e.level;
+      const sp=ENG_SPECS[(ENGINEER_POOL.find(p=>p.id===e.engId)||{}).spec||'hybrid'];
+      speedBonus += ((sp&&sp.lineBonus&&sp.lineBonus.speed)||0) * e.level;
+      valBonus   += ((sp&&sp.lineBonus&&sp.lineBonus.val)  ||0) * e.level;
     });
     return {speedBonus, valBonus};
   };
@@ -1529,18 +1516,18 @@ function AutoFactory() {
     const req = MODEL_UNLOCK_REQ[mi]||MODEL_UNLOCK_REQ[0];
     const cost= Math.round(m.val * req.cost);
     if(gs.money<cost) return;
-    // Global unlock — applies to all lines
+    // Global unlock  -  applies to all lines
     setGS(p=>({
       ...p,
       money: p.money - cost,
       unlockedModels: { ...(p.unlockedModels||{}), [m.id]: true },
       // Immediately switch the requesting line to the new model
-      lines: p.lines.map(l=>l.id===showUnlockPanel?.lineId?{...l,modelId:m.id,stIdx:0,prog:0,ready:false}:l),
+      lines: p.lines.map(l=>l.id===(showUnlockPanel||{}).lineId?{...l,modelId:m.id,stIdx:0,prog:0,ready:false}:l),
     }));
     notify(`🔓 ${m.emoji} ${m.name} global freigeschaltet!`);
     setShowUnlockPanel(null);
   };
-  const research=(tech)=>{ const disc=getResearchDiscount(gs.techs); const cost=Math.round(tech.cost*disc); if(gs.techs[tech.id]||(tech.req&&!gs.techs[tech.req])||gs.money<cost||ci<tech.city)return; setGS(p=>({...p,money:p.money-cost,techs:{...p.techs,[tech.id]:true}})); notify(`🎉 ${tech.name} erforscht!`+(disc<1?` (−${Math.round((1-disc)*100)}% Rabatt)`:``) ); };
+  const research=(tech)=>{ const disc=getResearchDiscount(gs.techs); const cost=Math.round(tech.cost*disc); if(gs.techs[tech.id]||(tech.req&&!gs.techs[tech.req])||gs.money<cost||ci<tech.city)return; setGS(p=>({...p,money:p.money-cost,techs:{...p.techs,[tech.id]:true}})); notify(`🎉 ${tech.name} erforscht!`+(disc<1?` (-${Math.round((1-disc)*100)}% Rabatt)`:``) ); };
   const prestige=(bonusEffect)=>{
     if(!canPre)return;
     const nl=ci+1; _cid=1;
@@ -1548,7 +1535,7 @@ function AutoFactory() {
     if(bonusEffect==="speed") pb.speed=(pb.speed||0)+8;
     if(bonusEffect==="value") pb.value=(pb.value||0)+10;
     if(bonusEffect==="wage")  pb.wage =(pb.wage ||0)+10;
-    const newCityFirstId = CITY_MODELS[nl]?.[0]?.id || 'polo';
+    const newCityFirstId = (CITY_MODELS[nl]&&CITY_MODELS[nl][0]&&CITY_MODELS[nl][0].id) || 'polo';
     setGS({
       money:Math.floor(gs.money*0.1), cityIdx:nl, totalBuilt:0, totalSold:0,
       totalWorkers:3, salesmanLvl:0, gameDay:1, dayTick:0,
@@ -1569,13 +1556,13 @@ function AutoFactory() {
       totalTaps:gs.totalTaps||0, // taps persist across prestige
     });
     setShowPre(false); setShowPresBonus(false); setTab("fabrik");
-    notify(`🎉 Willkommen in ${CITIES[nl].name}! Bonus: ${PRESTIGE_BONUS_OPTIONS.find(o=>o.effect===bonusEffect)?.name||""}`);
+    notify(`🎉 Willkommen in ${CITIES[nl].name}! Bonus: ${(PRESTIGE_BONUS_OPTIONS.find(o=>o.effect===bonusEffect)||{}).name||""}`);
   };
 
   const buyMarketOffer=(offer)=>{
     const price=offer.price||offer.cost;
     if(gs.money<price) return;
-    const bought=[...(gs.weekMarket?.bought||[]),offer.id];
+    const bought=[...((gs.weekMarket||{}).bought||[]),offer.id];
     let upd={money:gs.money-price,weekMarket:{...gs.weekMarket,bought}};
     if(offer.type==="workers")  upd.totalWorkers=(gs.totalWorkers||0)+offer.val;
     if(offer.type==="rep")      upd.reputation=cl((gs.reputation||0)+offer.val,0,100);
@@ -1591,8 +1578,8 @@ function AutoFactory() {
   };
 
   const tapStation = (lineId, stIdx) => {
-    // Each tap adds a fixed progress boost — equivalent to ~1 extra tick
-    const BOOST = 0.012; // ~1.2% per tap — more taps needed
+    // Each tap adds a fixed progress boost  -  equivalent to ~1 extra tick
+    const BOOST = 0.012; // ~1.2% per tap  -  more taps needed
     setGS(p => {
       const line = p.lines.find(l=>l.id===lineId);
       if (!line || !line.unlocked || line.workers===0) return p;
@@ -1615,7 +1602,7 @@ function AutoFactory() {
     const cost=Math.round(m.val*MODEL_UPGRADE_COST_MULT[lvl]);
     if(gs.money<cost) return;
     setGS(p=>({...p,money:p.money-cost,modelUpgrades:{...(p.modelUpgrades||{}),[modelId]:lvl+1}}));
-    notify(`⬆️ ${m.name} Stufe ${lvl+1} — Wert +20%!`);
+    notify(`⬆️ ${m.name} Stufe ${lvl+1}  -  Wert +20%!`);
   };
 
   const setLineSpec=(lineId,spec)=>{
@@ -1625,7 +1612,7 @@ function AutoFactory() {
     notify(`${LINE_SPECS[spec].icon} ${LINE_SPECS[spec].label} auf Linie ${lineId+1}!`);
   };
 
-  // ─── CSS ──────────────────────────────────────────────────
+  // --- CSS --------------------------------------------------
   const css = `
     @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;800;900&display=swap');
     *{box-sizing:border-box;margin:0;padding:0}
@@ -1673,13 +1660,13 @@ function AutoFactory() {
 
   const LINE_COLORS = ["#FF6B35","#4CAF50","#9C27B0","#2196F3","#FF9800","#00BCD4","#E91E63"];
 
-  // Loading screen — MUST be in return, after all hooks
+  // Loading screen  -  MUST be in return, after all hooks
   if (isLoading) return (
     <div style={{ background:"#EEF2F7",minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center",flexDirection:"column",gap:16,fontFamily:"'Nunito',sans-serif",maxWidth:430,margin:"0 auto" }}>
       <style>{`@keyframes loadingBar{0%{width:0%}50%{width:70%}100%{width:100%}} @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}`}</style>
       <div style={{ fontSize:72,animation:"float 1.5s ease-in-out infinite" }}>🏭</div>
       <div style={{ fontSize:24,fontWeight:900,color:"#333",fontFamily:"'Fredoka One',cursive" }}>Auto-Factory</div>
-      <div style={{ fontSize:13,color:"#aaa",marginTop:-8 }}>Spielstand wird geladen…</div>
+      <div style={{ fontSize:13,color:"#aaa",marginTop:-8 }}>Spielstand wird geladen...</div>
       <div style={{ width:200,height:6,background:"#e0e0e0",borderRadius:99,overflow:"hidden",marginTop:16 }}>
         <div style={{ height:"100%",background:"#FF6B35",borderRadius:99,animation:"loadingBar 1.5s ease-in-out infinite" }}/>
       </div>
@@ -1696,25 +1683,25 @@ function AutoFactory() {
         <div key={c.id} style={{ position:"fixed", bottom:88, left:`${c.x}%`, fontSize:26, animation:"coinUp 1s ease-out forwards", zIndex:200, pointerEvents:"none" }}>💰</div>
       ))}
 
-      {/* ── HUD ── */}
+      {/* -- HUD -- */}
       <div style={{ position:"sticky",top:0,zIndex:50,background:"#fff",borderBottom:`2px solid ${city.accent}33`,paddingBottom:8,boxShadow:"0 3px 16px rgba(0,0,0,0.07)" }}>
         <div style={{ display:"flex",justifyContent:"space-between",alignItems:"center",padding:"12px 14px 6px" }}>
           <div style={{ display:"flex",alignItems:"center",gap:8,cursor:"pointer",background:"#fff",borderRadius:99,padding:"7px 14px 7px 10px",boxShadow:"0 3px 0 #e0e0e0",border:"2px solid #e8e8e8" }} onClick={()=>setShowMap(true)}>
             <span style={{ fontSize:24,display:"inline-block" }}>{city.flag}</span>
             <div>
               <div style={{ fontSize:13,fontFamily:"'Fredoka One',cursive",color:"#333",lineHeight:1 }}>{city.name}</div>
-              <div style={{ fontSize:9,color:"#888" }}>Stadt {ci+1}/{CITIES.length} · Roadmap</div>
+              <div style={{ fontSize:9,color:"#888" }}>Stadt {ci+1}/{CITIES.length} . Roadmap</div>
             </div>
           </div>
           <div style={{ display:"flex",flexDirection:"column",alignItems:"flex-end",gap:2 }}>
             <div onClick={handleCheatTap} style={{ background:"#fff",borderRadius:18,padding:"8px 16px",boxShadow:`0 3px 0 ${city.accent}44`,border:`2px solid ${cheatMode?"#FF6B35":city.accent}33`,cursor:"pointer",position:"relative",userSelect:"none" }}>
-              {cheatMode&&<div style={{ position:"absolute",top:-9,right:-9,background:"#FF6B35",color:"#fff",fontSize:9,fontWeight:900,borderRadius:20,padding:"3px 8px",animation:"bounce 0.8s ease infinite",cursor:"pointer" }} onClick={(e)=>{e.stopPropagation();setShowAdmin(true);}}>⚡×{adminSpeed}</div>}
+              {cheatMode&&<div style={{ position:"absolute",top:-9,right:-9,background:"#FF6B35",color:"#fff",fontSize:9,fontWeight:900,borderRadius:20,padding:"3px 8px",animation:"bounce 0.8s ease infinite",cursor:"pointer" }} onClick={(e)=>{e.stopPropagation();setShowAdmin(true);}}>⚡x{adminSpeed}</div>}
               <div style={{ fontSize:9,color:"#aaa",letterSpacing:1 }}>KASSE</div>
               <div style={{ fontSize:21,fontWeight:900,color:"#222",fontFamily:"'Fredoka One',cursive" }}>{fmtE(gs.money)}</div>
             </div>
             {/* Save indicator */}
             <div onClick={()=>saveNow(gs)} style={{ fontSize:9,color:saveStatus==='saving'?"#FF9800":saveStatus==='saved'?"#4CAF50":saveStatus==='error'?"#E63946":"#ccc",fontWeight:700,cursor:"pointer",display:"flex",alignItems:"center",gap:3,padding:"2px 4px" }}>
-              {saveStatus==='saving'?"💾 Speichern…":saveStatus==='saved'?"✅ Gespeichert":saveStatus==='error'?"❌ Fehler":"💾 Speichern"}
+              {saveStatus==='saving'?"💾 Speichern...":saveStatus==='saved'?"✅ Gespeichert":saveStatus==='error'?"❌ Fehler":"💾 Speichern"}
             </div>
           </div>
         </div>
@@ -1752,7 +1739,7 @@ function AutoFactory() {
               <div style={{ fontSize:14 }}>📋</div>
               <div style={{ flex:1 }}>
                 <div style={{ fontSize:10,fontWeight:900,color:ready>0?"#4CAF50":"#888" }}>
-                  {ready>0?`${ready} Mission${ready>1?'en':''} abholbereit! 🎁`:`Tages-Missionen · ${done}/3 erledigt`}
+                  {ready>0?`${ready} Mission${ready>1?'en':''} abholbereit! 🎁`:`Tages-Missionen . ${done}/3 erledigt`}
                 </div>
                 <div style={{ display:"flex",gap:4,marginTop:3 }}>
                   {ms.map((m,i)=>(
@@ -1780,7 +1767,7 @@ function AutoFactory() {
         {!gs.activeEvent&&gs.streak>=5&&(
           <div style={{ margin:"0 14px 4px",padding:"6px 12px",borderRadius:10,background:"#FFF3E0",border:"2px solid #FF6B3544",display:"flex",alignItems:"center",gap:6 }}>
             <span style={{ fontSize:18,animation:"streakPulse 0.8s ease infinite" }}>🔥</span>
-            <span style={{ fontSize:11,fontWeight:900,color:"#FF6B35" }}>Streak ×{gs.streak} — {streakMult}× Auftragsboni!</span>
+            <span style={{ fontSize:11,fontWeight:900,color:"#FF6B35" }}>Streak x{gs.streak}  -  {streakMult}x Auftragsboni!</span>
           </div>
         )}
 
@@ -1812,7 +1799,7 @@ function AutoFactory() {
                   })}
                 </div>
                 <span style={{ fontSize:8,color:"rgba(0,0,0,0.4)",minWidth:40,textAlign:"right" }}>
-                  {(CITY_MODELS[ci]||[]).filter(m=>(gs.unlockedModels||{})[m.id]).length}/{CITY_MODELS[ci]?.length||3} Modelle
+                  {(CITY_MODELS[ci]||[]).filter(m=>(gs.unlockedModels||{})[m.id]).length}/{(CITY_MODELS[ci]||[]).length||3} Modelle
                 </span>
               </div>
             </div>
@@ -1822,10 +1809,10 @@ function AutoFactory() {
             </button>
           </div>
         )}
-        {!req&&<div style={{ fontSize:11,color:"#FFD700",textAlign:"center",fontWeight:800,padding:"4px 0" }}>🏆 Cyberspace — Endstufe erreicht!</div>}
+        {!req&&<div style={{ fontSize:11,color:"#FFD700",textAlign:"center",fontWeight:800,padding:"4px 0" }}>🏆 Cyberspace  -  Endstufe erreicht!</div>}
       </div>
 
-      {/* ── UNIFIED NOTIFICATION (one at a time, queued) ── */}
+      {/* -- UNIFIED NOTIFICATION (one at a time, queued) -- */}
       {activeNotif&&(()=>{
         const n = activeNotif;
         if (n.type==='toast') return (
@@ -1843,7 +1830,7 @@ function AutoFactory() {
               <div style={{ fontSize:10,color:"#aaa",fontWeight:800,letterSpacing:2 }}>ERFOLG FREIGESCHALTET!</div>
               <div style={{ fontSize:15,fontWeight:900,color:"#fff",marginTop:4 }}>{a.name}</div>
               <div style={{ fontSize:10,color:"#888",marginTop:3 }}>{a.desc}</div>
-              {a.reward?.type==="money"&&(
+              {(a.reward||{}).type==="money"&&(
                 <div style={{ marginTop:8,background:"rgba(255,215,0,0.15)",borderRadius:10,padding:"5px 10px",fontSize:12,fontWeight:900,color:"#FFD700" }}>+{fmtE(a.reward.val)} Belohnung</div>
               )}
             </div>
@@ -1855,7 +1842,7 @@ function AutoFactory() {
             <div style={{ fontSize:44,marginBottom:4 }}>{n.tl.icon}</div>
             <div style={{ fontSize:16,fontWeight:900,color:"#fff" }}>{n.tl.label}</div>
             <div style={{ fontSize:10,color:"rgba(255,255,255,0.75)",marginTop:3 }}>{n.tl.desc}</div>
-            <div style={{ marginTop:10,background:"rgba(255,255,255,0.25)",borderRadius:10,padding:"6px 12px",fontSize:12,fontWeight:900,color:"#fff" }}>+{Math.round(n.tl.bonus*100)}% Wert · Jetzt anwendbar!</div>
+            <div style={{ marginTop:10,background:"rgba(255,255,255,0.25)",borderRadius:10,padding:"6px 12px",fontSize:12,fontWeight:900,color:"#fff" }}>+{Math.round(n.tl.bonus*100)}% Wert . Jetzt anwendbar!</div>
           </div>
         );
         if (n.type==='blueprint') return (
@@ -1864,7 +1851,7 @@ function AutoFactory() {
             <div style={{ fontSize:44,marginBottom:6,animation:"float 2s ease-in-out infinite" }}>{n.bp.emoji}</div>
             <div style={{ fontSize:16,fontWeight:900,color:"#fff" }}>{n.bp.name}</div>
             <div style={{ fontSize:10,color:"#888",marginTop:3 }}>{n.bp.desc}</div>
-            <div style={{ marginTop:10,background:"rgba(76,175,80,0.2)",borderRadius:10,padding:"6px 12px",fontSize:13,fontWeight:900,color:"#4CAF50" }}>Wert: {fmtE(n.bp.val)} · Jetzt baubar!</div>
+            <div style={{ marginTop:10,background:"rgba(76,175,80,0.2)",borderRadius:10,padding:"6px 12px",fontSize:13,fontWeight:900,color:"#4CAF50" }}>Wert: {fmtE(n.bp.val)} . Jetzt baubar!</div>
           </div>
         );
         if (n.type==='offline') return (
@@ -1881,18 +1868,18 @@ function AutoFactory() {
         return null;
       })()}
 
-      {/* ── CONTENT ── */}
+      {/* -- CONTENT -- */}
       <div style={{ flex:1,overflowY:"auto",padding:"10px 12px 100px" }}>
 
-        {/* ══ FABRIK ══ */}
+        {/* == FABRIK == */}
         {tab==="fabrik"&&(
           <div>
-            {/* Compact hire bar — above Linie 1 */}
+            {/* Compact hire bar  -  above Linie 1 */}
             <div style={{ display:"flex",alignItems:"center",gap:10,background:"#fff",borderRadius:14,border:"2px solid #4CAF5033",padding:"8px 12px",marginBottom:10,boxShadow:"0 2px 0 #4CAF5022" }}>
               <span style={{ fontSize:18 }}>👷</span>
               <div style={{ flex:1 }}>
                 <span style={{ fontSize:12,fontWeight:900,color:"#333" }}>{gs.totalWorkers} Arbeiter</span>
-                <span style={{ fontSize:11,color:"#aaa",marginLeft:6 }}>{freeW} frei · {fmtE(gs.totalWorkers*500)}/Tag</span>
+                <span style={{ fontSize:11,color:"#aaa",marginLeft:6 }}>{freeW} frei . {fmtE(gs.totalWorkers*500)}/Tag</span>
               </div>
               <button onClick={hire} style={{ padding:"6px 12px",background:gs.money>=mechCost?"#4CAF50":"#eee",border:"none",borderRadius:10,color:gs.money>=mechCost?"#fff":"#bbb",fontWeight:900,fontSize:11,cursor:gs.money>=mechCost?"pointer":"default",boxShadow:gs.money>=mechCost?"0 3px 0 #2E7D32":"none",fontFamily:"'Nunito',sans-serif",whiteSpace:"nowrap" }}>
                 + {fmtE(mechCost)}
@@ -1918,7 +1905,7 @@ function AutoFactory() {
               const techReq = LINE_TECH_REQ[line.id];
               const spec     = (gs.lineSpecs||{})[line.id];
               const canUnlock= !line.unlocked&&gs.money>=LINE_COSTS[line.id]&&(!techReq||gs.techs[techReq]);
-              const techName  = techReq?TECH_TREE.find(t=>t.id===techReq)?.name:"";
+              const techName  = techReq?(TECH_TREE.find(t=>t.id===techReq)||{}).name:"";
 
               return (
                 <div key={line.id} style={{ background:"#fff",borderRadius:18,border:`3px solid ${line.unlocked?(isOn?lc+"99":lc+"44"):"#e8e8e8"}`,boxShadow:isOn?`0 4px 0 ${lc}44`:"0 3px 0 #e8e8e8",marginBottom:12,overflow:"hidden" }}>
@@ -1932,7 +1919,7 @@ function AutoFactory() {
                         <div style={{ fontSize:13,fontWeight:900,color:line.unlocked?"#fff":"#bbb",lineHeight:1.1 }}>
                           Linie {line.id+1}{spec&&<span style={{ fontSize:9,marginLeft:6,background:"rgba(255,255,255,0.3)",borderRadius:20,padding:"1px 7px" }}>{LINE_SPECS[spec].icon} {LINE_SPECS[spec].label}</span>}
                         </div>
-                        {line.unlocked&&<div style={{ fontSize:11,color:"rgba(255,255,255,0.85)",marginTop:1 }}>{model.emoji} {model.name} · {isOn?`${Math.round(oProg*100)}% fertig`:"⏸ Warte auf Arbeiter"}</div>}
+                        {line.unlocked&&<div style={{ fontSize:11,color:"rgba(255,255,255,0.85)",marginTop:1 }}>{model.emoji} {model.name} . {isOn?`${Math.round(oProg*100)}% fertig`:"⏸ Warte auf Arbeiter"}</div>}
                       </div>
                     </div>
                     {line.unlocked?(
@@ -1943,7 +1930,7 @@ function AutoFactory() {
                           ))}
                           {line.workers>5&&<span style={{ fontSize:9,color:"rgba(255,255,255,0.8)",fontWeight:900,paddingLeft:2 }}>+{line.workers-5}</span>}
                         </div>
-                        <button onClick={()=>setLW(line.id,-1)} style={{ width:28,height:28,borderRadius:8,background:"rgba(255,255,255,0.2)",border:"2px solid rgba(255,255,255,0.4)",color:"#fff",fontSize:16,fontWeight:900,cursor:line.workers>0?"pointer":"default",opacity:line.workers>0?1:0.4 }}>−</button>
+                        <button onClick={()=>setLW(line.id,-1)} style={{ width:28,height:28,borderRadius:8,background:"rgba(255,255,255,0.2)",border:"2px solid rgba(255,255,255,0.4)",color:"#fff",fontSize:16,fontWeight:900,cursor:line.workers>0?"pointer":"default",opacity:line.workers>0?1:0.4 }}>-</button>
                         <span style={{ fontSize:13,fontWeight:900,color:"#fff",minWidth:18,textAlign:"center" }}>{line.workers}</span>
                         <button onClick={()=>setLW(line.id,1)} style={{ width:28,height:28,borderRadius:8,background:"rgba(255,255,255,0.2)",border:"2px solid rgba(255,255,255,0.4)",color:"#fff",fontSize:16,fontWeight:900,cursor:freeW>0?"pointer":"default",opacity:freeW>0?1:0.4 }}>+</button>
                       </div>
@@ -1966,9 +1953,9 @@ function AutoFactory() {
                       {/* Status + model picker */}
                       <div style={{ display:"flex",alignItems:"center",justifyContent:"space-between",gap:6,marginBottom:10 }}>
                         <div style={{ fontSize:11,fontWeight:700,color:curSt?curSt.col:"#bbb",flex:1,overflow:"hidden",whiteSpace:"nowrap",textOverflow:"ellipsis" }}>
-                          {isOn?(curSt?`⚙️ ${curSt.name} · ${Math.round(line.prog*100)}%`:"🎉 Fertig!"):gs.parked.length>=showroomMax?"⚠️ Showroom voll":"💤 Kein Arbeiter"}
+                          {isOn?(curSt?`⚙️ ${curSt.name} . ${Math.round(line.prog*100)}%`:"🎉 Fertig!"):gs.parked.length>=showroomMax?"⚠️ Showroom voll":"💤 Kein Arbeiter"}
                         </div>
-                        {/* Model picker — current city + unlocked legacy */}
+                        {/* Model picker  -  current city + unlocked legacy */}
                         <div style={{ display:"flex",gap:3,flexShrink:0,overflowX:"auto",paddingBottom:2,maxWidth:210 }}>
                           {availModels.map((m,mi2)=>{
                             const isActive=line.modelId===m.id;
@@ -2014,7 +2001,7 @@ function AutoFactory() {
                               <span style={{ fontSize:28 }}>{m.emoji}</span>
                               <div style={{ flex:1 }}>
                                 <div style={{ fontSize:13,fontWeight:900,color:"#333" }}>{m.name}</div>
-                                <div style={{ fontSize:10,color:"#888" }}>Wert: {fmtE(m.val)} · Preis zum freischalten</div>
+                                <div style={{ fontSize:10,color:"#888" }}>Wert: {fmtE(m.val)} . Preis zum freischalten</div>
                               </div>
                               <button onClick={()=>setShowUnlockPanel(null)} style={{ fontSize:16,background:"none",border:"none",cursor:"pointer",color:"#aaa",padding:"0 4px" }}>✕</button>
                             </div>
@@ -2049,8 +2036,8 @@ function AutoFactory() {
                             <div style={{ display:"flex",alignItems:"center",gap:8,marginBottom:10 }}>
                               <span style={{ fontSize:22 }}>{m.emoji}</span>
                               <div style={{ flex:1 }}>
-                                <div style={{ fontSize:12,fontWeight:900,color:"#333" }}>{m.name} — Upgrade</div>
-                                <div style={{ fontSize:10,color:"#888" }}>Stufe {upgLvl}/{MODEL_UPGRADE_LEVELS} · Jede Stufe +20% Basiswert</div>
+                                <div style={{ fontSize:12,fontWeight:900,color:"#333" }}>{m.name}  -  Upgrade</div>
+                                <div style={{ fontSize:10,color:"#888" }}>Stufe {upgLvl}/{MODEL_UPGRADE_LEVELS} . Jede Stufe +20% Basiswert</div>
                               </div>
                               <button onClick={()=>setShowUnlockPanel(null)} style={{ fontSize:14,background:"none",border:"none",cursor:"pointer",color:"#aaa" }}>✕</button>
                             </div>
@@ -2066,7 +2053,7 @@ function AutoFactory() {
                               return (
                                 <button onClick={()=>upgradeModel(m.id)}
                                   style={{ width:"100%",padding:"10px",background:canUp?"linear-gradient(135deg,#4CAF50,#388E3C)":"#e8e8e8",border:"none",borderRadius:12,color:canUp?"#fff":"#aaa",fontWeight:900,fontSize:12,cursor:canUp?"pointer":"default",fontFamily:"'Nunito',sans-serif",boxShadow:canUp?"0 4px 0 #2E7D3255":"none" }}>
-                                  {canUp?`⬆️ Upgrade Stufe ${upgLvl+1} — ${fmtE(cost)}`:`💰 ${fmtE(cost)} nötig`}
+                                  {canUp?`⬆️ Upgrade Stufe ${upgLvl+1}  -  ${fmtE(cost)}`:`💰 ${fmtE(cost)} nötig`}
                                 </button>
                               );
                             })():(
@@ -2076,7 +2063,7 @@ function AutoFactory() {
                         );
                       })()}
 
-                      {/* Station belt — bigger, more visual */}
+                      {/* Station belt  -  bigger, more visual */}
                       <div style={{ display:"flex",gap:5,overflowX:"auto",paddingBottom:4,paddingTop:4,
                         scrollbarWidth:"none",WebkitOverflowScrolling:"touch",msOverflowStyle:"none" }}>
                         {activeSts.map((st,si2)=>{
@@ -2141,7 +2128,7 @@ function AutoFactory() {
                     <div style={{ height:6,background:"#ffffff18",borderRadius:99,marginTop:6,overflow:"hidden" }}>
                       <div style={{ height:"100%",background:"linear-gradient(90deg,#FFD700,#FF9800)",borderRadius:99,width:`${cl(((gs.seasonChallenge.current||0)/gs.seasonChallenge.target)*100,0,100)}%`,transition:"width .5s" }}/>
                     </div>
-                    <div style={{ fontSize:9,color:"#aaa",marginTop:3 }}>{gs.seasonChallenge.current||0}/{gs.seasonChallenge.target} · {gs.seasonChallenge.dayEnd-gs.gameDay} Tage verbleibend</div>
+                    <div style={{ fontSize:9,color:"#aaa",marginTop:3 }}>{gs.seasonChallenge.current||0}/{gs.seasonChallenge.target} . {gs.seasonChallenge.dayEnd-gs.gameDay} Tage verbleibend</div>
                   </div>
                   <div style={{ textAlign:"right" }}>
                     <div style={{ fontSize:14,fontWeight:900,color:"#FFD700" }}>{fmtE(gs.seasonChallenge.reward)}</div>
@@ -2152,26 +2139,26 @@ function AutoFactory() {
             )}
 
             <div style={{ textAlign:"center",fontSize:10,color:"rgba(0,0,0,0.2)",fontWeight:700,padding:"6px 0" }}>
-              🏭 {gs.totalBuilt} GEBAUT · 👆 {gs.totalTaps||0} TAPS · {CITIES[ci].maxLines} LINIEN
+              🏭 {gs.totalBuilt} GEBAUT . 👆 {gs.totalTaps||0} TAPS . {CITIES[ci].maxLines} LINIEN
             </div>
           </div>
         )}
 
-        {/* ══ AUFTRÄGE ══ */}
-        {/* ══ SHOWROOM ══ */}
-        {/* ══ MISSIONEN ══ */}
+        {/* == AUFTRÄGE == */}
+        {/* == SHOWROOM == */}
+        {/* == MISSIONEN == */}
         {tab==="missions"&&(()=>{
           const slotIdx = (gs.loginStreak||0) % 7;
           const todayClaimed = gs.lastLoginDay >= gs.gameDay;
           return (
             <div>
-              {/* ─ Login Kalender ─ */}
+              {/* - Login Kalender - */}
               <div style={{ background:"linear-gradient(135deg,#1a1a2e,#16213e)",borderRadius:20,padding:"16px",marginBottom:14,border:"2px solid #FFD70033" }}>
                 <div style={{ display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:12 }}>
                   <div>
                     <div style={{ fontSize:15,fontWeight:900,color:"#fff",fontFamily:"'Fredoka One',cursive" }}>🎁 Täglicher Login-Bonus</div>
                     <div style={{ fontSize:10,color:"#888",marginTop:1 }}>
-                      {todayClaimed ? `✅ Heute abgeholt · Streak: ${gs.loginStreak||0} Tage 🔥` : `⏳ Noch nicht abgeholt · Streak: ${gs.loginStreak||0} Tage`}
+                      {todayClaimed ? `✅ Heute abgeholt . Streak: ${gs.loginStreak||0} Tage 🔥` : `⏳ Noch nicht abgeholt . Streak: ${gs.loginStreak||0} Tage`}
                     </div>
                   </div>
                   {!todayClaimed&&(
@@ -2201,8 +2188,8 @@ function AutoFactory() {
                 )}
               </div>
 
-              {/* ─ Daily Missions ─ */}
-              <div style={{ fontSize:11,fontWeight:900,color:"#333",letterSpacing:0.5,marginBottom:10 }}>📋 TAGES-MISSIONEN — Tag {gs.gameDay}</div>
+              {/* - Daily Missions - */}
+              <div style={{ fontSize:11,fontWeight:900,color:"#333",letterSpacing:0.5,marginBottom:10 }}>📋 TAGES-MISSIONEN  -  Tag {gs.gameDay}</div>
               {(gs.dailyMissions||[]).map((m,i)=>{
                 const pct=Math.min(100,Math.round((m.current/m.target)*100));
                 const done=m.current>=m.target;
@@ -2241,10 +2228,10 @@ function AutoFactory() {
                 );
               })}
 
-              {/* ─ Aufträge (moved here) ─ */}
+              {/* - Aufträge (moved here) - */}
               <div style={{ fontSize:11,fontWeight:900,color:"#333",letterSpacing:0.5,margin:"16px 0 10px" }}>📋 OFFENE AUFTRÄGE</div>
               {(gs.contracts||[]).filter(c=>!c.claimed).length===0?(
-                <div style={{ textAlign:"center",padding:"20px 0",color:"#bbb",fontSize:12 }}>Keine offenen Aufträge — Autos verkaufen um neue zu erhalten</div>
+                <div style={{ textAlign:"center",padding:"20px 0",color:"#bbb",fontSize:12 }}>Keine offenen Aufträge  -  Autos verkaufen um neue zu erhalten</div>
               ):(gs.contracts||[]).filter(c=>!c.claimed).map(c=>{
                 const m=ALL_MODELS.find(x=>x.id===c.modelId)||{emoji:"🚗",name:c.modelId};
                 const val=Math.round((c.val||0)*streakMult*repBonus);
@@ -2294,9 +2281,9 @@ function AutoFactory() {
             <div>
               {/* Header */}
               <div style={{ background:`linear-gradient(135deg,${city.accent}22,${city.accent}08)`,borderRadius:18,padding:"12px 16px",marginBottom:14,border:`2px solid ${city.accent}33` }}>
-                <div style={{ fontSize:15,fontWeight:900,color:"#333" }}>{city.flag} {city.name} — Fahrzeug-Showroom</div>
+                <div style={{ fontSize:15,fontWeight:900,color:"#333" }}>{city.flag} {city.name}  -  Fahrzeug-Showroom</div>
                 <div style={{ fontSize:10,color:"#aaa",marginTop:2 }}>
-                  {allAvail.filter(m=>m.unlocked).length} Modelle verfügbar · {allAvail.filter(m=>!m.unlocked).length} gesperrt
+                  {allAvail.filter(m=>m.unlocked).length} Modelle verfügbar . {allAvail.filter(m=>!m.unlocked).length} gesperrt
                 </div>
                 <div style={{ height:6,background:"rgba(255,255,255,0.5)",borderRadius:99,marginTop:8,overflow:"hidden" }}>
                   <div style={{ height:"100%",background:`linear-gradient(90deg,${city.accent},${city.accent}88)`,borderRadius:99,width:`${Math.round(allAvail.filter(m=>m.unlocked).length/Math.max(1,allAvail.length)*100)}%`,transition:"width .5s" }}/>
@@ -2410,26 +2397,26 @@ function AutoFactory() {
           );
         })()}
 
-        {/* ══ FORSCHUNG ══ */}
-        {/* ══ INGENIEURE ══ */}
+        {/* == FORSCHUNG == */}
+        {/* == INGENIEURE == */}
         {tab==="forschen"&&(
           <div>
             {/* Sub-nav */}
             <div style={{ display:"flex",gap:6,marginBottom:14,background:"#fff",borderRadius:16,padding:5,boxShadow:"0 2px 0 #ebebeb" }}>
-              {[["tech","🔬","Technologien"],["ing","🧑‍🔬","Ingenieure"]].map(([k,ic,lb])=>(
+              {[["tech","🔬","Technologien"],["ing","🧑🔬","Ingenieure"]].map(([k,ic,lb])=>(
                 <button key={k} onClick={()=>setForschTab(k)} style={{ flex:1,padding:"9px 6px",borderRadius:12,border:"none",background:forschTab===k?"linear-gradient(135deg,#4CAF50,#388E3C)":"transparent",color:forschTab===k?"#fff":"#aaa",fontWeight:900,fontSize:12,cursor:"pointer",fontFamily:"'Nunito',sans-serif",boxShadow:forschTab===k?"0 3px 0 #2E7D3255":"none",transition:"all .2s",display:"flex",alignItems:"center",justifyContent:"center",gap:5 }}>
                   <span>{ic}</span>{lb}
                 </button>
               ))}
             </div>
 
-            {/* ── TECHNOLOGIEN ── */}
+            {/* -- TECHNOLOGIEN -- */}
             {forschTab==='tech'&&(()=>{
               const disc=getResearchDiscount(gs.techs);
               const cats=[{key:"prod",label:"⚙️ Produktion",col:"#FF6B35"},{key:"sale",label:"💰 Vertrieb",col:"#4CAF50"},{key:"mgmt",label:"👔 Management",col:"#2196F3"}];
               return (
                 <div>
-                  {disc<1&&<div style={{ background:"#E8F5E9",borderRadius:12,padding:"8px 12px",marginBottom:10,fontSize:11,fontWeight:800,color:"#4CAF50" }}>🧪 F&E-Abteilung aktiv: −{Math.round((1-disc)*100)}% auf alle Techs</div>}
+                  {disc<1&&<div style={{ background:"#E8F5E9",borderRadius:12,padding:"8px 12px",marginBottom:10,fontSize:11,fontWeight:800,color:"#4CAF50" }}>🧪 F&E-Abteilung aktiv: -{Math.round((1-disc)*100)}% auf alle Techs</div>}
                   {cats.map(({key,label,col})=>{
                     const nodes=flattenTree(key);
                     return (
@@ -2456,7 +2443,7 @@ function AutoFactory() {
                               ):cityOk&&reqOk?(
                                 <div style={{ textAlign:"right",flexShrink:0 }}>
                                   <div style={{ fontSize:12,fontWeight:900,color:gs.money>=discCost?col:"#ccc" }}>{fmtE(discCost)}</div>
-                                  {disc<1&&<div style={{ fontSize:8,color:"#4CAF50" }}>−{Math.round((1-disc)*100)}%</div>}
+                                  {disc<1&&<div style={{ fontSize:8,color:"#4CAF50" }}>-{Math.round((1-disc)*100)}%</div>}
                                 </div>
                               ):(
                                 <div style={{ fontSize:16 }}>🔒</div>
@@ -2471,15 +2458,15 @@ function AutoFactory() {
               );
             })()}
 
-            {/* ── INGENIEURE ── */}
+            {/* -- INGENIEURE -- */}
             {forschTab==='ing'&&(
               <div>
                 {/* Header */}
                 <div style={{ background:"linear-gradient(135deg,#0a1628,#1a2e4a)",borderRadius:18,padding:"14px 16px",marginBottom:12,border:"2px solid #4CAF5044" }}>
                   <div style={{ display:"flex",alignItems:"center",justifyContent:"space-between" }}>
                     <div>
-                      <div style={{ fontSize:14,fontWeight:900,color:"#fff" }}>🧑‍🔬 Ingenieur-Labor</div>
-                      <div style={{ fontSize:10,color:"#888",marginTop:2 }}>{(gs.engineers||[]).length}/{engSlots} Slots · Erforschen Tuning & Prototypen</div>
+                      <div style={{ fontSize:14,fontWeight:900,color:"#fff" }}>🧑🔬 Ingenieur-Labor</div>
+                      <div style={{ fontSize:10,color:"#888",marginTop:2 }}>{(gs.engineers||[]).length}/{engSlots} Slots . Erforschen Tuning & Prototypen</div>
                     </div>
                     <div style={{ textAlign:"right" }}>
                       <div style={{ fontSize:12,fontWeight:900,color:"#4CAF50" }}>{Object.keys(gs.blueprints||{}).length}/{BLUEPRINTS.filter(b=>b.cityIdx<=ci).length}</div>
@@ -2498,7 +2485,8 @@ function AutoFactory() {
                         </div>
                       );
                     })}
-            </div>
+                  </div>
+                </div>
 
             {/* Hired Engineers */}
             {(gs.engineers||[]).length>0&&(
@@ -2518,26 +2506,26 @@ function AutoFactory() {
                         <div style={{ fontSize:28 }}>{eng.emoji}</div>
                         <div style={{ flex:1 }}>
                           <div style={{ fontSize:13,fontWeight:900,color:"#333" }}>{eng.name}</div>
-                          <div style={{ fontSize:10,color:sp.col,fontWeight:800 }}>{sp.icon} {sp.label} · Stufe {engInst.level}</div>
+                          <div style={{ fontSize:10,color:sp.col,fontWeight:800 }}>{sp.icon} {sp.label} . Stufe {engInst.level}</div>
                           {/* XP bar */}
                           <div style={{ height:4,background:"#f0f0f0",borderRadius:99,marginTop:4,overflow:"hidden" }}>
                             <div style={{ height:"100%",background:sp.col,width:`${xpPct}%`,borderRadius:99,transition:"width .5s" }}/>
                           </div>
-                          <div style={{ fontSize:8,color:"#aaa",marginTop:1 }}>XP: {Math.floor(engInst.xp||0)} · Nächste Stufe bei {engInst.level*100}</div>
+                          <div style={{ fontSize:8,color:"#aaa",marginTop:1 }}>XP: {Math.floor(engInst.xp||0)} . Nächste Stufe bei {engInst.level*100}</div>
                         </div>
                         <button onClick={()=>fireEngineer(engInst.id)} style={{ fontSize:12,background:"none",border:"none",cursor:"pointer",color:"#ddd",padding:"4px" }}>✕</button>
                       </div>
 
                       {/* Current assignment */}
-                      <div style={{ background:engInst.assignment==='research'?"#E8F5E9":engInst.assignment==='tuning'?`${TUNING_LEVELS.find(t=>t.id===engInst.tuningId)?.col||"#FF9800"}15`:engInst.assignment==='line'?"#E3F2FD":"#f5f5f5",borderRadius:10,padding:"8px 10px",marginBottom:8 }}>
-                        <div style={{ fontSize:10,fontWeight:800,color:engInst.assignment==='research'?"#4CAF50":engInst.assignment==='tuning'?TUNING_LEVELS.find(t=>t.id===engInst.tuningId)?.col||"#FF9800":engInst.assignment==='line'?"#2196F3":"#aaa" }}>
-                          {engInst.assignment==='research'?`🔬 Blaupause: ${assignedBp?.name||'?'} (${bpPct}%)`:
-                           engInst.assignment==='tuning'?`${TUNING_LEVELS.find(t=>t.id===engInst.tuningId)?.icon||'🔧'} Forscht: ${TUNING_LEVELS.find(t=>t.id===engInst.tuningId)?.label||'?'} (${Math.round(((gs.tuningResearch||{})[engInst.tuningId]||0)/((TUNING_LEVELS.find(t=>t.id===engInst.tuningId)?.researchCost)||1)*100)}%)`:
+                      <div style={{ background:engInst.assignment==='research'?"#E8F5E9":engInst.assignment==='tuning'?`${(TUNING_LEVELS.find(t=>t.id===engInst.tuningId)||{}).col||"#FF9800"}15`:engInst.assignment==='line'?"#E3F2FD":"#f5f5f5",borderRadius:10,padding:"8px 10px",marginBottom:8 }}>
+                        <div style={{ fontSize:10,fontWeight:800,color:engInst.assignment==='research'?"#4CAF50":engInst.assignment==='tuning'?(TUNING_LEVELS.find(t=>t.id===engInst.tuningId)||{}).col||"#FF9800":engInst.assignment==='line'?"#2196F3":"#aaa" }}>
+                          {engInst.assignment==='research'?`🔬 Blaupause: ${(assignedBp||{}).name||'?'} (${bpPct}%)`:
+                           engInst.assignment==='tuning'?`${(TUNING_LEVELS.find(t=>t.id===engInst.tuningId)||{}).icon||'🔧'} Forscht: ${(TUNING_LEVELS.find(t=>t.id===engInst.tuningId)||{}).label||'?'} (${Math.round(((gs.tuningResearch||{})[engInst.tuningId]||0)/(((TUNING_LEVELS.find(t=>t.id===engInst.tuningId)||{}).researchCost)||1)*100)}%)`:
                            engInst.assignment==='line'?`⚡ Linie ${(engInst.lineId||0)+1} boosten`:'😴 Unzugewiesen'}
                         </div>
                         {(assignedBp||(engInst.assignment==='tuning'&&engInst.tuningId))&&(
                           <div style={{ height:5,background:"rgba(0,0,0,0.1)",borderRadius:99,marginTop:5,overflow:"hidden" }}>
-                            <div style={{ height:"100%",background:engInst.assignment==='tuning'?TUNING_LEVELS.find(t=>t.id===engInst.tuningId)?.col:"#4CAF50",width:`${engInst.assignment==='tuning'?Math.round(((gs.tuningResearch||{})[engInst.tuningId]||0)/((TUNING_LEVELS.find(t=>t.id===engInst.tuningId)?.researchCost)||1)*100):bpPct}%`,transition:"width .3s",borderRadius:99,position:"relative",overflow:"hidden" }}>
+                            <div style={{ height:"100%",background:engInst.assignment==='tuning'?(TUNING_LEVELS.find(t=>t.id===engInst.tuningId)||{}).col:"#4CAF50",width:`${engInst.assignment==='tuning'?Math.round(((gs.tuningResearch||{})[engInst.tuningId]||0)/(((TUNING_LEVELS.find(t=>t.id===engInst.tuningId)||{}).researchCost)||1)*100):bpPct}%`,transition:"width .3s",borderRadius:99,position:"relative",overflow:"hidden" }}>
                               <div style={{ position:"absolute",inset:0,background:"linear-gradient(90deg,transparent,rgba(255,255,255,0.5),transparent)",animation:"shine 1.5s ease infinite" }}/>
                             </div>
                           </div>
@@ -2547,17 +2535,17 @@ function AutoFactory() {
                       {/* Assignment buttons */}
                       <div style={{ display:"flex",gap:6,flexWrap:"wrap" }}>
                         <button onClick={()=>assignEngineerLine(engInst.id,null)} style={{ fontSize:9,padding:"5px 10px",borderRadius:8,border:`1px solid #e0e0e0`,background:engInst.assignment==='idle'?"#f0f0f0":"#fff",fontWeight:800,cursor:"pointer",color:"#888" }}>😴 Pause</button>
-                        {/* Line boost buttons — all specs */}
+                        {/* Line boost buttons  -  all specs */}
                         {visLines.filter(l=>l.unlocked).map(line=>(
                           <button key={line.id} onClick={()=>assignEngineerLine(engInst.id,line.id)} style={{ fontSize:9,padding:"5px 10px",borderRadius:8,border:`1px solid ${LINE_COLORS[line.id]||"#ccc"}66`,background:engInst.lineId===line.id&&engInst.assignment==='line'?`${LINE_COLORS[line.id]||"#ccc"}22`:"#fff",fontWeight:800,cursor:"pointer",color:LINE_COLORS[line.id]||"#ccc" }}>⚡ L{line.id+1}</button>
                         ))}
-                        {/* Tuning research — available to research+hybrid spec */}
+                        {/* Tuning research  -  available to research+hybrid spec */}
                         {(eng.spec==='research'||eng.spec==='hybrid')&&TUNING_LEVELS.filter(tl=>!(gs.tuningUnlocked||{})[tl.id]).map(tl=>(
                           <button key={tl.id} onClick={()=>assignEngineerTuning(engInst.id,tl.id)} style={{ fontSize:9,padding:"5px 10px",borderRadius:8,border:`1px solid ${tl.col}88`,background:engInst.tuningId===tl.id&&engInst.assignment==='tuning'?`${tl.col}22`:"#fff",fontWeight:800,cursor:"pointer",color:tl.col }}>
                             {tl.icon} {tl.label.split('-')[0]}
                           </button>
                         ))}
-                        {/* Blueprint research — research spec only */}
+                        {/* Blueprint research  -  research spec only */}
                         {eng.spec==='research'&&BLUEPRINTS.filter(b=>b.cityIdx<=ci&&!(gs.blueprints||{})[b.id]).slice(0,3).map(bp=>(
                           <button key={bp.id} onClick={()=>assignEngineerResearch(engInst.id,bp.id)} style={{ fontSize:9,padding:"5px 10px",borderRadius:8,border:`1px solid #4CAF5066`,background:engInst.blueprintId===bp.id&&engInst.assignment==='research'?"#E8F5E9":"#fff",fontWeight:800,cursor:"pointer",color:"#4CAF50" }}>🔬 {bp.emoji}</button>
                         ))}
@@ -2582,7 +2570,7 @@ function AutoFactory() {
                       <div style={{ flex:1 }}>
                         <div style={{ fontSize:13,fontWeight:900,color:"#333" }}>{eng.name}</div>
                         <div style={{ fontSize:10,color:sp.col,fontWeight:800,marginTop:1 }}>{sp.icon} {sp.label}</div>
-                        <div style={{ fontSize:9,color:"#aaa",marginTop:2 }}>{sp.desc} · Gehalt: {fmtE(eng.baseSalary)}/Tag</div>
+                        <div style={{ fontSize:9,color:"#aaa",marginTop:2 }}>{sp.desc} . Gehalt: {fmtE(eng.baseSalary)}/Tag</div>
                       </div>
                       <button onClick={()=>hireEngineer(eng.id)} style={{ padding:"8px 14px",background:canHire?sp.col:"#eee",border:"none",borderRadius:12,color:canHire?"#fff":"#bbb",fontWeight:900,fontSize:11,cursor:canHire?"pointer":"default",boxShadow:canHire?`0 4px 0 ${sp.col}66`:"none",fontFamily:"'Nunito',sans-serif",whiteSpace:"nowrap" }}>
                         {fmtE(cost)}
@@ -2593,7 +2581,7 @@ function AutoFactory() {
               </div>
             )}
             {(gs.engineers||[]).length >= engSlots && (
-              <div style={{ textAlign:"center",padding:"16px",color:"#aaa",fontSize:11,fontWeight:700 }}>🏗️ Alle {engSlots} Slots belegt — reise weiter für mehr Slots</div>
+              <div style={{ textAlign:"center",padding:"16px",color:"#aaa",fontSize:11,fontWeight:700 }}>🏗️ Alle {engSlots} Slots belegt  -  reise weiter für mehr Slots</div>
             )}
 
             {/* Completed blueprints showcase */}
@@ -2615,11 +2603,12 @@ function AutoFactory() {
                 ))}
               </div>
             )}
+              </div>
             )}
           </div>
         )}
 
-        {/* ══ ACHIEVEMENTS ══ */}
+        {/* == ACHIEVEMENTS == */}
         {tab==="achievements"&&(
           <div>
             {/* Progress overview */}
@@ -2629,14 +2618,14 @@ function AutoFactory() {
               const done=ACHIEVEMENTS.filter(a=>gs.achievements[a.id]);
               const secretDone=done.filter(a=>a.tier===0).length;
               const pct=Math.round((done.length/ACHIEVEMENTS.length)*100);
-              const totalReward=done.reduce((s,a)=>s+(a.reward?.type==="money"?a.reward.val:0),0);
+              const totalReward=done.reduce((s,a)=>s+((a.reward||{}).type==="money"?a.reward.val:0),0);
               return (
                 <div style={{ background:"linear-gradient(135deg,#1a1a2e,#16213e)",borderRadius:20,padding:14,marginBottom:12,border:"3px solid #FFD70044" }}>
                   <div style={{ display:"flex",alignItems:"center",gap:12,marginBottom:10 }}>
                     <div style={{ fontSize:36 }}>🏆</div>
                     <div style={{ flex:1 }}>
                       <div style={{ fontSize:14,fontWeight:900,color:"#fff" }}>Erfolgs-Sammlung</div>
-                      <div style={{ fontSize:10,color:"#888" }}>{done.length}/{ACHIEVEMENTS.length} · {secretDone}/{secretTotal} Geheim-Erfolge</div>
+                      <div style={{ fontSize:10,color:"#888" }}>{done.length}/{ACHIEVEMENTS.length} . {secretDone}/{secretTotal} Geheim-Erfolge</div>
                     </div>
                     <div style={{ textAlign:"right" }}>
                       <div style={{ fontSize:18,fontWeight:900,color:"#FFD700" }}>{pct}%</div>
@@ -2668,12 +2657,12 @@ function AutoFactory() {
             <div style={{ background:"#fff",border:`2px solid ${rep>=80?"#FFD700":"#e8e8e8"}`,borderRadius:16,padding:"10px 14px",marginBottom:12,display:"flex",gap:12,alignItems:"center" }}>
               <div style={{ fontSize:28 }}>{rep>=80?"👑":rep>=40?"⭐":"🔘"}</div>
               <div style={{ flex:1 }}>
-                <div style={{ fontSize:12,fontWeight:900,color:"#333" }}>{repLabel} · Ruf {rep}/100</div>
+                <div style={{ fontSize:12,fontWeight:900,color:"#333" }}>{repLabel} . Ruf {rep}/100</div>
                 <div style={{ height:7,background:"#f0f0f0",borderRadius:99,marginTop:4,overflow:"hidden" }}>
                   <div style={{ height:"100%",background:rep>=80?"linear-gradient(90deg,#FFD700,#FFA000)":"#aaa",width:`${rep}%`,borderRadius:99,transition:"width .5s" }}/>
                 </div>
               </div>
-              {gs.streak>0&&<div style={{ textAlign:"center" }}><div style={{ fontSize:18,animation:gs.streak>=5?"streakPulse 0.8s ease infinite":"none" }}>🔥</div><div style={{ fontSize:10,fontWeight:900,color:"#FF6B35" }}>×{gs.streak}</div></div>}
+              {gs.streak>0&&<div style={{ textAlign:"center" }}><div style={{ fontSize:18,animation:gs.streak>=5?"streakPulse 0.8s ease infinite":"none" }}>🔥</div><div style={{ fontSize:10,fontWeight:900,color:"#FF6B35" }}>x{gs.streak}</div></div>}
             </div>
 
             {/* Achievements by category */}
@@ -2716,12 +2705,12 @@ function AutoFactory() {
                           <span style={{ fontSize:22,filter:done?"none":isSecret?"grayscale(1) opacity(0.3)":"grayscale(0.6) opacity(0.5)" }}>{isSecret?"❓":a.icon}</span>
                           <div style={{ flex:1 }}>
                             <div style={{ fontSize:12,fontWeight:800,color:done?tc:isSecret?"#bbb":"#888" }}>
-                              {isSecret?"???":a.name}
+                              {isSecret?"||?":a.name}
                             </div>
                             <div style={{ fontSize:9,color:done?"#666":isSecret?"#ccc":"#ccc",marginTop:1 }}>
-                              {isSecret?"Geheimer Erfolg — finde ihn!":a.desc}
+                              {isSecret?"Geheimer Erfolg  -  finde ihn!":a.desc}
                             </div>
-                            {done&&a.reward?.type==="money"&&(
+                            {done&&(a.reward||{}).type==="money"&&(
                               <div style={{ fontSize:9,color:"#FFD700",fontWeight:800,marginTop:2 }}>+{fmtE(a.reward.val)} erhalten</div>
                             )}
                           </div>
@@ -2740,7 +2729,7 @@ function AutoFactory() {
         )}
       </div>
 
-      {/* ── TAB BAR ── */}
+      {/* -- TAB BAR -- */}
       <div style={{ position:"fixed",bottom:0,left:"50%",transform:"translateX(-50%)",width:"100%",maxWidth:430,background:"#fff",borderTop:"3px solid #f0f0f0",display:"flex",zIndex:50,boxShadow:"0 -4px 20px rgba(0,0,0,0.08)" }}>
         {[["fabrik","🏭","Fabrik"],["showroom","🚗","Showroom"],["missions","📋","Missionen"],["forschen","🔬","Forschen"],["achievements","🏆","Erfolge"]].map(([k,ic,lb])=>(
           <button key={k} onClick={()=>switchTab(k)} style={{ flex:1,padding:"8px 2px 12px",background:"none",border:"none",cursor:"pointer",borderTop:`3px solid ${tab===k?city.accent:"transparent"}`,transition:"border-color .2s",position:"relative" }}>
@@ -2756,7 +2745,7 @@ function AutoFactory() {
         ))}
       </div>
 
-      {/* ══ LOGIN BONUS MODAL ══ */}
+      {/* == LOGIN BONUS MODAL == */}
       {showLogin&&(()=>{
         const slotIdx = (gs.loginStreak||0) % 7;
         const r = LOGIN_REWARDS[slotIdx];
@@ -2774,7 +2763,7 @@ function AutoFactory() {
                 {r.type==='worker'   && `+${r.val} Facharbeiter kostenlos`}
                 {r.type==='cars'     && `${r.val} Gratis-Autos im Showroom`}
                 {r.type==='techDisc' && `50% Rabatt auf deine nächste Tech`}
-                {r.type==='speedBoost'&& `×3 Produktionsgeschwindigkeit für 5 Min`}
+                {r.type==='speedBoost'&& `x3 Produktionsgeschwindigkeit für 5 Min`}
               </div>
               {/* 7-day preview */}
               <div style={{ display:"flex",gap:4,marginBottom:20,justifyContent:"center" }}>
@@ -2801,14 +2790,14 @@ function AutoFactory() {
             <div style={{ display:"flex",alignItems:"center",justifyContent:"space-between",padding:"16px 20px 12px" }}>
               <div>
                 <div style={{ fontSize:18,fontFamily:"'Fredoka One',cursive",color:"#222" }}>🏪 Wochenmarkt</div>
-                <div style={{ fontSize:11,color:"#aaa",marginTop:1 }}>Tag {gs.gameDay} · Nur heute!</div>
+                <div style={{ fontSize:11,color:"#aaa",marginTop:1 }}>Tag {gs.gameDay} . Nur heute!</div>
               </div>
               <button onClick={()=>setShowMarket(false)} style={{ width:32,height:32,borderRadius:99,background:"#ebebeb",border:"none",fontSize:16,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",color:"#888" }}>✕</button>
             </div>
             <div style={{ width:40,height:4,background:"#e0e0e0",borderRadius:99,margin:"-8px auto 16px" }}/>
             <div style={{ padding:"0 16px" }}>
-              {(gs.weekMarket?.offers||[]).map(offer=>{
-                const bought=(gs.weekMarket?.bought||[]).includes(offer.id);
+              {((gs.weekMarket||{}).offers||[]).map(offer=>{
+                const bought=((gs.weekMarket||{}).bought||[]).includes(offer.id);
                 const price=offer.price||offer.cost;
                 const canBuy=!bought&&gs.money>=price;
                 return (
@@ -2833,7 +2822,7 @@ function AutoFactory() {
         </div>
       )}
 
-      {/* ══ TUNING — Bottom Sheet ══ */}
+      {/* == TUNING  -  Bottom Sheet == */}
       {tuningCar&&gs.parked.some(c=>c.id===tuningCar)&&(()=>{
         const car=gs.parked.find(c=>c.id===tuningCar);
         if(!car) return null;
@@ -2847,7 +2836,7 @@ function AutoFactory() {
                   <span style={{ fontSize:34 }}>{car.emoji}</span>
                   <div>
                     <div style={{ fontSize:16,fontWeight:900,color:"#fff" }}>{car.name}</div>
-                    <div style={{ fontSize:11,color:"#aaa" }}>Tuning-Werkstatt · Aktuell: {fmtE(car.val)}</div>
+                    <div style={{ fontSize:11,color:"#aaa" }}>Tuning-Werkstatt . Aktuell: {fmtE(car.val)}</div>
                   </div>
                 </div>
                 <button onClick={()=>setTuningCar(null)} style={{ width:32,height:32,borderRadius:99,background:"rgba(255,255,255,0.1)",border:"none",fontSize:16,cursor:"pointer",color:"#888" }}>✕</button>
@@ -2855,7 +2844,7 @@ function AutoFactory() {
               <div style={{ width:40,height:4,background:"rgba(255,255,255,0.15)",borderRadius:99,margin:"0 auto 16px" }}/>
               {/* Tuning info */}
               <div style={{ margin:"0 16px 16px",background:"rgba(255,255,255,0.06)",borderRadius:14,padding:"10px 14px",fontSize:10,color:"#888" }}>
-                🔬 Tuning-Methoden werden einmalig von Ingenieuren erforscht — dann für alle Autos anwendbar.
+                🔬 Tuning-Methoden werden einmalig von Ingenieuren erforscht  -  dann für alle Autos anwendbar.
               </div>
               <div style={{ padding:"0 16px",display:"flex",flexDirection:"column",gap:12 }}>
                 {TUNING_LEVELS.map((tl)=>{
@@ -2882,7 +2871,7 @@ function AutoFactory() {
                                 <div style={{ height:"100%",background:researching?tl.col:"rgba(255,255,255,0.2)",width:`${pct}%`,transition:"width .5s",borderRadius:99 }}/>
                               </div>
                               <div style={{ fontSize:8,color:researching?tl.col:"#555",marginTop:3 }}>
-                                {researching?`Ingenieur forscht — ${pct}%`:`Nicht erforscht — Ingenieur-Tab`}
+                                {researching?`Ingenieur forscht  -  ${pct}%`:`Nicht erforscht  -  Ingenieur-Tab`}
                               </div>
                             </div>
                           )}
@@ -2901,7 +2890,7 @@ function AutoFactory() {
                           <div style={{ fontSize:20,color:"#444" }}>🔒</div>
                         )}
                       </div>
-                      {/* Parts list — show when unlocked or researching */}
+                      {/* Parts list  -  show when unlocked or researching */}
                       {(unlocked||researching)&&(
                         <div style={{ borderTop:`1px solid ${tl.col}22`,padding:"10px 16px",display:"flex",gap:8,flexWrap:"wrap" }}>
                           {tl.parts.map(p=>(
@@ -2922,7 +2911,7 @@ function AutoFactory() {
               <div style={{ padding:"16px 16px 0",display:"flex",gap:10 }}>
                 <button onClick={()=>setTuningCar(null)} style={{ flex:1,padding:"13px",background:"rgba(255,255,255,0.08)",border:"2px solid rgba(255,255,255,0.1)",borderRadius:16,color:"#888",cursor:"pointer",fontWeight:800,fontSize:13,fontFamily:"'Nunito',sans-serif" }}>Zurück</button>
                 <button onClick={()=>{setTuningCar(null);sell();}} style={{ flex:2,padding:"13px",background:`linear-gradient(135deg,${city.accent},${city.accent}bb)`,border:"none",borderRadius:16,color:"#fff",cursor:"pointer",fontWeight:900,fontSize:14,fontFamily:"'Fredoka One',cursive",boxShadow:`0 6px 0 ${city.accent}88` }}>
-                  💰 Verkaufen · {fmtE(car.val)}
+                  💰 Verkaufen . {fmtE(car.val)}
                 </button>
               </div>
             </div>
@@ -2930,7 +2919,7 @@ function AutoFactory() {
         );
       })()}
 
-      {/* ══ PRESTIGE BONUS — Center Modal ══ */}
+      {/* == PRESTIGE BONUS  -  Center Modal == */}
       {showPresBonus&&(
         <div style={{ position:"fixed",inset:0,background:"rgba(0,0,0,0.7)",zIndex:400,display:"flex",alignItems:"center",justifyContent:"center",padding:20,animation:"fadeIn .2s ease" }}>
           <div style={{ background:"#fff",borderRadius:24,padding:"28px 20px",width:"100%",maxWidth:360,animation:"scaleIn .3s cubic-bezier(0.34,1.56,0.64,1)",border:`4px solid #FFD700`,boxShadow:"0 20px 60px rgba(0,0,0,0.4)" }}>
@@ -2960,7 +2949,7 @@ function AutoFactory() {
         </div>
       )}
 
-      {/* ══ ROADMAP — Bottom Sheet ══ */}
+      {/* == ROADMAP  -  Bottom Sheet == */}
       {showMap&&(
         <div style={{ position:"fixed",inset:0,background:"rgba(0,0,0,0.55)",zIndex:300,display:"flex",alignItems:"flex-end",animation:"sheetBg .2s ease" }} onClick={()=>setShowMap(false)}>
           <div onClick={e=>e.stopPropagation()} style={{ background:"#F8F9FA",borderRadius:"24px 24px 0 0",padding:"0 0 44px",width:"100%",maxWidth:430,margin:"0 auto",animation:"slideUp .3s cubic-bezier(0.22,1,0.36,1)",maxHeight:"82vh",display:"flex",flexDirection:"column",boxShadow:"0 -8px 40px rgba(0,0,0,0.2)" }}>
@@ -2986,7 +2975,7 @@ function AutoFactory() {
                       <div style={{ fontSize:13,fontWeight:900,color:cur?c.accent:past?"#4CAF50":"#777",display:"flex",alignItems:"center",gap:6,flexWrap:"wrap" }}>
                         {c.flag} {c.name}
                         <span style={{ fontSize:9,background:cur?c.accent+"22":"#f0f0f0",color:cur?c.accent:"#aaa",borderRadius:20,padding:"2px 8px",fontWeight:700 }}>
-                          {c.maxLines} Linien · {CITY_MODELS[i].length} Modelle
+                          {c.maxLines} Linien . {CITY_MODELS[i].length} Modelle
                         </span>
                       </div>
                       {r&&cur&&(
@@ -2999,7 +2988,7 @@ function AutoFactory() {
                         </div>
                       )}
                       {past&&<div style={{ fontSize:10,color:"#4CAF50",fontWeight:700,marginTop:4 }}>✅ Abgeschlossen</div>}
-                      {!r&&<div style={{ fontSize:10,color:"#FFD700",fontWeight:700,marginTop:4 }}>🏆 Endstufe — Cyberspace!</div>}
+                      {!r&&<div style={{ fontSize:10,color:"#FFD700",fontWeight:700,marginTop:4 }}>🏆 Endstufe  -  Cyberspace!</div>}
                     </div>
                   </div>
                 );
@@ -3009,20 +2998,20 @@ function AutoFactory() {
         </div>
       )}
 
-      {/* ══ PRESTIGE BESTÄTIGUNG — Center Modal ══ */}
+      {/* == PRESTIGE BESTÄTIGUNG  -  Center Modal == */}
       {showPre&&(
         <div style={{ position:"fixed",inset:0,background:"rgba(0,0,0,0.65)",zIndex:400,display:"flex",alignItems:"center",justifyContent:"center",padding:20,animation:"fadeIn .2s ease" }}>
           <div style={{ background:"#fff",borderRadius:24,padding:"28px 20px",width:"100%",maxWidth:360,animation:"scaleIn .3s cubic-bezier(0.34,1.56,0.64,1)",border:`4px solid ${city.accent}`,boxShadow:"0 20px 60px rgba(0,0,0,0.4)" }}>
             <div style={{ textAlign:"center",marginBottom:20 }}>
-              <div style={{ fontSize:60,animation:"float 2s ease-in-out infinite" }}>{CITIES[ci+1]?.flag||"🏆"}</div>
-              <div style={{ fontSize:22,fontFamily:"'Fredoka One',cursive",color:city.accent,marginTop:10 }}>Auf nach {CITIES[ci+1]?.name||"Cyberspace"}!</div>
+              <div style={{ fontSize:60,animation:"float 2s ease-in-out infinite" }}>{(CITIES[ci+1]||{}).flag||"🏆"}</div>
+              <div style={{ fontSize:22,fontFamily:"'Fredoka One',cursive",color:city.accent,marginTop:10 }}>Auf nach {(CITIES[ci+1]||{}).name||"Cyberspace"}!</div>
               <div style={{ fontSize:12,color:"#aaa",marginTop:4 }}>Prestige {ci+1} von {CITIES.length-1}</div>
             </div>
             <div style={{ background:"#F8F9FA",borderRadius:16,padding:"14px 16px",marginBottom:20,display:"flex",flexDirection:"column",gap:8 }}>
               {[
                 {icon:"💰",label:"Kasse",value:`→ 10% behalten (${fmtE(Math.round(gs.money*0.1))})`,ok:true},
-                {icon:"🏭",label:"Linien",value:`${CITIES[ci+1]?.maxLines||5} Linien möglich`,ok:true},
-                {icon:"🚗",label:"Modelle",value:`${CITY_MODELS[ci+1]?.length||3} neue Fahrzeuge`,ok:true},
+                {icon:"🏭",label:"Linien",value:`${(CITIES[ci+1]||{}).maxLines||5} Linien möglich`,ok:true},
+                {icon:"🚗",label:"Modelle",value:`${(CITY_MODELS[ci+1]||[]).length||3} neue Fahrzeuge`,ok:true},
                 {icon:"🔬",label:"Forschung",value:"Alle Techs bleiben erhalten",ok:true},
                 {icon:"👷",label:"Arbeiter",value:"3 Facharbeiter zum Start",ok:true},
               ].map(({icon,label,value,ok})=>(
@@ -3039,13 +3028,13 @@ function AutoFactory() {
             <div style={{ display:"flex",gap:10 }}>
               <button onClick={()=>setShowPre(false)} style={{ flex:1,padding:14,background:"#f5f5f5",border:"2px solid #e8e8e8",borderRadius:16,color:"#999",cursor:"pointer",fontWeight:800,fontSize:13,fontFamily:"'Nunito',sans-serif" }}>Zurück</button>
               <button onClick={()=>{setShowPre(false);setShowPresBonus(true);}} style={{ flex:2,padding:14,background:`linear-gradient(135deg,${city.accent},${city.accent}bb)`,border:"none",borderRadius:16,color:"#fff",cursor:"pointer",fontWeight:900,fontSize:15,fontFamily:"'Fredoka One',cursive",boxShadow:`0 6px 0 ${city.accent}88` }}>
-                ✨ Prestige — Los!
+                ✨ Prestige  -  Los!
               </button>
             </div>
           </div>
         </div>
       )}
-      {/* ══ ADMIN PANEL ══ */}
+      {/* == ADMIN PANEL == */}
       {showAdmin&&(
         <div style={{ position:"fixed",inset:0,background:"rgba(0,0,0,0.8)",zIndex:500,display:"flex",alignItems:"flex-end",animation:"sheetBg .2s ease" }} onClick={()=>setShowAdmin(false)}>
           <div onClick={e=>e.stopPropagation()} style={{ background:"#111",borderRadius:"24px 24px 0 0",padding:"0 0 48px",width:"100%",maxWidth:430,margin:"0 auto",animation:"slideUp .3s cubic-bezier(0.22,1,0.36,1)",maxHeight:"90vh",display:"flex",flexDirection:"column",boxShadow:"0 -8px 60px rgba(255,107,53,0.3)" }}>
@@ -3054,7 +3043,7 @@ function AutoFactory() {
               <div style={{ display:"flex",alignItems:"center",justifyContent:"space-between" }}>
                 <div>
                   <div style={{ fontSize:18,fontWeight:900,color:"#FF6B35",fontFamily:"'Fredoka One',cursive" }}>⚡ Admin Panel</div>
-                  <div style={{ fontSize:10,color:"#555",marginTop:1 }}>5× Kasse tippen zum Öffnen · Tipp: Cheats nach Test deaktivieren</div>
+                  <div style={{ fontSize:10,color:"#555",marginTop:1 }}>5x Kasse tippen zum Öffnen . Tipp: Cheats nach Test deaktivieren</div>
                 </div>
                 <button onClick={()=>setShowAdmin(false)} style={{ width:32,height:32,borderRadius:99,background:"#222",border:"none",color:"#888",fontSize:16,cursor:"pointer" }}>✕</button>
               </div>
@@ -3066,7 +3055,7 @@ function AutoFactory() {
               <div>
                 <div style={{ fontSize:10,fontWeight:900,color:"#555",letterSpacing:1,marginBottom:8 }}>⏩ SPIELGESCHWINDIGKEIT</div>
                 <div style={{ display:"flex",gap:8 }}>
-                  {[[1,"🐢 Normal"],[5,"🐇 ×5"],[25,"⚡ ×25"],[100,"🚀 ×100"]].map(([spd,label])=>(
+                  {[[1,"🐢 Normal"],[5,"🐇 x5"],[25,"⚡ x25"],[100,"🚀 x100"]].map(([spd,label])=>(
                     <button key={spd} onClick={()=>{ setAdminSpeed(spd); setCheatMode(spd>1); }} style={{ flex:1,padding:"10px 4px",borderRadius:14,border:`2px solid ${adminSpeed===spd?"#FF6B35":"#333"}`,background:adminSpeed===spd?"#FF6B3522":"#1a1a1a",color:adminSpeed===spd?"#FF6B35":"#666",fontWeight:900,fontSize:11,cursor:"pointer",fontFamily:"'Nunito',sans-serif" }}>
                       {label}
                     </button>
@@ -3132,9 +3121,9 @@ function AutoFactory() {
                     if(!available.length){notify('Keine weiteren Ingenieure verfügbar');return;}
                     const eng = available[0];
                     setGS(p=>({...p,engineers:[...(p.engineers||[]),{id:`eng_${Date.now()}`,engId:eng.id,level:3,xp:200,assignment:'idle',lineId:null,blueprintId:null,researchProgress:0,tuningId:null}]}));
-                    notify(`🧑‍🔬 ${eng.name} eingestellt (Stufe 3)!`);
+                    notify(`🧑🔬 ${eng.name} eingestellt (Stufe 3)!`);
                   }} style={{ padding:"11px 14px",borderRadius:14,border:"2px solid #2a2a3a",background:"#1a1a2a",color:"#2196F3",fontWeight:900,fontSize:12,cursor:"pointer",fontFamily:"'Nunito',sans-serif",textAlign:"left" }}>
-                    🧑‍🔬 Nächsten Ingenieur einstellen (Stufe 3)
+                    🧑🔬 Nächsten Ingenieur einstellen (Stufe 3)
                   </button>
                   {/* Research all blueprints */}
                   <button onClick={()=>{
@@ -3186,7 +3175,7 @@ function AutoFactory() {
                   <button onClick={()=>saveNow(gs)} style={{ flex:1,padding:"11px 14px",borderRadius:14,border:"2px solid #2a3a2a",background:"#1a2a1a",color:"#4CAF50",fontWeight:900,fontSize:12,cursor:"pointer",fontFamily:"'Nunito',sans-serif" }}>
                     💾 Jetzt speichern
                   </button>
-                  <button onClick={()=>{ const d=JSON.stringify(gs,null,0); navigator.clipboard?.writeText(d).then(()=>notify('📋 Save-Code kopiert!')).catch(()=>notify('❌ Nicht kopiert')); }} style={{ flex:1,padding:"11px 14px",borderRadius:14,border:"2px solid #2a2a3a",background:"#1a1a2a",color:"#2196F3",fontWeight:900,fontSize:12,cursor:"pointer",fontFamily:"'Nunito',sans-serif" }}>
+                  <button onClick={()=>{ const d=JSON.stringify(gs,null,0); (navigator.clipboard&&navigator.clipboard.writeText)(d).then(()=>notify('📋 Save-Code kopiert!')).catch(()=>notify('❌ Nicht kopiert')); }} style={{ flex:1,padding:"11px 14px",borderRadius:14,border:"2px solid #2a2a3a",background:"#1a1a2a",color:"#2196F3",fontWeight:900,fontSize:12,cursor:"pointer",fontFamily:"'Nunito',sans-serif" }}>
                     📋 Code kopieren
                   </button>
                 </div>
@@ -3195,7 +3184,7 @@ function AutoFactory() {
               {/* Reset */}
               <div>
                 <div style={{ fontSize:10,fontWeight:900,color:"#555",letterSpacing:1,marginBottom:8 }}>⚠️ GEFÄHRLICH</div>
-                <button onClick={async ()=>{
+                <button onClick={()=>{
                   if(!window.confirm('Wirklich alles zurücksetzen? Spielstand wird gelöscht!')) return;
                   deleteSave();
                   setShowAdmin(false);
@@ -3235,17 +3224,20 @@ function AutoFactory() {
   );
 }
 
-
-      ReactDOM.createRoot(document.getElementById('root')).render(
-        React.createElement(AutoFactory)
-      );
-
-    } catch(e) {
-      document.getElementById('root').innerHTML =
-        '<div style="padding:20px;font-family:monospace;font-size:11px;color:red;white-space:pre-wrap;background:#fff">' +
-        'FEHLER:\n' + (e && e.stack ? e.stack : String(e)) +
-        '</div>';
-    }
+  ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(AutoFactory));
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+  <script>
+  (function(){
+    function showErr(msg){document.getElementById('root').innerHTML='<pre style="color:red;font-size:10px;padding:12px;white-space:pre-wrap;background:#fff;min-height:100vh">'+String(msg)+'</pre>';}
+    try{
+      var src=document.getElementById('src').textContent;
+      var r=Babel.transform(src,{presets:['react'],sourceType:'script',filename:'game.jsx'});
+      var s=document.createElement('script');s.textContent=r.code;document.body.appendChild(s);
+    }catch(e){showErr(e&&e.message?e.message+'\n'+(e.stack||''):String(e));}
+  })();
   </script>
 </body>
 </html>
