@@ -1,24 +1,40 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Auto-Factory">
   <meta name="theme-color" content="#FF6B35">
   <title>🏭 Auto-Factory</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;800;900&display=swap" rel="stylesheet">
-  <style>*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}html,body{margin:0;padding:0;background:#EEF2F7;}body{overscroll-behavior:none;-webkit-overflow-scrolling:touch;}#root{max-width:430px;margin:0 auto;min-height:100vh;}</style>
+  <style>
+    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+    html,body{margin:0;padding:0;background:#EEF2F7;}
+    body{overscroll-behavior:none;}
+    #root{max-width:430px;margin:0 auto;min-height:100vh;}
+  </style>
 </head>
 <body>
-  <div id="root"></div>
-  <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
-  <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+  <div id="root">
+    <div style="display:flex;align-items:center;justify-content:center;height:100vh;flex-direction:column;gap:16px;font-family:sans-serif;">
+      <div style="font-size:60px">🏭</div>
+      <div style="font-weight:900;font-size:20px;color:#333">Auto-Factory</div>
+      <div style="color:#aaa;font-size:13px">Wird geladen...</div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
-  <script type="text/babel" data-presets="react">
+
+  <script type="text/babel">
+    /* eslint-disable */
     const { useState, useEffect, useRef } = React;
-// React from CDN
+
+    try {
+
+
 
 // ═══ CONSTANTS ═══════════════════════════════════════════════
 const TICK_MS   = 200;
@@ -1025,7 +1041,8 @@ function AutoFactory() {
   const [showAdmin, setShowAdmin] = useState(false);
   const [adminSpeed, setAdminSpeed] = useState(1);
   const [tuningCar, setTuningCar] = useState(null);
-  const [showLogin, setShowLogin] = useState(false); // login bonus modal
+  const [showLogin, setShowLogin] = useState(false);
+  const [forschTab, setForschTab] = useState('tech'); // tech|ing sub-tab in forschen
 
   // ── Save system ─────────────────────────────────────────────
   const [isLoading, setIsLoading]   = useState(true);  // true while checking storage
@@ -2395,9 +2412,7 @@ function AutoFactory() {
 
         {/* ══ FORSCHUNG ══ */}
         {/* ══ INGENIEURE ══ */}
-        {tab==="forschen"&&(()=>{
-          const [forschTab, setForschTab] = React.useState('tech');
-          return (
+        {tab==="forschen"&&(
           <div>
             {/* Sub-nav */}
             <div style={{ display:"flex",gap:6,marginBottom:14,background:"#fff",borderRadius:16,padding:5,boxShadow:"0 2px 0 #ebebeb" }}>
@@ -2602,8 +2617,7 @@ function AutoFactory() {
             )}
             )}
           </div>
-        );
-        })()}
+        )}
 
         {/* ══ ACHIEVEMENTS ══ */}
         {tab==="achievements"&&(
@@ -3221,7 +3235,17 @@ function AutoFactory() {
   );
 }
 
-    ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(AutoFactory));
+
+      ReactDOM.createRoot(document.getElementById('root')).render(
+        React.createElement(AutoFactory)
+      );
+
+    } catch(e) {
+      document.getElementById('root').innerHTML =
+        '<div style="padding:20px;font-family:monospace;font-size:11px;color:red;white-space:pre-wrap;background:#fff">' +
+        'FEHLER:\n' + (e && e.stack ? e.stack : String(e)) +
+        '</div>';
+    }
   </script>
 </body>
 </html>
